@@ -1,9 +1,6 @@
-const CACHE_NAME = 'yourblog-cache-v1';
+const CACHE_NAME = 'alamtoolkit-v1';
 const urlsToCache = [
-  '/',
-  '/styles/main.css',
-  '/script/main.js',
-  // Add other important pages
+  '/'
 ];
 
 // Install event - cache resources
