@@ -1,10 +1,9 @@
-// sw-notifications.js - Service Worker for Background Notifications
+// Service Worker for Habit Tracker PWA
 const CACHE_NAME = 'habit-tracker-v1';
 const urlsToCache = [
     '/',
-    '/index.html',
-    'https://muhiuddinalam.github.io/alam-toolkit-pwa/icon-192.png',
-    'https://muhiuddinalam.github.io/alam-toolkit-pwa/icon-512.png'
+    '/icon-192.png',
+    '/icon-512.png'
 ];
 
 self.addEventListener('install', (event) => {
@@ -86,8 +85,8 @@ self.addEventListener('message', (event) => {
         setTimeout(() => {
             self.registration.showNotification(title, {
                 body: body,
-                icon: 'https://muhiuddinalam.github.io/alam-toolkit-pwa/icon-192.png',
-                badge: 'https://muhiuddinalam.github.io/alam-toolkit-pwa/icon-192.png',
+                icon: '/icon-192.png',
+                badge: '/icon-192.png',
                 tag: 'habit-reminder',
                 requireInteraction: true,
                 vibrate: [200, 100, 200]
@@ -114,7 +113,7 @@ self.addEventListener('notificationclick', (event) => {
             .then((clientList) => {
                 // Focus existing window or open new one
                 for (const client of clientList) {
-                    if (client.url.includes('alamtoolkit') && 'focus' in client) {
+                    if (client.url.includes('habit-tracker') && 'focus' in client) {
                         return client.focus();
                     }
                 }
@@ -135,8 +134,8 @@ self.addEventListener('push', (event) => {
         event.waitUntil(
             self.registration.showNotification(data.title || 'Habit Tracker', {
                 body: data.body || 'Reminder',
-                icon: 'https://muhiuddinalam.github.io/alam-toolkit-pwa/icon-192.png',
-                badge: 'https://muhiuddinalam.github.io/alam-toolkit-pwa/icon-192.png',
+                icon: '/icon-192.png',
+                badge: '/icon-192.png',
                 tag: 'habit-reminder',
                 requireInteraction: true,
                 vibrate: [200, 100, 200]
