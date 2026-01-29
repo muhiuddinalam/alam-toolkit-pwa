@@ -1,66 +1,39 @@
-// Service Worker for Blogger PWA
-const CACHE_NAME = 'alamtoolkit-blogger-v1';
+// Minimal Service Worker for Blogger
+const CACHE_NAME = 'blogger-pwa-v1';
 
-// Cache Blogger pages and assets
-const urlsToCache = [
-  'https://www.alamtoolkit.com/',
-  // Add other important pages from your blog
+// Only cache essential pages
+const CACHE_URLS = [
+  '/', // Homepage
+  // Add specific post URLs if needed
 ];
 
-self.addEventListener('install', event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(urlsToCache))
-  );
+self.addEventListener('install', function(event) {
+  console.log('Service Worker installing...');
+  // Skip waiting to activate immediately
+  self.skipWaiting();
 });
 
-self.addEventListener('fetch', event => {
-  // Only cache GET requests
-  if (event.request.method !== 'GET') return;
-  
-  event.respondWith(
-    caches.match(event.request)
-      .then(response => {
-        // Return cached response if found
-        if (response) {
-          return response;
-        }
-        
-        // Clone the request
-        const fetchRequest = event.request.clone();
-        
-        return fetch(fetchRequest).then(response => {
-          // Check if valid response
-          if (!response || response.status !== 200 || response.type !== 'basic') {
-            return response;
-          }
-          
-          // Clone the response
-          const responseToCache = response.clone();
-          
-          // Cache the new response
-          caches.open(CACHE_NAME)
-            .then(cache => {
-              cache.put(event.request, responseToCache);
-            });
-          
-          return response;
+self.addEventListener('activate', function(event) {
+  console.log('Service Worker activating...');
+  // Take control immediately
+  event.waitUntil(clients.claim());
+});
+
+self.addEventListener('fetch', function(event) {
+  // Very simple - only cache homepage
+  if (event.request.url === 'https://www.alamtoolkit.com/' || 
+      event.request.url === 'https://www.alamtoolkit.com') {
+    event.respondWith(
+      caches.match(event.request).then(function(response) {
+        return response || fetch(event.request).then(function(fetchResponse) {
+          // Cache the homepage
+          return caches.open(CACHE_NAME).then(function(cache) {
+            cache.put(event.request, fetchResponse.clone());
+            return fetchResponse;
+          });
         });
       })
-  );
-});
-
-// Clean up old caches
-self.addEventListener('activate', event => {
-  event.waitUntil(
-    caches.keys().then(cacheNames => {
-      return Promise.all(
-        cacheNames.map(cacheName => {
-          if (cacheName !== CACHE_NAME) {
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    })
-  );
+    );
+  }
+  // For all other requests, just fetch normally
 });
