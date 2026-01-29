@@ -1,20 +1,20 @@
 {
   "name": "AlamToolKit",
   "short_name": "ATK",
-  "description": "Tools and utilities collection",
-  "start_url": "/",  // Changed from absolute URL
-  "scope": "/",
+  "description": "Tools and utilities collection - Blogger PWA",
+  "start_url": "https://www.alamtoolkit.com/",  // Your Blogger URL
+  "scope": "https://www.alamtoolkit.com/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#3367D6",
   "icons": [
     {
-      "src": "/icon-192.png",  // Changed to relative path
+      "src": "https://cdn.jsdelivr.net/gh/muhiuddinalam/alam-toolkit-pwa/icon-192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "/icon-512.png",  // Changed to relative path
+      "src": "https://cdn.jsdelivr.net/gh/muhiuddinalam/alam-toolkit-pwa/icon-512.png",
       "sizes": "512x512",
       "type": "image/png"
     }
