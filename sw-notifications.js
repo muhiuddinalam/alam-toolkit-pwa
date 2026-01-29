@@ -53,22 +53,7 @@ self.addEventListener('fetch', (event) => {
                 }
                 
                 // Otherwise fetch from network
-                return fetch(event.request).then((response) => {
-                    // Don't cache if not a valid response
-                    if (!response || response.status !== 200 || response.type !== 'basic') {
-                        return response;
-                    }
-                    
-                    // Clone the response
-                    const responseToCache = response.clone();
-                    
-                    caches.open(CACHE_NAME)
-                        .then((cache) => {
-                            cache.put(event.request, responseToCache);
-                        });
-                    
-                    return response;
-                });
+                return fetch(event.request);
             })
     );
 });
@@ -97,11 +82,6 @@ self.addEventListener('message', (event) => {
             });
         }, delay);
     }
-    
-    if (event.data && event.data.type === 'TEST_CONNECTION') {
-        console.log('Test connection received:', event.data.message);
-        event.ports[0].postMessage({ type: 'TEST_RESPONSE', message: 'Hello from Service Worker' });
-    }
 });
 
 self.addEventListener('notificationclick', (event) => {
@@ -113,7 +93,7 @@ self.addEventListener('notificationclick', (event) => {
             .then((clientList) => {
                 // Focus existing window or open new one
                 for (const client of clientList) {
-                    if (client.url.includes('habit-tracker') && 'focus' in client) {
+                    if (client.url.includes('alamtoolkit') && 'focus' in client) {
                         return client.focus();
                     }
                 }
@@ -122,24 +102,4 @@ self.addEventListener('notificationclick', (event) => {
                 }
             })
     );
-});
-
-self.addEventListener('push', (event) => {
-    console.log('Push event received:', event);
-    
-    if (event.data) {
-        const data = event.data.json();
-        console.log('Push data:', data);
-        
-        event.waitUntil(
-            self.registration.showNotification(data.title || 'Habit Tracker', {
-                body: data.body || 'Reminder',
-                icon: '/icon-192.png',
-                badge: '/icon-192.png',
-                tag: 'habit-reminder',
-                requireInteraction: true,
-                vibrate: [200, 100, 200]
-            })
-        );
-    }
 });
