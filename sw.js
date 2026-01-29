@@ -1,9 +1,14 @@
-const CACHE_NAME = 'www.alamtoolkit.com';
+const CACHE_NAME = 'alamtoolkit-v1';
 const urlsToCache = [
-  '/'
+  '/',  // Root of www.alamtoolkit.com
+  '/index.html',
+  '/style.css',
+  '/icon-192.png',
+  '/icon-512.png',
+  '/manifest.json',
+  '/habit-and-goal-tracker.html'
 ];
 
-// Install event - cache resources
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
@@ -11,7 +16,6 @@ self.addEventListener('install', event => {
   );
 });
 
-// Fetch event - serve from cache if available
 self.addEventListener('fetch', event => {
   event.respondWith(
     caches.match(event.request)
