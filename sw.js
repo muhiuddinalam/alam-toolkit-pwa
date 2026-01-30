@@ -4,6 +4,7 @@ const urlsToCache = [
   '/index.html',
   '/style.css',
   '/app.js',
+  '/firebase-messaging-sw.js',
   '/icon-192.png',
   '/icon-512.png'
 ];
@@ -38,6 +39,26 @@ self.addEventListener('fetch', event => {
     caches.match(event.request)
       .then(response => response || fetch(event.request))
   );
+});
+
+// Background sync for offline reminder scheduling
+self.addEventListener('sync', event => {
+  if (event.tag === 'sync-reminders') {
+    event.waitUntil(
+      // This would sync reminders with server when back online
+      console.log('Syncing reminders with server...')
+    );
+  }
+});
+
+// Periodic sync for daily reminders
+self.addEventListener('periodicsync', event => {
+  if (event.tag === 'daily-reminders') {
+    event.waitUntil(
+      // Check for scheduled reminders
+      console.log('Checking for scheduled reminders...')
+    );
+  }
 });
 
 // Push Notifications
@@ -93,3 +114,4 @@ self.addEventListener('notificationclick', event => {
     );
   }
 });
+
