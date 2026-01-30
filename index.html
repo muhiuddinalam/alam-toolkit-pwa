@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlamToolKit - App</title>
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .notification-section {
+            margin: 40px 0;
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 8px;
+        }
+        button {
+            background: #3367D6;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #2850a7;
+        }
+    </style>
+</head>
+<body>
+    <h1>AlamToolKit App</h1>
+    <p>Progressive Web App with notification support</p>
+    
+    <div class="notification-section">
+        <h2>Notifications</h2>
+        <p>Click below to enable notifications:</p>
+        <button id="enableNotifications">Enable Notifications</button>
+        <button id="testNotification">Test Notification</button>
+        <p id="notificationStatus"></p>
+    </div>
+
+    <div>
+        <h3>Tools:</h3>
+        <ul>
+            <li><a href="https://www.alamtoolkit.com/habit-and-goal-tracker.html">Habit & Goal Tracker</a></li>
+            <!-- Add more tool links as needed -->
+        </ul>
+    </div>
+
+    <script src="/app.js"></script>
+</body>
+</html>
