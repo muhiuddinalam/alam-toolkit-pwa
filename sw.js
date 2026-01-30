@@ -1,63 +1,125 @@
-// Service Worker for AlamToolKit - Host this on GitHub
-self.addEventListener('install', (event) => {
-  console.log('Service Worker installing');
-  event.waitUntil(self.skipWaiting());
+const CACHE_NAME = 'alamtoolkit-v2';
+const urlsToCache = [
+    '/',
+    '/index.html',
+    '/habit-and-goal-tracker.html',
+    '/icon-192.png',
+    '/icon-512.png',
+    '/manifest.json'
+];
+
+// Install Service Worker
+self.addEventListener('install', event => {
+    event.waitUntil(
+        caches.open(CACHE_NAME)
+            .then(cache => {
+                console.log('Opened cache');
+                return cache.addAll(urlsToCache);
+            })
+            .then(() => self.skipWaiting())
+    );
 });
 
-self.addEventListener('activate', (event) => {
-  console.log('Service Worker activating');
-  event.waitUntil(self.clients.claim());
+// Activate Service Worker
+self.addEventListener('activate', event => {
+    event.waitUntil(
+        caches.keys().then(cacheNames => {
+            return Promise.all(
+                cacheNames.map(cache => {
+                    if (cache !== CACHE_NAME) {
+                        console.log('Deleting old cache:', cache);
+                        return caches.delete(cache);
+                    }
+                })
+            );
+        }).then(() => {
+            console.log('Service Worker activated');
+            return self.clients.claim();
+        })
+    );
 });
 
-self.addEventListener('fetch', (event) => {
-  event.respondWith(fetch(event.request));
+// Fetch with Cache
+self.addEventListener('fetch', event => {
+    event.respondWith(
+        caches.match(event.request)
+            .then(response => {
+                // Return cached version or fetch from network
+                return response || fetch(event.request);
+            })
+    );
 });
 
-self.addEventListener('push', (event) => {
-  const data = event.data?.json() || {};
-  
+// Background sync for offline reminder scheduling
+self.addEventListener('sync', event => {
+  if (event.tag === 'sync-reminders') {
+    event.waitUntil(
+      // This would sync reminders with server when back online
+      console.log('Syncing reminders with server...')
+    );
+  }
+});
+
+// Periodic sync for daily reminders
+self.addEventListener('periodicsync', event => {
+  if (event.tag === 'daily-reminders') {
+    event.waitUntil(
+      // Check for scheduled reminders
+      console.log('Checking for scheduled reminders...')
+    );
+  }
+});
+
+// Push Notifications
+self.addEventListener('push', event => {
   const options = {
-    body: data.body || 'New notification',
-    icon: 'https://muhiuddinalam.github.io/alam-toolkit-pwa/icon-192.png',
-    badge: 'https://muhiuddinalam.github.io/alam-toolkit-pwa/icon-192.png',
-    tag: 'habit-reminder',
-    data: data.data || {},
+    body: event.data ? event.data.text() : 'New update available!',
+    icon: '/icon-192.png',
+    badge: '/icon-192.png',
+    vibrate: [100, 50, 100],
+    data: {
+      dateOfArrival: Date.now(),
+      primaryKey: 1
+    },
     actions: [
-      {
-        action: 'complete',
-        title: 'Mark Complete'
-      },
       {
         action: 'open',
         title: 'Open App'
+      },
+      {
+        action: 'close',
+        title: 'Close'
       }
     ]
   };
 
   event.waitUntil(
-    self.registration.showNotification(data.title || 'AlamToolKit', options)
+    self.registration.showNotification('AlamToolKit', options)
   );
 });
 
-self.addEventListener('notificationclick', (event) => {
+// Notification Click Handler
+self.addEventListener('notificationclick', event => {
   event.notification.close();
 
-  if (event.action === 'complete') {
-    // Send message to all clients
+  if (event.action === 'open') {
     event.waitUntil(
-      self.clients.matchAll().then(clients => {
-        clients.forEach(client => {
-          client.postMessage({
-            type: 'COMPLETE_HABIT',
-            habitId: event.notification.data.habitId
-          });
-        });
-      })
+      clients.openWindow('https://app.alamtoolkit.com/')
     );
+  } else if (event.action === 'close') {
+    // Do nothing
   } else {
-    // Open the app
     event.waitUntil(
-      clients.openWindow('https://app.alamtoolkit.com/habit-and-goal-tracker.html')
+      clients.matchAll({ type: 'window' }).then(clientList => {
+        for (const client of clientList) {
+          if (client.url === 'https://app.alamtoolkit.com/' && 'focus' in client) {
+            return client.focus();
+          }
+        }
+        if (clients.openWindow) {
+          return clients.openWindow('https://app.alamtoolkit.com/');
+        }
+      })
     );
   }
 });
