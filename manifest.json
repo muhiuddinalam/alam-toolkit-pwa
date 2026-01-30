@@ -2,21 +2,22 @@
   "name": "AlamToolKit",
   "short_name": "ATK",
   "description": "Tools and utilities collection with notifications",
-  "start_url": "/",
+  "start_url": "https://app.alamtoolkit.com/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#3367D6",
   "icons": [
     {
-      "src": "/icon-192.png",
+      "src": "https://muhiuddinalam.github.io/alam-toolkit-pwa/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/icon-512.png",
+      "src": "https://muhiuddinalam.github.io/alam-toolkit-pwa/icon-512.png",
       "sizes": "512x512",
       "type": "image/png"
     }
   ]
 }
+
