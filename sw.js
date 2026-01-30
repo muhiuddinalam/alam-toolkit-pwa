@@ -1,66 +1,63 @@
-// Main Service Worker
-const CACHE_NAME = 'alamtoolkit-v2';
-const urlsToCache = [
-  '/',
-  '/habit-and-goal-tracker.html',
-  '/icon-192.png',
-  '/icon-512.png',
-  '/manifest.json'
-];
+// Service Worker for AlamToolKit - Host this on GitHub
+self.addEventListener('install', (event) => {
+  console.log('Service Worker installing');
+  event.waitUntil(self.skipWaiting());
+});
 
-self.addEventListener('install', event => {
-  console.log('📱 Service Worker installing...');
+self.addEventListener('activate', (event) => {
+  console.log('Service Worker activating');
+  event.waitUntil(self.clients.claim());
+});
+
+self.addEventListener('fetch', (event) => {
+  event.respondWith(fetch(event.request));
+});
+
+self.addEventListener('push', (event) => {
+  const data = event.data?.json() || {};
+  
+  const options = {
+    body: data.body || 'New notification',
+    icon: 'https://muhiuddinalam.github.io/alam-toolkit-pwa/icon-192.png',
+    badge: 'https://muhiuddinalam.github.io/alam-toolkit-pwa/icon-192.png',
+    tag: 'habit-reminder',
+    data: data.data || {},
+    actions: [
+      {
+        action: 'complete',
+        title: 'Mark Complete'
+      },
+      {
+        action: 'open',
+        title: 'Open App'
+      }
+    ]
+  };
+
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(urlsToCache))
-      .then(() => self.skipWaiting())
+    self.registration.showNotification(data.title || 'AlamToolKit', options)
   );
 });
 
-self.addEventListener('activate', event => {
-  console.log('📱 Service Worker activating...');
-  event.waitUntil(
-    caches.keys().then(cacheNames => {
-      return Promise.all(
-        cacheNames.map(cache => {
-          if (cache !== CACHE_NAME) {
-            return caches.delete(cache);
-          }
-        })
-      );
-    }).then(() => self.clients.claim())
-  );
-});
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
 
-self.addEventListener('fetch', event => {
-  event.respondWith(
-    caches.match(event.request)
-      .then(response => response || fetch(event.request))
-  );
-});
-
-// Listen for messages from main thread
-self.addEventListener('message', (event) => {
-  if (event.data && event.data.type === 'STORE_REMINDER') {
-    storeReminderInDB(event.data.reminder);
+  if (event.action === 'complete') {
+    // Send message to all clients
+    event.waitUntil(
+      self.clients.matchAll().then(clients => {
+        clients.forEach(client => {
+          client.postMessage({
+            type: 'COMPLETE_HABIT',
+            habitId: event.notification.data.habitId
+          });
+        });
+      })
+    );
+  } else {
+    // Open the app
+    event.waitUntil(
+      clients.openWindow('https://app.alamtoolkit.com/habit-and-goal-tracker.html')
+    );
   }
 });
-
-// Store reminder in IndexedDB for service worker access
-function storeReminderInDB(reminder) {
-  const request = indexedDB.open('habit-reminders', 1);
-  
-  request.onupgradeneeded = (event) => {
-    const db = event.target.result;
-    if (!db.objectStoreNames.contains('reminders')) {
-      db.createObjectStore('reminders', { keyPath: 'id' });
-    }
-  };
-  
-  request.onsuccess = (event) => {
-    const db = event.target.result;
-    const transaction = db.transaction(['reminders'], 'readwrite');
-    const store = transaction.objectStore('reminders');
-    store.put(reminder);
-  };
-}
