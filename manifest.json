@@ -2,7 +2,7 @@
   "name": "AlamToolKit",
   "short_name": "ATK",
   "description": "Tools and utilities collection with notifications",
-  "start_url": "https://www.alamtoolkit.com/",
+  "start_url": "https://app.alamtoolkit.com/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#3367D6",
@@ -20,6 +20,7 @@
     }
   ]
 }
+
 
 
 
