@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-        <!-- Page Title -->
+    
+    <!-- Page Title -->
     <title>AlamToolKit - Productivity Tools</title>
     
     <!-- Meta Description -->
@@ -50,14 +50,7 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     
-    <!-- Styles -->
-    <link rel="stylesheet" href="/style.css">
-    
-    <!-- Preload critical resources -->
-    <link rel="preload" href="/app.js" as="script">
-    <link rel="preload" href="/style.css" as="style">
-    
-    <!-- CRITICAL: Service Worker Registration -->
+    <!-- Service Worker Registration -->
     <script>
         // Register Service Worker for PWA
         if ('serviceWorker' in navigator) {
@@ -536,6 +529,59 @@
                 border: 1px solid #ddd !important;
             }
         }
+        
+        /* ========== INSTALL BUTTON STYLES ========== */
+        .pwa-install-container {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #ff6b35 0%, #ff3e3e 100%);
+            color: white;
+            border-radius: 12px;
+            margin: 40px auto;
+            max-width: 600px;
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);
+        }
+        
+        .pwa-install-container h2 {
+            margin: 0 0 15px 0;
+            font-size: 28px;
+        }
+        
+        .pwa-install-container p {
+            margin: 0 0 25px 0;
+            opacity: 0.9;
+            font-size: 16px;
+        }
+        
+        #pwaInstallButton {
+            background: white;
+            color: #ff6b35;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        #pwaInstallButton:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+        
+        .pwa-features {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+            font-size: 14px;
+            opacity: 0.8;
+        }
     </style>
 </head>
 
@@ -587,6 +633,22 @@
             </div>
         </div>
     </section>
+
+    <!-- PWA INSTALL SECTION -->
+    <div class="pwa-install-container">
+        <h2>🚀 Install AlamToolKit App</h2>
+        <p>Get faster access, offline features & push notifications</p>
+        
+        <button id="pwaInstallButton">
+            <span>📱</span> Install Now
+        </button>
+        
+        <div class="pwa-features">
+            <div>⚡ Fast Loading</div>
+            <div>📶 Works Offline</div>
+            <div>🔔 Push Alerts</div>
+        </div>
+    </div>
 
     <!-- TOOL CATEGORIES SECTION -->
     <section id="tool-categories-section">
@@ -1019,33 +1081,67 @@
                 this.style.transform = 'translateY(0) scale(1)';
             });
         });
-    </script>
-
-    <!-- CRITICAL: PWA Installation Logic -->
-    <script>
-        // PWA Installation - Browser will show native install prompt automatically
-        let deferredPrompt;
         
-        // Listen for the beforeinstallprompt event
+        // ========== PWA INSTALLATION LOGIC ==========
+        let deferredPrompt;
+        const installButton = document.getElementById('pwaInstallButton');
+        
+        // Listen for install prompt
         window.addEventListener('beforeinstallprompt', (e) => {
-            // Prevent Chrome 67 and earlier from automatically showing the prompt
             e.preventDefault();
-            // Stash the event so it can be triggered later
             deferredPrompt = e;
             console.log('✅ PWA install is available');
             
-            // The browser will show its own install button in the address bar
-            // Chrome/Android: Shows install icon in address bar
-            // iOS Safari: User needs to use "Add to Home Screen" from share menu
+            // Show install button
+            if (installButton) {
+                installButton.style.display = 'inline-flex';
+                installButton.innerHTML = '<span>📱</span> Install Now';
+            }
         });
         
-        // Check if app is already installed
+        // Install button click
+        if (installButton) {
+            installButton.addEventListener('click', async () => {
+                if (deferredPrompt) {
+                    installButton.innerHTML = '<span>⏳</span> Installing...';
+                    installButton.disabled = true;
+                    
+                    try {
+                        deferredPrompt.prompt();
+                        const { outcome } = await deferredPrompt.userChoice;
+                        
+                        if (outcome === 'accepted') {
+                            installButton.innerHTML = '<span>✅</span> Installed!';
+                            installButton.disabled = true;
+                            installButton.style.background = '#4CAF50';
+                            installButton.style.color = 'white';
+                            
+                            // Hide after 3 seconds
+                            setTimeout(() => {
+                                installButton.style.display = 'none';
+                            }, 3000);
+                        } else {
+                            installButton.innerHTML = '<span>📱</span> Install Now';
+                            installButton.disabled = false;
+                        }
+                    } catch (error) {
+                        console.error('Install error:', error);
+                        installButton.innerHTML = '<span>📱</span> Install Now';
+                        installButton.disabled = false;
+                    }
+                    
+                    deferredPrompt = null;
+                }
+            });
+        }
+        
+        // Check if already installed
         if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
             console.log('✅ App is running in standalone mode');
+            if (installButton) {
+                installButton.style.display = 'none';
+            }
         }
     </script>
-    
-    <!-- Load external app.js if it exists -->
-    <script src="/app.js"></script>
 </body>
 </html>
