@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <!-- Page Title -->
+    
+    <!-- Page Title -->
     <title>AlamToolKit - Productivity Tools</title>
     
     <!-- Meta Description -->
     <meta name="description" content="AlamToolkit.com offers essential digital tools for daily life, from planners and calculators to converters and productivity apps.">
     
-  <!-- Link canonical -->  
-  <link href='https://www.alamtoolkit.com/' rel='canonical'/>
+    <!-- Link canonical -->  
+    <link href='https://www.alamtoolkit.com/' rel='canonical'>
 
-     <!-- PWA Manifest -->
+    <!-- PWA Manifest -->
     <link rel="manifest" href="/manifest.json" crossorigin="use-credentials">
     
     <!-- Favicon & Icons -->
@@ -25,7 +26,6 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="AlamToolKit">
-    <link rel="apple-touch-icon" href="/icon-192.png">
     <link rel="apple-touch-icon" sizes="512x512" href="/icon-512.png">
     
     <!-- Theme Colors -->
@@ -47,953 +47,962 @@
     <meta name="twitter:description" content="Productivity tools collection">
     <meta name="twitter:image" content="https://app.alamtoolkit.com/icon-512.png">
     
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    
     <!-- Styles -->
     <link rel="stylesheet" href="/style.css">
     
     <!-- Preload critical resources -->
     <link rel="preload" href="/app.js" as="script">
-    <link rel="preload" href="/style.css" as="style">   
+    <link rel="preload" href="/style.css" as="style">
     
-    <h1>AlamToolKit - Simplify Daily Tasks</h1>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-<style>
-/* ========== HERO SECTION ========== */
-.hero-section {
-    background: url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiTYK2BOaBRKxfg4Nfw8uJSAQg445JJJmsrnkPDbSOaX5L2Ll1mU2lH2bS9_w32QzAPLBtDjY3QpCbcny2u4yFgwDzC6RrdIU2pk5GJBIHwugVvfy5Rl2l2VJNJNzudCyOxXTXr9PSM_beQMZBCFfgOvpNXPp4sFpWwQi745PYoTkoppOJcxWkIF13y2Sg/s320/AlamToolKit.webp') 
-                center center / cover no-repeat;
-    padding: 80px 20px;
-    color: #fff;
-    position: relative;
-    min-height: 600px;
-    display: flex;
-    align-items: center;
-    overflow: hidden;
-}
-
-.hero-section::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.4) 100%);
-    z-index: 1;
-}
-
-.hero-content {
-    position: relative;
-    max-width: 1200px;
-    margin: 0 auto;
-    width: 100%;
-    z-index: 2;
-}
-
-.hero-title {
-    font-size: 48px;
-    font-weight: 800;
-    line-height: 1.2;
-    margin-bottom: 24px;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-.hero-subtext {
-    font-size: 18px;
-    line-height: 1.7;
-    max-width: 700px;
-    color: #d5d9e3;
-    margin-bottom: 40px;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
-}
-
-/* FIXED: Added missing .hero-buttons class */
-.hero-buttons {
-    margin-bottom: 40px;
-}
-
-/* RESTORED: Original orange/red gradient */
-.btn-gradient {
-    background: linear-gradient(90deg, #ff8a00 0%, #ff3e3e 100%);
-    padding: 16px 40px;
-    color: #fff !important;
-    border-radius: 12px;
-    font-weight: 600;
-    font-size: 18px;
-    text-decoration: none;
-    display: inline-block;
-    transition: all 0.3s ease;
-    border: none;
-    cursor: pointer;
-    box-shadow: 0 4px 15px rgba(255, 138, 0, 0.3);
-}
-
-.btn-gradient:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(255, 138, 0, 0.4);
-    filter: brightness(1.1);
-}
-
-.hero-stats {
-    display: flex;
-    gap: 60px;
-    flex-wrap: wrap;
-    margin-top: 60px;
-}
-
-.stat-box {
-    text-align: left;
-}
-
-.stat-number {
-    font-size: 36px;
-    font-weight: 800;
-    color: #ff8a00;
-    display: block;
-    margin-bottom: 5px;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-.stat-label {
-    font-size: 14px;
-    color: #d5d9e3;
-    font-weight: 600;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-}
-
-/* ========== TOOL CATEGORIES SECTION ========== */
-#tool-categories-section {
-    padding: 100px 20px;
-    background: #ffffff;
-}
-
-.category-tabs {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    justify-content: center;
-    margin-bottom: 50px;
-    padding: 20px;
-    background: white;
-    border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-}
-
-.category-tab {
-    padding: 12px 24px;
-    background: #f8fafc;
-    border: 2px solid #e2e8f0;
-    border-radius: 50px;
-    cursor: pointer;
-    font-weight: 600;
-    color: #64748b;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.category-tab:hover {
-    background: #f1f5f9;
-    border-color: #cbd5e1;
-    color: #475569;
-}
-
-/* RESTORED: Original orange/red gradient for active tab */
-.category-tab.active {
-    background: linear-gradient(135deg, #ff6b35 0%, #ff3e3e 100%);
-    border-color: #ff6b35;
-    color: white;
-    box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
-}
-
-/* ========== FEATURES GRID ========== */
-#features-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 25px;
-    margin-bottom: 60px;
-}
-
-.feature-card {
-    background: white;
-    padding: 25px;
-    border-radius: 16px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-    transition: all 0.3s ease;
-    border-left: 5px solid;
-    opacity: 1;
-    display: block;
-}
-
-.feature-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-}
-
-/* RESTORED: Original orange gradient for feature icons */
-.feature-icon {
-    width: 60px;
-    height: 60px;
-    background: linear-gradient(135deg, #ff6b35 0%, #ff8555 100%);
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 14px;
-    font-size: 28px;
-    margin-bottom: 20px;
-}
-
-.feature-card h3 {
-    font-size: 20px;
-    margin-bottom: 12px;
-    color: #1a1a2e;
-    font-weight: 600;
-}
-
-.feature-card p {
-    color: #555;
-    font-size: 15px;
-    line-height: 1.6;
-}
-
-/* ========== TOOL LISTS ========== */
-.tool-list {
-    display: none;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 15px;
-    animation: fadeIn 0.5s ease;
-}
-
-.tool-list.active {
-    display: grid;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.tool-item {
-    background: white;
-    padding: 18px 20px;
-    border-radius: 12px;
-    text-decoration: none;
-    color: #475569;
-    font-weight: 500;
-    border: 1px solid #e2e8f0;
-    transition: all 0.3s ease;
-    text-align: center;
-    display: block;
-}
-
-/* RESTORED: Original orange/red gradient for tool items */
-.tool-item:hover {
-    background: linear-gradient(135deg, #ff6b35 0%, #ff3e3e 100%);
-    color: white;
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(255, 107, 53, 0.25);
-    border-color: transparent;
-}
-
-/* ========== CATEGORY COLORS ========== */
-/* Adjusted to work with orange theme */
-.category-1 { border-left-color: #ff6b35; background-color: #fff5e6; }
-.category-2 { border-left-color: #ff8a00; background-color: #fff3e0; }
-.category-3 { border-left-color: #ff3e3e; background-color: #ffe6e6; }
-.category-4 { border-left-color: #ff8555; background-color: #fff0eb; }
-.category-5 { border-left-color: #ff9e00; background-color: #fff8e6; }
-.category-6 { border-left-color: #ff6b6b; background-color: #fff0f0; }
-.category-7 { border-left-color: #ffa726; background-color: #fff3e0; }
-.category-8 { border-left-color: #ff7043; background-color: #ffebee; }
-.category-9 { border-left-color: #ff5722; background-color: #fbe9e7; }
-.category-10 { border-left-color: #ff9800; background-color: #fff3e0; }
-
-.category-1:hover { border-color: #ffd7b5; background-color: #ffe8d6; }
-.category-2:hover { border-color: #ffc285; background-color: #ffddb3; }
-.category-3:hover { border-color: #ffb3b3; background-color: #ffd6d6; }
-.category-4:hover { border-color: #ffc9b8; background-color: #ffe0d6; }
-.category-5:hover { border-color: #ffd699; background-color: #ffecb3; }
-.category-6:hover { border-color: #ffb8b8; background-color: #ffd6d6; }
-.category-7:hover { border-color: #ffd699; background-color: #ffecb3; }
-.category-8:hover { border-color: #ffccbc; background-color: #ffe0d6; }
-.category-9:hover { border-color: #ffccbc; background-color: #ffd6cc; }
-.category-10:hover { border-color: #ffcc80; background-color: #ffe0b2; }
-
-/* ========== RESPONSIVE DESIGN ========== */
-@media (max-width: 1024px) {
-    .hero-title {
-        font-size: 42px;
-    }
-    
-    .hero-subtext {
-        font-size: 17px;
-    }
-    
-    .section-title {
-        font-size: 36px;
-    }
-    
-    #why-choose-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .category-tabs {
-        gap: 10px;
-    }
-    
-    .category-tab {
-        padding: 10px 20px;
-        font-size: 14px;
-    }
-}
-
-@media (max-width: 768px) {
-    .hero-section {
-        padding: 60px 20px;
-        min-height: 500px;
-    }
-    
-    .hero-title {
-        font-size: 32px;
-    }
-    
-    .hero-subtext {
-        font-size: 16px;
-    }
-    
-    .btn-gradient {
-        padding: 14px 32px;
-        font-size: 16px;
-    }
-    
-    .hero-stats {
-        gap: 40px;
-    }
-    
-    .stat-number {
-        font-size: 28px;
-    }
-    
-    .stat-label {
-        font-size: 12px;
-    }
-    
-    .section-title {
-        font-size: 28px;
-    }
-    
-    .section-subtitle {
-        font-size: 16px;
-    }
-    
-    #why-choose-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    #features-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .category-tabs {
-        flex-direction: column;
-        align-items: center;
-    }
-    
-    .category-tab {
-        width: 100%;
-        max-width: 300px;
-        justify-content: center;
-    }
-    
-    .tool-list {
-        grid-template-columns: 1fr;
-    }
-    
-    .why-choose-card,
-    .feature-card {
-        padding: 20px;
-    }
-    
-    .why-choose-icon {
-        width: 60px;
-        height: 60px;
-        font-size: 28px;
-    }
-    
-    .feature-icon {
-        width: 50px;
-        height: 50px;
-        font-size: 24px;
-    }
-}
-
-@media (max-width: 480px) {
-    .hero-title {
-        font-size: 28px;
-    }
-    
-    .hero-subtext {
-        font-size: 15px;
-    }
-    
-    .hero-stats {
-        gap: 30px;
-        justify-content: center;
-    }
-    
-    .stat-box {
-        text-align: center;
-    }
-    
-    .section-title {
-        font-size: 24px;
-    }
-    
-    .section-subtitle {
-        font-size: 15px;
-    }
-}
-
-/* ========== ANIMATIONS ========== */
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.hero-content,
-#why-choose-section .features-container,
-#tool-categories-section .features-container {
-    animation: fadeInUp 0.8s ease-out;
-}
-
-/* ========== ACCESSIBILITY ========== */
-@media (prefers-reduced-motion: reduce) {
-    * {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-    }
-}
-
-/* RESTORED: Original orange focus outline */
-:focus {
-    outline: 3px solid #ff8a00;
-    outline-offset: 2px;
-}
-
-/* ========== PRINT STYLES ========== */
-@media print {
-    .hero-section {
-        background: white !important;
-        color: black !important;
-        min-height: auto;
-    }
-    
-    .hero-section::before {
-        display: none;
-    }
-    
-    .btn-gradient {
-        display: none;
-    }
-    
-    .feature-card,
-    .why-choose-card {
-        break-inside: avoid;
-        box-shadow: none !important;
-        border: 1px solid #ddd !important;
-    }
-}
-</style>
-</head>
-<body>
-<!-- HERO SECTION -->
-<section class="hero-section">
-    <!-- LCP Image for Google (invisible but improves LCP) -->
-    <img 
-        src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiTYK2BOaBRKxfg4Nfw8uJSAQg445JJJmsrnkPDbSOaX5L2Ll1mU2lH2bS9_w32QzAPLBtDjY3QpCbcny2u4yFgwDzC6RrdIU2pk5GJBIHwugVvfy5Rl2l2VJNJNzudCyOxXTXr9PSM_beQMZBCFfgOvpNXPp4sFpWwQi745PYoTkoppOJcxWkIF13y2Sg/s1600/AlamToolKit.webp"
-        alt="AlamToolkit.com - Professional Engineering and Productivity Tools"
-        width="1600"
-        height="600"
-        fetchpriority="high"
-        style="position:absolute; width:0; height:0; opacity:0;"
-    />
-
-    <div class="hero-content">
-        <h2 class="hero-title">Your Ultimate Digital Toolkit</h2>
+    <!-- Inline CSS for critical styles -->
+    <style>
+        /* ========== GLOBAL SECTION STYLES ========== */
+        .section-title {
+            font-size: 42px;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #1a1a2e;
+        }
         
-        <p class="hero-subtext">
-            AlamToolKit.com provides all the essential tools a person needs for daily planning, productivity, calculation, organization, work, study, and smart living — in one simple place.
-        </p>
+        .section-subtitle {
+            font-size: 18px;
+            text-align: center;
+            color: #666;
+            max-width: 700px;
+            margin: 0 auto 60px;
+            line-height: 1.6;
+        }
         
-        <div class="hero-buttons">
-            <a href="https://www.alamtoolkit.com/" class="btn-gradient">Explore All Tools</a>
-        </div>
-            
-        <div class="hero-stats">
-            <div class="stat-box">
-                <span class="stat-number">300+</span>
-                <span class="stat-label">FREE TOOLS</span>
-            </div>
-            
-            <div class="stat-box">
-                <span class="stat-number">100%</span>
-                <span class="stat-label">ACCURATE</span>
-            </div>
-            
-            <div class="stat-box">
-                <span class="stat-number">24/7</span>
-                <span class="stat-label">AVAILABLE</span>
-            </div>
-            
-            <div class="stat-box">
-                <span class="stat-number">0$</span>
-                <span class="stat-label">COST</span>
-            </div>
-        </div>
-    </div>
-</section>
+        .features-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* ========== HERO SECTION ========== */
+        .hero-section {
+            background: url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiTYK2BOaBRKxfg4Nfw8uJSAQg445JJJmsrnkPDbSOaX5L2Ll1mU2lH2bS9_w32QzAPLBtDjY3QpCbcny2u4yFgwDzC6RrdIU2pk5GJBIHwugVvfy5Rl2l2VJNJNzudCyOxXTXr9PSM_beQMZBCFfgOvpNXPp4sFpWwQi745PYoTkoppOJcxWkIF13y2Sg/s320/AlamToolKit.webp') 
+                        center center / cover no-repeat;
+            padding: 80px 20px;
+            color: #fff;
+            position: relative;
+            min-height: 600px;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+        }
 
-<!-- TOOL CATEGORIES SECTION -->
-<section id="tool-categories-section">
-    <div class="features-container">
-        <h2 class="section-title">Comprehensive Tool Categories</h2>
-        <p class="section-subtitle">
-            Organized by function to help you find exactly what you need for any task
-        </p>
-        
-        <!-- Category Tabs -->
-        <div class="category-tabs">
-            <div class="category-tab active" data-category="all">All Tools</div>
-            <div class="category-tab" data-category="planning">📅 Planning & Time</div>
-            <div class="category-tab" data-category="calculation">🔢 Calculation</div>
-            <div class="category-tab" data-category="writing">📝 Writing & Notes</div>
-            <div class="category-tab" data-category="organization">📂 Organization</div>
-            <div class="category-tab" data-category="finance">💰 Finance</div>
-            <div class="category-tab" data-category="utilities">🛠️ Utilities</div>
-            <div class="category-tab" data-category="communication">🌐 Communication</div>
-            <div class="category-tab" data-category="learning">🎓 Learning</div>
-            <div class="category-tab" data-category="security">🔐 Security</div>
-            <div class="category-tab" data-category="health">🧘 Health</div>
-        </div>
-        
-        <!-- Features Grid -->
-        <div id="features-grid">
-            <!-- Planning & Time Management -->
-            <div class="feature-card category-1" data-category="planning">
-                <div class="feature-icon">📅</div>
-                <h3>Planning & Time Management</h3>
-                <p>Calendars, planners, timers, and schedulers to help you stay organized and meet deadlines.</p>
-            </div>
-            
-            <!-- Calculation & Conversion -->
-            <div class="feature-card category-2" data-category="calculation">
-                <div class="feature-icon">🧮</div>
-                <h3>Calculation & Conversion</h3>
-                <p>Advanced calculators for engineering, finance, conversions, and everyday math with precise results.</p>
-            </div>
-            
-            <!-- Writing, Notes & Text Tools -->
-            <div class="feature-card category-3" data-category="writing">
-                <div class="feature-icon">✍️</div>
-                <h3>Writing & Text Tools</h3>
-                <p>Word processors, note-taking apps, and documentation tools for content creation.</p>
-            </div>
-            
-            <!-- Organization & Productivity -->
-            <div class="feature-card category-4" data-category="organization">
-                <div class="feature-icon">📊</div>
-                <h3>Organization & Productivity</h3>
-                <p>Task managers, file organizers, and workflow tools are designed for maximum efficiency.</p>
-            </div>
-            
-            <!-- Finance & Office -->
-            <div class="feature-card category-5" data-category="finance">
-                <div class="feature-icon">💰</div>
-                <h3>Finance & Office</h3>
-                <p>Budget planners, expense trackers, and financial calculators for personal and professional use.</p>
-            </div>
-            
-            <!-- Utilities & Digital Tools -->
-            <div class="feature-card category-6" data-category="utilities">
-                <div class="feature-icon">🛠️</div>
-                <h3>Utilities & Digital Tools</h3>
-                <p>File converters, password generators, and utility tools for digital workflow enhancement.</p>
-            </div>
-            
-            <!-- Communication & Information -->
-            <div class="feature-card category-7" data-category="communication">
-                <div class="feature-icon">🌐</div>
-                <h3>Communication & Information</h3>
-                <p>Email clients, weather apps, dictionaries, and information tools for daily use.</p>
-            </div>
-            
-            <!-- Learning & Self-Improvement -->
-            <div class="feature-card category-8" data-category="learning">
-                <div class="feature-icon">🎓</div>
-                <h3>Learning & Self-Improvement</h3>
-                <p>Study tools, flashcards, and educational resources for continuous learning.</p>
-            </div>
-            
-            <!-- Security & Privacy -->
-            <div class="feature-card category-9" data-category="security">
-                <div class="feature-icon">🔐</div>
-                <h3>Security & Privacy</h3>
-                <p>Password managers, VPN guides, and security tools to protect your digital life.</p>
-            </div>
-            
-            <!-- Health & Wellness -->
-            <div class="feature-card category-10" data-category="health">
-                <div class="feature-icon">🧘</div>
-                <h3>Health & Wellness</h3>
-                <p>Fitness trackers, meditation guides, and health calculators for overall wellbeing.</p>
-            </div>
-        </div>
-        
-        <!-- Tool Lists by Category -->
-        <!-- All Tools -->
-        <div class="tool-list active" id="all-tools">
-            <!-- Planning & Time Management -->
-            <a href="https://www.alamtoolkit.com/p/team-calendar-scheduler.html" class="tool-item">Calendar & Scheduler</a>
-            <a href="https://www.alamtoolkit.com/p/personal-daily-calendar-planner.html" class="tool-item">Daily/Weekly Planner</a>
-            <a href="https://www.alamtoolkit.com/p/task-manager.html" class="tool-item">Task Manager & To-Do List</a>
-            <a href="https://www.alamtoolkit.com/p/habit-and-goal-tracker.html" class="tool-item">Habit & Goal Tracker</a>
-            <a href="#" class="tool-item">Reminder & Alarm System</a>
-            <a href="#" class="tool-item">Countdown Timer & Stopwatch</a>
-            <a href="#" class="tool-item">World Clock & Time Zone Converter</a>
-            <a href="https://www.alamtoolkit.com/p/team-calendar-scheduler.html" class="tool-item">Meeting/Event Planner</a>
-            
-            <!-- Calculation & Conversion -->
-            <a href="https://www.alamtoolkit.com/p/engineering-calculator.html" class="tool-item">Standard & Scientific Calculator</a>
-            <a href="https://www.alamtoolkit.com/p/unit-converter.html" class="tool-item">Unit Converter</a>
-            <a href="https://www.alamtoolkit.com/p/currency-converter.html" class="tool-item">Currency Converter</a>
-            <a href="#" class="tool-item">Percentage Calculator</a>
-            <a href="#" class="tool-item">Discount, Tax & Tip Calculator</a>
-            <a href="#" class="tool-item">EMI / Loan Calculator</a>
-            <a href="#" class="tool-item">Salary & Timesheet Calculator</a>
-            <a href="https://www.alamtoolkit.com/p/age-calculator.html" class="tool-item">Date Difference & Age Calculator</a>
-            <a href="#" class="tool-item">BMI & Health Calculators</a>
-            <a href="#" class="tool-item">Speed/Distance Calculator</a>
-            
-            <!-- Writing, Notes & Text Tools -->
-            <a href="#" class="tool-item">Notes App & Notepad</a>
-            <a href="#" class="tool-item">Text Editor & Word Processor</a>
-            <a href="#" class="tool-item">Checklist & Shopping List Maker</a>
-            <a href="#" class="tool-item">Word & Character Counter</a>
-            <a href="#" class="tool-item">Text Case Converter</a>
-            <a href="#" class="tool-item">Grammar & Spell Check</a>
-            <a href="#" class="tool-item">Document Scanner</a>
-            
-            <!-- Organization & Productivity -->
-            <a href="#" class="tool-item">File Manager & Organizer</a>
-            <a href="#" class="tool-item">Bookmark Manager</a>
-            <a href="#" class="tool-item">Expense Tracker & Budget Planner</a>
-            <a href="#" class="tool-item">Invoice Generator</a>
-            <a href="#" class="tool-item">Password Manager</a>
-            <a href="#" class="tool-item">Cloud Storage Interface</a>
-            <a href="#" class="tool-item">Work Planner</a>
-            <a href="#" class="tool-item">Shopping List</a>
-            
-            <!-- Finance & Office -->
-            <a href="#" class="tool-item">Budget Planner</a>
-            <a href="#" class="tool-item">Expense Tracker</a>
-            <a href="#" class="tool-item">Bill Reminder</a>
-            <a href="#" class="tool-item">Price Comparison Helper</a>
-            <a href="#" class="tool-item">Investment & Savings Tracker</a>
-            <a href="#" class="tool-item">Invoice Generator</a>
-            <a href="#" class="tool-item">Timesheet Calculator</a>
-            
-            <!-- Utilities & Digital Tools -->
-            <a href="#" class="tool-item">QR Code Generator & Scanner</a>
-            <a href="#" class="tool-item">File Size Converter & Compressor</a>
-            <a href="#" class="tool-item">PDF Tools (Merge, Split, Compress)</a>
-            <a href="#" class="tool-item">Image Resizer & Editor</a>
-            <a href="#" class="tool-item">URL Shortener & Encoder/Decoder</a>
-            <a href="#" class="tool-item">Random Number Generator</a>
-            <a href="#" class="tool-item">Password Generator</a>
-            <a href="#" class="tool-item">Internet Speed Test</a>
-            <a href="#" class="tool-item">Download Manager</a>
-            <a href="#" class="tool-item">Online Clock</a>
-            
-            <!-- Communication & Information -->
-            <a href="#" class="tool-item">Email Client</a>
-            <a href="#" class="tool-item">Messaging & Video Call Platform</a>
-            <a href="#" class="tool-item">Contact Manager</a>
-            <a href="#" class="tool-item">Weather App & Widget</a>
-            <a href="#" class="tool-item">News Aggregator</a>
-            <a href="#" class="tool-item">Dictionary & Translator</a>
-            <a href="#" class="tool-item">Map & Navigation</a>
-            
-            <!-- Learning & Self-Improvement -->
-            <a href="#" class="tool-item">Flashcard & Study Tool</a>
-            <a href="#" class="tool-item">Grade Calculator</a>
-            <a href="#" class="tool-item">Reading Timer & Study Timer</a>
-            <a href="#" class="tool-item">Recipe Database & Meal Planner</a>
-            
-            <!-- Security & Privacy -->
-            <a href="#" class="tool-item">Password Generator & Manager</a>
-            <a href="#" class="tool-item">Two-Factor Authentication (2FA) App</a>
-            <a href="#" class="tool-item">VPN Information/Guide</a>
-            <a href="#" class="tool-item">Antivirus Information/Guide</a>
-            
-            <!-- Health & Wellness -->
-            <a href="#" class="tool-item">Fitness & Workout Tracker</a>
-            <a href="#" class="tool-item">Meditation & Mindfulness Guide</a>
-            <a href="#" class="tool-item">Water Intake Logger</a>
-            <a href="#" class="tool-item">Nutrition & Food Tracker</a>
-            <a href="#" class="tool-item">Sleep Cycle Analyzer</a>
-            <a href="#" class="tool-item">BMI Calculator</a>
-        </div>
-        
-        <!-- Planning & Time Management Tools -->
-        <div class="tool-list" id="planning-tools">
-            <a href="https://www.alamtoolkit.com/p/team-calendar-scheduler.html" class="tool-item">Calendar & Scheduler</a>
-            <a href="https://www.alamtoolkit.com/p/personal-daily-calendar-planner.html" class="tool-item">Daily/Weekly Planner</a>
-            <a href="https://www.alamtoolkit.com/p/task-manager.html" class="tool-item">Task Manager & To-Do List</a>
-            <a href="https://www.alamtoolkit.com/p/habit-and-goal-tracker.html" class="tool-item">Habit & Goal Tracker</a>
-            <a href="#" class="tool-item">Reminder & Alarm System</a>
-            <a href="#" class="tool-item">Alarm Clock</a>
-            <a href="#" class="tool-item">Countdown Timer & Stopwatch</a>
-            <a href="#" class="tool-item">Countdown Timer</a>
-            <a href="#" class="tool-item">Stopwatch</a>
-            <a href="#" class="tool-item">World Clock & Time Zone Converter</a>
-            <a href="https://www.alamtoolkit.com/p/team-calendar-scheduler.html" class="tool-item">Meeting/Event Planner</a>
-            <a href="#" class="tool-item">Meeting Scheduler</a>
-            <a href="#" class="tool-item">Work Planner</a>
-            <a href="#" class="tool-item">Study Timer</a>
-            <a href="#" class="tool-item">Reading Timer</a>
-            <a href="#" class="tool-item">Meditation/Focus Timer</a>
-        </div>
-        
-        <!-- Calculation & Conversion Tools -->
-        <div class="tool-list" id="calculation-tools">
-            <a href="https://www.alamtoolkit.com/p/engineering-calculator.html" class="tool-item">Standard & Scientific Calculator</a>
-            <a href="https://www.alamtoolkit.com/p/engineering-calculator.html" class="tool-item">Engineering Calculator</a>
-            <a href="https://www.alamtoolkit.com/p/unit-converter.html" class="tool-item">Unit Converter</a>
-            <a href="https://www.alamtoolkit.com/p/currency-converter.html" class="tool-item">Currency Converter</a>
-            <a href="#" class="tool-item">Percentage Calculator</a>
-            <a href="#" class="tool-item">Discount Calculator</a>
-            <a href="#" class="tool-item">Tax Calculator</a>
-            <a href="#" class="tool-item">Tip Calculator</a>
-            <a href="#" class="tool-item">EMI / Loan Calculator</a>
-            <a href="#" class="tool-item">Salary Calculator</a>
-            <a href="#" class="tool-item">Timesheet Calculator</a>
-            <a href="#" class="tool-item">Date Difference Calculator</a>
-            <a href="https://www.alamtoolkit.com/p/age-calculator.html" class="tool-item">Age Calculator</a>
-            <a href="#" class="tool-item">Speed/Distance Calculator</a>
-            <a href="#" class="tool-item">BMI Calculator</a>
-            <a href="#" class="tool-item">Discount, Tax & Tip Calculator</a>
-            <a href="#" class="tool-item">Salary & Timesheet Calculator</a>
-            <a href="#" class="tool-item">BMI & Health Calculators</a>
-            <a href="#" class="tool-item">Grade Calculator</a>
-        </div>
-        
-        <!-- Writing, Notes & Text Tools -->
-        <div class="tool-list" id="writing-tools">
-            <a href="#" class="tool-item">Notes App & Notepad</a>
-            <a href="#" class="tool-item">Notes App / Quick Memo</a>
-            <a href="#" class="tool-item">Notepad</a>
-            <a href="#" class="tool-item">Text Editor & Word Processor</a>
-            <a href="#" class="tool-item">Text Editor</a>
-            <a href="#" class="tool-item">Checklist & Shopping List Maker</a>
-            <a href="#" class="tool-item">Checklist Maker</a>
-            <a href="#" class="tool-item">Word & Character Counter</a>
-            <a href="#" class="tool-item">Word Counter</a>
-            <a href="#" class="tool-item">Character Counter</a>
-            <a href="#" class="tool-item">Text Case Converter</a>
-            <a href="#" class="tool-item">Grammar & Spell Check</a>
-            <a href="#" class="tool-item">Document Scanner</a>
-            <a href="#" class="tool-item">Digital Notepad</a>
-        </div>
-        
-        <!-- Organization & Productivity Tools -->
-        <div class="tool-list" id="organization-tools">
-            <a href="#" class="tool-item">File Manager & Organizer</a>
-            <a href="#" class="tool-item">File Manager / Organizer</a>
-            <a href="#" class="tool-item">Bookmark Manager</a>
-            <a href="#" class="tool-item">Expense Tracker & Budget Planner</a>
-            <a href="#" class="tool-item">Expense Tracker</a>
-            <a href="#" class="tool-item">Budget Planner</a>
-            <a href="#" class="tool-item">Invoice Generator</a>
-            <a href="#" class="tool-item">Password Manager</a>
-            <a href="#" class="tool-item">Cloud Storage Interface</a>
-            <a href="#" class="tool-item">Cloud Storage Access</a>
-            <a href="#" class="tool-item">Habit Tracker</a>
-            <a href="#" class="tool-item">Goal Tracker</a>
-            <a href="#" class="tool-item">Work Planner</a>
-            <a href="#" class="tool-item">Shopping List</a>
-            <a href="https://www.alamtoolkit.com/p/task-manager.html" class="tool-item">To-Do List / Task Manager</a>
-            <a href="https://www.alamtoolkit.com/p/task-manager.html" class="tool-item">Task Manager</a>
-        </div>
-        
-        <!-- Finance & Office Tools -->
-        <div class="tool-list" id="finance-tools">
-            <a href="#" class="tool-item">Budget Planner</a>
-            <a href="#" class="tool-item">Expense Tracker</a>
-            <a href="#" class="tool-item">Bill Reminder</a>
-            <a href="#" class="tool-item">Price Comparison Helper</a>
-            <a href="#" class="tool-item">Investment & Savings Tracker</a>
-            <a href="#" class="tool-item">Investment / Saving Tracker</a>
-            <a href="#" class="tool-item">Invoice Generator</a>
-            <a href="#" class="tool-item">Timesheet Calculator</a>
-            <a href="#" class="tool-item">EMI / Loan Calculator</a>
-            <a href="#" class="tool-item">Salary Calculator</a>
-            <a href="https://www.alamtoolkit.com/p/currency-converter.html" class="tool-item">Currency Converter</a>
-            <a href="#" class="tool-item">Tax Calculator</a>
-            <a href="#" class="tool-item">Tip Calculator</a>
-        </div>
-        
-        <!-- Utilities & Digital Tools -->
-        <div class="tool-list" id="utilities-tools">
-            <a href="#" class="tool-item">QR Code Generator & Scanner</a>
-            <a href="#" class="tool-item">File Size Converter & Compressor</a>
-            <a href="#" class="tool-item">Image Resizer</a>
-            <a href="#" class="tool-item">Image Compressor</a>
-            <a href="#" class="tool-item">File Size Converter</a>
-            <a href="#" class="tool-item">PDF Tools (Merge, Split, Compress)</a>
-            <a href="#" class="tool-item">PDF Tools</a>
-            <a href="#" class="tool-item">Image Resizer & Editor</a>
-            <a href="#" class="tool-item">URL Shortener & Encoder/Decoder</a>
-            <a href="#" class="tool-item">URL Encoder / Decoder</a>
-            <a href="#" class="tool-item">URL Shortener</a>
-            <a href="#" class="tool-item">Random Number Generator</a>
-            <a href="#" class="tool-item">Password Generator</a>
-            <a href="#" class="tool-item">Internet Speed Test</a>
-            <a href="#" class="tool-item">Download Manager</a>
-            <a href="#" class="tool-item">Online Clock</a>
-            <a href="#" class="tool-item">Document Scanner</a>
-            <a href="#" class="tool-item">Document Scanner (for text capture)</a>
-        </div>
-        
-        <!-- Communication & Information Tools -->
-        <div class="tool-list" id="communication-tools">
-            <a href="#" class="tool-item">Email Client</a>
-            <a href="#" class="tool-item">Email Tool</a>
-            <a href="#" class="tool-item">Messaging & Video Call Platform</a>
-            <a href="#" class="tool-item">Messaging Tool</a>
-            <a href="#" class="tool-item">Video Calling Tool</a>
-            <a href="#" class="tool-item">Contact Manager</a>
-            <a href="#" class="tool-item">Weather App & Widget</a>
-            <a href="#" class="tool-item">Weather Checker</a>
-            <a href="#" class="tool-item">News Aggregator</a>
-            <a href="#" class="tool-item">Dictionary & Translator</a>
-            <a href="#" class="tool-item">Dictionary</a>
-            <a href="#" class="tool-item">Translator</a>
-            <a href="#" class="tool-item">Map & Navigation</a>
-        </div>
-        
-        <!-- Learning & Self-Improvement Tools -->
-        <div class="tool-list" id="learning-tools">
-            <a href="#" class="tool-item">Flashcard & Study Tool</a>
-            <a href="#" class="tool-item">Flashcard Tool</a>
-            <a href="#" class="tool-item">Grade Calculator</a>
-            <a href="#" class="tool-item">Reading Timer & Study Timer</a>
-            <a href="#" class="tool-item">Study Timer</a>
-            <a href="#" class="tool-item">Reading Timer</a>
-            <a href="#" class="tool-item">Recipe Database & Meal Planner</a>
-        </div>
-        
-        <!-- Security & Privacy Tools -->
-        <div class="tool-list" id="security-tools">
-            <a href="#" class="tool-item">Password Generator & Manager</a>
-            <a href="#" class="tool-item">Password Generator</a>
-            <a href="#" class="tool-item">Password Manager</a>
-            <a href="#" class="tool-item">Two-Factor Authentication (2FA) App</a>
-            <a href="#" class="tool-item">Two-Factor Authentication Tool</a>
-            <a href="#" class="tool-item">VPN Information/Guide</a>
-            <a href="#" class="tool-item">VPN Tool</a>
-            <a href="#" class="tool-item">Antivirus Information/Guide</a>
-            <a href="#" class="tool-item">Antivirus Utility</a>
-        </div>
-        
-        <!-- Health & Wellness Tools -->
-        <div class="tool-list" id="health-tools">
-            <a href="#" class="tool-item">Fitness & Workout Tracker</a>
-            <a href="#" class="tool-item">Fitness Tracker</a>
-            <a href="#" class="tool-item">Meditation & Mindfulness Guide</a>
-            <a href="#" class="tool-item">Meditation / Focus Timer</a>
-            <a href="#" class="tool-item">Water Intake Logger</a>
-            <a href="#" class="tool-item">Nutrition & Food Tracker</a>
-            <a href="#" class="tool-item">Sleep Cycle Analyzer</a>
-            <a href="#" class="tool-item">BMI Calculator</a>
-        </div>
-    </div>
-</section>
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.4) 100%);
+            z-index: 1;
+        }
 
-<script>
-    // Tab functionality
-    document.querySelectorAll('.category-tab').forEach(tab => {
-        tab.addEventListener('click', function() {
-            // Update active tab
-            document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
-            this.classList.add('active');
-            
-            // Show corresponding tools
-            const category = this.dataset.category;
-            document.querySelectorAll('.tool-list').forEach(list => {
-                list.classList.remove('active');
-            });
-            
-            if(category === 'all') {
-                document.getElementById('all-tools').classList.add('active');
-            } else {
-                const toolList = document.getElementById(`${category}-tools`);
-                if(toolList) toolList.classList.add('active');
+        .hero-content {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            z-index: 2;
+        }
+
+        .hero-title {
+            font-size: 48px;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 24px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero-subtext {
+            font-size: 18px;
+            line-height: 1.7;
+            max-width: 700px;
+            color: #d5d9e3;
+            margin-bottom: 40px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero-buttons {
+            margin-bottom: 40px;
+        }
+
+        /* RESTORED: Original orange/red gradient */
+        .btn-gradient {
+            background: linear-gradient(90deg, #ff8a00 0%, #ff3e3e 100%);
+            padding: 16px 40px;
+            color: #fff !important;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 18px;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 138, 0, 0.3);
+        }
+
+        .btn-gradient:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 138, 0, 0.4);
+            filter: brightness(1.1);
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 60px;
+            flex-wrap: wrap;
+            margin-top: 60px;
+        }
+
+        .stat-box {
+            text-align: left;
+        }
+
+        .stat-number {
+            font-size: 36px;
+            font-weight: 800;
+            color: #ff8a00;
+            display: block;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #d5d9e3;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* ========== TOOL CATEGORIES SECTION ========== */
+        #tool-categories-section {
+            padding: 100px 20px;
+            background: #ffffff;
+        }
+
+        .category-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 50px;
+            padding: 20px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .category-tab {
+            padding: 12px 24px;
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #64748b;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .category-tab:hover {
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+            color: #475569;
+        }
+
+        /* RESTORED: Original orange/red gradient for active tab */
+        .category-tab.active {
+            background: linear-gradient(135deg, #ff6b35 0%, #ff3e3e 100%);
+            border-color: #ff6b35;
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+        }
+
+        /* ========== FEATURES GRID ========== */
+        #features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 60px;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border-left: 5px solid;
+            opacity: 1;
+            display: block;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        /* RESTORED: Original orange gradient for feature icons */
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #ff6b35 0%, #ff8555 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 14px;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            font-size: 20px;
+            margin-bottom: 12px;
+            color: #1a1a2e;
+            font-weight: 600;
+        }
+
+        .feature-card p {
+            color: #555;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        /* ========== TOOL LISTS ========== */
+        .tool-list {
+            display: none;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tool-list.active {
+            display: grid;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .tool-item {
+            background: white;
+            padding: 18px 20px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: #475569;
+            font-weight: 500;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+            text-align: center;
+            display: block;
+        }
+
+        /* RESTORED: Original orange/red gradient for tool items */
+        .tool-item:hover {
+            background: linear-gradient(135deg, #ff6b35 0%, #ff3e3e 100%);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 107, 53, 0.25);
+            border-color: transparent;
+        }
+
+        /* ========== CATEGORY COLORS ========== */
+        /* Adjusted to work with orange theme */
+        .category-1 { border-left-color: #ff6b35; background-color: #fff5e6; }
+        .category-2 { border-left-color: #ff8a00; background-color: #fff3e0; }
+        .category-3 { border-left-color: #ff3e3e; background-color: #ffe6e6; }
+        .category-4 { border-left-color: #ff8555; background-color: #fff0eb; }
+        .category-5 { border-left-color: #ff9e00; background-color: #fff8e6; }
+        .category-6 { border-left-color: #ff6b6b; background-color: #fff0f0; }
+        .category-7 { border-left-color: #ffa726; background-color: #fff3e0; }
+        .category-8 { border-left-color: #ff7043; background-color: #ffebee; }
+        .category-9 { border-left-color: #ff5722; background-color: #fbe9e7; }
+        .category-10 { border-left-color: #ff9800; background-color: #fff3e0; }
+
+        .category-1:hover { border-color: #ffd7b5; background-color: #ffe8d6; }
+        .category-2:hover { border-color: #ffc285; background-color: #ffddb3; }
+        .category-3:hover { border-color: #ffb3b3; background-color: #ffd6d6; }
+        .category-4:hover { border-color: #ffc9b8; background-color: #ffe0d6; }
+        .category-5:hover { border-color: #ffd699; background-color: #ffecb3; }
+        .category-6:hover { border-color: #ffb8b8; background-color: #ffd6d6; }
+        .category-7:hover { border-color: #ffd699; background-color: #ffecb3; }
+        .category-8:hover { border-color: #ffccbc; background-color: #ffe0d6; }
+        .category-9:hover { border-color: #ffccbc; background-color: #ffd6cc; }
+        .category-10:hover { border-color: #ffcc80; background-color: #ffe0b2; }
+
+        /* ========== RESPONSIVE DESIGN ========== */
+        @media (max-width: 1024px) {
+            .hero-title {
+                font-size: 42px;
             }
             
-            // Filter feature cards
-            document.querySelectorAll('.feature-card').forEach(card => {
-                if(category === 'all' || card.dataset.category === category) {
-                    card.style.display = 'block';
-                    setTimeout(() => card.style.opacity = '1', 10);
+            .hero-subtext {
+                font-size: 17px;
+            }
+            
+            .section-title {
+                font-size: 36px;
+            }
+            
+            .category-tabs {
+                gap: 10px;
+            }
+            
+            .category-tab {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 60px 20px;
+                min-height: 500px;
+            }
+            
+            .hero-title {
+                font-size: 32px;
+            }
+            
+            .hero-subtext {
+                font-size: 16px;
+            }
+            
+            .btn-gradient {
+                padding: 14px 32px;
+                font-size: 16px;
+            }
+            
+            .hero-stats {
+                gap: 40px;
+            }
+            
+            .stat-number {
+                font-size: 28px;
+            }
+            
+            .stat-label {
+                font-size: 12px;
+            }
+            
+            .section-title {
+                font-size: 28px;
+            }
+            
+            .section-subtitle {
+                font-size: 16px;
+            }
+            
+            #features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .category-tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .category-tab {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+            
+            .tool-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .feature-card {
+                padding: 20px;
+            }
+            
+            .feature-icon {
+                width: 50px;
+                height: 50px;
+                font-size: 24px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 28px;
+            }
+            
+            .hero-subtext {
+                font-size: 15px;
+            }
+            
+            .hero-stats {
+                gap: 30px;
+                justify-content: center;
+            }
+            
+            .stat-box {
+                text-align: center;
+            }
+            
+            .section-title {
+                font-size: 24px;
+            }
+            
+            .section-subtitle {
+                font-size: 15px;
+            }
+        }
+
+        /* ========== ANIMATIONS ========== */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-content,
+        #tool-categories-section .features-container {
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        /* ========== ACCESSIBILITY ========== */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* RESTORED: Original orange focus outline */
+        :focus {
+            outline: 3px solid #ff8a00;
+            outline-offset: 2px;
+        }
+
+        /* ========== PRINT STYLES ========== */
+        @media print {
+            .hero-section {
+                background: white !important;
+                color: black !important;
+                min-height: auto;
+            }
+            
+            .hero-section::before {
+                display: none;
+            }
+            
+            .btn-gradient {
+                display: none;
+            }
+            
+            .feature-card {
+                break-inside: avoid;
+                box-shadow: none !important;
+                border: 1px solid #ddd !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- HERO SECTION -->
+    <section class="hero-section">
+        <!-- LCP Image for Google (invisible but improves LCP) -->
+        <img 
+            src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiTYK2BOaBRKxfg4Nfw8uJSAQg445JJJmsrnkPDbSOaX5L2Ll1mU2lH2bS9_w32QzAPLBtDjY3QpCbcny2u4yFgwDzC6RrdIU2pk5GJBIHwugVvfy5Rl2l2VJNJNzudCyOxXTXr9PSM_beQMZBCFfgOvpNXPp4sFpWwQi745PYoTkoppOJcxWkIF13y2Sg/s1600/AlamToolKit.webp"
+            alt="AlamToolkit.com - Professional Engineering and Productivity Tools"
+            width="1600"
+            height="600"
+            fetchpriority="high"
+            style="position:absolute; width:0; height:0; opacity:0;"
+        />
+
+        <div class="hero-content">
+            <h1 class="hero-title">Your Ultimate Digital Toolkit</h1>
+            
+            <p class="hero-subtext">
+                AlamToolKit.com provides all the essential tools a person needs for daily planning, productivity, calculation, organization, work, study, and smart living — in one simple place.
+            </p>
+            
+            <div class="hero-buttons">
+                <a href="https://www.alamtoolkit.com/" class="btn-gradient">Explore All Tools</a>
+            </div>
+                
+            <div class="hero-stats">
+                <div class="stat-box">
+                    <span class="stat-number">300+</span>
+                    <span class="stat-label">FREE TOOLS</span>
+                </div>
+                
+                <div class="stat-box">
+                    <span class="stat-number">100%</span>
+                    <span class="stat-label">ACCURATE</span>
+                </div>
+                
+                <div class="stat-box">
+                    <span class="stat-number">24/7</span>
+                    <span class="stat-label">AVAILABLE</span>
+                </div>
+                
+                <div class="stat-box">
+                    <span class="stat-number">0$</span>
+                    <span class="stat-label">COST</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TOOL CATEGORIES SECTION -->
+    <section id="tool-categories-section">
+        <div class="features-container">
+            <h2 class="section-title">Comprehensive Tool Categories</h2>
+            <p class="section-subtitle">
+                Organized by function to help you find exactly what you need for any task
+            </p>
+            
+            <!-- Category Tabs -->
+            <div class="category-tabs">
+                <div class="category-tab active" data-category="all">All Tools</div>
+                <div class="category-tab" data-category="planning">📅 Planning & Time</div>
+                <div class="category-tab" data-category="calculation">🔢 Calculation</div>
+                <div class="category-tab" data-category="writing">📝 Writing & Notes</div>
+                <div class="category-tab" data-category="organization">📂 Organization</div>
+                <div class="category-tab" data-category="finance">💰 Finance</div>
+                <div class="category-tab" data-category="utilities">🛠️ Utilities</div>
+                <div class="category-tab" data-category="communication">🌐 Communication</div>
+                <div class="category-tab" data-category="learning">🎓 Learning</div>
+                <div class="category-tab" data-category="security">🔐 Security</div>
+                <div class="category-tab" data-category="health">🧘 Health</div>
+            </div>
+            
+            <!-- Features Grid -->
+            <div id="features-grid">
+                <!-- Planning & Time Management -->
+                <div class="feature-card category-1" data-category="planning">
+                    <div class="feature-icon">📅</div>
+                    <h3>Planning & Time Management</h3>
+                    <p>Calendars, planners, timers, and schedulers to help you stay organized and meet deadlines.</p>
+                </div>
+                
+                <!-- Calculation & Conversion -->
+                <div class="feature-card category-2" data-category="calculation">
+                    <div class="feature-icon">🧮</div>
+                    <h3>Calculation & Conversion</h3>
+                    <p>Advanced calculators for engineering, finance, conversions, and everyday math with precise results.</p>
+                </div>
+                
+                <!-- Writing, Notes & Text Tools -->
+                <div class="feature-card category-3" data-category="writing">
+                    <div class="feature-icon">✍️</div>
+                    <h3>Writing & Text Tools</h3>
+                    <p>Word processors, note-taking apps, and documentation tools for content creation.</p>
+                </div>
+                
+                <!-- Organization & Productivity -->
+                <div class="feature-card category-4" data-category="organization">
+                    <div class="feature-icon">📊</div>
+                    <h3>Organization & Productivity</h3>
+                    <p>Task managers, file organizers, and workflow tools are designed for maximum efficiency.</p>
+                </div>
+                
+                <!-- Finance & Office -->
+                <div class="feature-card category-5" data-category="finance">
+                    <div class="feature-icon">💰</div>
+                    <h3>Finance & Office</h3>
+                    <p>Budget planners, expense trackers, and financial calculators for personal and professional use.</p>
+                </div>
+                
+                <!-- Utilities & Digital Tools -->
+                <div class="feature-card category-6" data-category="utilities">
+                    <div class="feature-icon">🛠️</div>
+                    <h3>Utilities & Digital Tools</h3>
+                    <p>File converters, password generators, and utility tools for digital workflow enhancement.</p>
+                </div>
+                
+                <!-- Communication & Information -->
+                <div class="feature-card category-7" data-category="communication">
+                    <div class="feature-icon">🌐</div>
+                    <h3>Communication & Information</h3>
+                    <p>Email clients, weather apps, dictionaries, and information tools for daily use.</p>
+                </div>
+                
+                <!-- Learning & Self-Improvement -->
+                <div class="feature-card category-8" data-category="learning">
+                    <div class="feature-icon">🎓</div>
+                    <h3>Learning & Self-Improvement</h3>
+                    <p>Study tools, flashcards, and educational resources for continuous learning.</p>
+                </div>
+                
+                <!-- Security & Privacy -->
+                <div class="feature-card category-9" data-category="security">
+                    <div class="feature-icon">🔐</div>
+                    <h3>Security & Privacy</h3>
+                    <p>Password managers, VPN guides, and security tools to protect your digital life.</p>
+                </div>
+                
+                <!-- Health & Wellness -->
+                <div class="feature-card category-10" data-category="health">
+                    <div class="feature-icon">🧘</div>
+                    <h3>Health & Wellness</h3>
+                    <p>Fitness trackers, meditation guides, and health calculators for overall wellbeing.</p>
+                </div>
+            </div>
+            
+            <!-- Tool Lists by Category -->
+            <!-- All Tools -->
+            <div class="tool-list active" id="all-tools">
+                <!-- Planning & Time Management -->
+                <a href="https://www.alamtoolkit.com/p/team-calendar-scheduler.html" class="tool-item">Calendar & Scheduler</a>
+                <a href="https://www.alamtoolkit.com/p/personal-daily-calendar-planner.html" class="tool-item">Daily/Weekly Planner</a>
+                <a href="https://www.alamtoolkit.com/p/task-manager.html" class="tool-item">Task Manager & To-Do List</a>
+                <a href="https://www.alamtoolkit.com/p/habit-and-goal-tracker.html" class="tool-item">Habit & Goal Tracker</a>
+                <a href="#" class="tool-item">Reminder & Alarm System</a>
+                <a href="#" class="tool-item">Countdown Timer & Stopwatch</a>
+                <a href="#" class="tool-item">World Clock & Time Zone Converter</a>
+                <a href="https://www.alamtoolkit.com/p/team-calendar-scheduler.html" class="tool-item">Meeting/Event Planner</a>
+                
+                <!-- Calculation & Conversion -->
+                <a href="https://www.alamtoolkit.com/p/engineering-calculator.html" class="tool-item">Standard & Scientific Calculator</a>
+                <a href="https://www.alamtoolkit.com/p/unit-converter.html" class="tool-item">Unit Converter</a>
+                <a href="https://www.alamtoolkit.com/p/currency-converter.html" class="tool-item">Currency Converter</a>
+                <a href="#" class="tool-item">Percentage Calculator</a>
+                <a href="#" class="tool-item">Discount, Tax & Tip Calculator</a>
+                <a href="#" class="tool-item">EMI / Loan Calculator</a>
+                <a href="#" class="tool-item">Salary & Timesheet Calculator</a>
+                <a href="https://www.alamtoolkit.com/p/age-calculator.html" class="tool-item">Date Difference & Age Calculator</a>
+                <a href="#" class="tool-item">BMI & Health Calculators</a>
+                <a href="#" class="tool-item">Speed/Distance Calculator</a>
+                
+                <!-- Writing, Notes & Text Tools -->
+                <a href="#" class="tool-item">Notes App & Notepad</a>
+                <a href="#" class="tool-item">Text Editor & Word Processor</a>
+                <a href="#" class="tool-item">Checklist & Shopping List Maker</a>
+                <a href="#" class="tool-item">Word & Character Counter</a>
+                <a href="#" class="tool-item">Text Case Converter</a>
+                <a href="#" class="tool-item">Grammar & Spell Check</a>
+                <a href="#" class="tool-item">Document Scanner</a>
+                
+                <!-- Organization & Productivity -->
+                <a href="#" class="tool-item">File Manager & Organizer</a>
+                <a href="#" class="tool-item">Bookmark Manager</a>
+                <a href="#" class="tool-item">Expense Tracker & Budget Planner</a>
+                <a href="#" class="tool-item">Invoice Generator</a>
+                <a href="#" class="tool-item">Password Manager</a>
+                <a href="#" class="tool-item">Cloud Storage Interface</a>
+                <a href="#" class="tool-item">Work Planner</a>
+                <a href="#" class="tool-item">Shopping List</a>
+                
+                <!-- Finance & Office -->
+                <a href="#" class="tool-item">Budget Planner</a>
+                <a href="#" class="tool-item">Expense Tracker</a>
+                <a href="#" class="tool-item">Bill Reminder</a>
+                <a href="#" class="tool-item">Price Comparison Helper</a>
+                <a href="#" class="tool-item">Investment & Savings Tracker</a>
+                <a href="#" class="tool-item">Invoice Generator</a>
+                <a href="#" class="tool-item">Timesheet Calculator</a>
+                
+                <!-- Utilities & Digital Tools -->
+                <a href="#" class="tool-item">QR Code Generator & Scanner</a>
+                <a href="#" class="tool-item">File Size Converter & Compressor</a>
+                <a href="#" class="tool-item">PDF Tools (Merge, Split, Compress)</a>
+                <a href="#" class="tool-item">Image Resizer & Editor</a>
+                <a href="#" class="tool-item">URL Shortener & Encoder/Decoder</a>
+                <a href="#" class="tool-item">Random Number Generator</a>
+                <a href="#" class="tool-item">Password Generator</a>
+                <a href="#" class="tool-item">Internet Speed Test</a>
+                <a href="#" class="tool-item">Download Manager</a>
+                <a href="#" class="tool-item">Online Clock</a>
+                
+                <!-- Communication & Information -->
+                <a href="#" class="tool-item">Email Client</a>
+                <a href="#" class="tool-item">Messaging & Video Call Platform</a>
+                <a href="#" class="tool-item">Contact Manager</a>
+                <a href="#" class="tool-item">Weather App & Widget</a>
+                <a href="#" class="tool-item">News Aggregator</a>
+                <a href="#" class="tool-item">Dictionary & Translator</a>
+                <a href="#" class="tool-item">Map & Navigation</a>
+                
+                <!-- Learning & Self-Improvement -->
+                <a href="#" class="tool-item">Flashcard & Study Tool</a>
+                <a href="#" class="tool-item">Grade Calculator</a>
+                <a href="#" class="tool-item">Reading Timer & Study Timer</a>
+                <a href="#" class="tool-item">Recipe Database & Meal Planner</a>
+                
+                <!-- Security & Privacy -->
+                <a href="#" class="tool-item">Password Generator & Manager</a>
+                <a href="#" class="tool-item">Two-Factor Authentication (2FA) App</a>
+                <a href="#" class="tool-item">VPN Information/Guide</a>
+                <a href="#" class="tool-item">Antivirus Information/Guide</a>
+                
+                <!-- Health & Wellness -->
+                <a href="#" class="tool-item">Fitness & Workout Tracker</a>
+                <a href="#" class="tool-item">Meditation & Mindfulness Guide</a>
+                <a href="#" class="tool-item">Water Intake Logger</a>
+                <a href="#" class="tool-item">Nutrition & Food Tracker</a>
+                <a href="#" class="tool-item">Sleep Cycle Analyzer</a>
+                <a href="#" class="tool-item">BMI Calculator</a>
+            </div>
+            
+            <!-- Planning & Time Management Tools -->
+            <div class="tool-list" id="planning-tools">
+                <a href="https://www.alamtoolkit.com/p/team-calendar-scheduler.html" class="tool-item">Calendar & Scheduler</a>
+                <a href="https://www.alamtoolkit.com/p/personal-daily-calendar-planner.html" class="tool-item">Daily/Weekly Planner</a>
+                <a href="https://www.alamtoolkit.com/p/task-manager.html" class="tool-item">Task Manager & To-Do List</a>
+                <a href="https://www.alamtoolkit.com/p/habit-and-goal-tracker.html" class="tool-item">Habit & Goal Tracker</a>
+                <a href="#" class="tool-item">Reminder & Alarm System</a>
+                <a href="#" class="tool-item">Alarm Clock</a>
+                <a href="#" class="tool-item">Countdown Timer & Stopwatch</a>
+                <a href="#" class="tool-item">Countdown Timer</a>
+                <a href="#" class="tool-item">Stopwatch</a>
+                <a href="#" class="tool-item">World Clock & Time Zone Converter</a>
+                <a href="https://www.alamtoolkit.com/p/team-calendar-scheduler.html" class="tool-item">Meeting/Event Planner</a>
+                <a href="#" class="tool-item">Meeting Scheduler</a>
+                <a href="#" class="tool-item">Work Planner</a>
+                <a href="#" class="tool-item">Study Timer</a>
+                <a href="#" class="tool-item">Reading Timer</a>
+                <a href="#" class="tool-item">Meditation/Focus Timer</a>
+            </div>
+            
+            <!-- Calculation & Conversion Tools -->
+            <div class="tool-list" id="calculation-tools">
+                <a href="https://www.alamtoolkit.com/p/engineering-calculator.html" class="tool-item">Standard & Scientific Calculator</a>
+                <a href="https://www.alamtoolkit.com/p/engineering-calculator.html" class="tool-item">Engineering Calculator</a>
+                <a href="https://www.alamtoolkit.com/p/unit-converter.html" class="tool-item">Unit Converter</a>
+                <a href="https://www.alamtoolkit.com/p/currency-converter.html" class="tool-item">Currency Converter</a>
+                <a href="#" class="tool-item">Percentage Calculator</a>
+                <a href="#" class="tool-item">Discount Calculator</a>
+                <a href="#" class="tool-item">Tax Calculator</a>
+                <a href="#" class="tool-item">Tip Calculator</a>
+                <a href="#" class="tool-item">EMI / Loan Calculator</a>
+                <a href="#" class="tool-item">Salary Calculator</a>
+                <a href="#" class="tool-item">Timesheet Calculator</a>
+                <a href="#" class="tool-item">Date Difference Calculator</a>
+                <a href="https://www.alamtoolkit.com/p/age-calculator.html" class="tool-item">Age Calculator</a>
+                <a href="#" class="tool-item">Speed/Distance Calculator</a>
+                <a href="#" class="tool-item">BMI Calculator</a>
+                <a href="#" class="tool-item">Discount, Tax & Tip Calculator</a>
+                <a href="#" class="tool-item">Salary & Timesheet Calculator</a>
+                <a href="#" class="tool-item">BMI & Health Calculators</a>
+                <a href="#" class="tool-item">Grade Calculator</a>
+            </div>
+            
+            <!-- Writing, Notes & Text Tools -->
+            <div class="tool-list" id="writing-tools">
+                <a href="#" class="tool-item">Notes App & Notepad</a>
+                <a href="#" class="tool-item">Notes App / Quick Memo</a>
+                <a href="#" class="tool-item">Notepad</a>
+                <a href="#" class="tool-item">Text Editor & Word Processor</a>
+                <a href="#" class="tool-item">Text Editor</a>
+                <a href="#" class="tool-item">Checklist & Shopping List Maker</a>
+                <a href="#" class="tool-item">Checklist Maker</a>
+                <a href="#" class="tool-item">Word & Character Counter</a>
+                <a href="#" class="tool-item">Word Counter</a>
+                <a href="#" class="tool-item">Character Counter</a>
+                <a href="#" class="tool-item">Text Case Converter</a>
+                <a href="#" class="tool-item">Grammar & Spell Check</a>
+                <a href="#" class="tool-item">Document Scanner</a>
+                <a href="#" class="tool-item">Digital Notepad</a>
+            </div>
+            
+            <!-- Organization & Productivity Tools -->
+            <div class="tool-list" id="organization-tools">
+                <a href="#" class="tool-item">File Manager & Organizer</a>
+                <a href="#" class="tool-item">File Manager / Organizer</a>
+                <a href="#" class="tool-item">Bookmark Manager</a>
+                <a href="#" class="tool-item">Expense Tracker & Budget Planner</a>
+                <a href="#" class="tool-item">Expense Tracker</a>
+                <a href="#" class="tool-item">Budget Planner</a>
+                <a href="#" class="tool-item">Invoice Generator</a>
+                <a href="#" class="tool-item">Password Manager</a>
+                <a href="#" class="tool-item">Cloud Storage Interface</a>
+                <a href="#" class="tool-item">Cloud Storage Access</a>
+                <a href="#" class="tool-item">Habit Tracker</a>
+                <a href="#" class="tool-item">Goal Tracker</a>
+                <a href="#" class="tool-item">Work Planner</a>
+                <a href="#" class="tool-item">Shopping List</a>
+                <a href="https://www.alamtoolkit.com/p/task-manager.html" class="tool-item">To-Do List / Task Manager</a>
+                <a href="https://www.alamtoolkit.com/p/task-manager.html" class="tool-item">Task Manager</a>
+            </div>
+            
+            <!-- Finance & Office Tools -->
+            <div class="tool-list" id="finance-tools">
+                <a href="#" class="tool-item">Budget Planner</a>
+                <a href="#" class="tool-item">Expense Tracker</a>
+                <a href="#" class="tool-item">Bill Reminder</a>
+                <a href="#" class="tool-item">Price Comparison Helper</a>
+                <a href="#" class="tool-item">Investment & Savings Tracker</a>
+                <a href="#" class="tool-item">Investment / Saving Tracker</a>
+                <a href="#" class="tool-item">Invoice Generator</a>
+                <a href="#" class="tool-item">Timesheet Calculator</a>
+                <a href="#" class="tool-item">EMI / Loan Calculator</a>
+                <a href="#" class="tool-item">Salary Calculator</a>
+                <a href="https://www.alamtoolkit.com/p/currency-converter.html" class="tool-item">Currency Converter</a>
+                <a href="#" class="tool-item">Tax Calculator</a>
+                <a href="#" class="tool-item">Tip Calculator</a>
+            </div>
+            
+            <!-- Utilities & Digital Tools -->
+            <div class="tool-list" id="utilities-tools">
+                <a href="#" class="tool-item">QR Code Generator & Scanner</a>
+                <a href="#" class="tool-item">File Size Converter & Compressor</a>
+                <a href="#" class="tool-item">Image Resizer</a>
+                <a href="#" class="tool-item">Image Compressor</a>
+                <a href="#" class="tool-item">File Size Converter</a>
+                <a href="#" class="tool-item">PDF Tools (Merge, Split, Compress)</a>
+                <a href="#" class="tool-item">PDF Tools</a>
+                <a href="#" class="tool-item">Image Resizer & Editor</a>
+                <a href="#" class="tool-item">URL Shortener & Encoder/Decoder</a>
+                <a href="#" class="tool-item">URL Encoder / Decoder</a>
+                <a href="#" class="tool-item">URL Shortener</a>
+                <a href="#" class="tool-item">Random Number Generator</a>
+                <a href="#" class="tool-item">Password Generator</a>
+                <a href="#" class="tool-item">Internet Speed Test</a>
+                <a href="#" class="tool-item">Download Manager</a>
+                <a href="#" class="tool-item">Online Clock</a>
+                <a href="#" class="tool-item">Document Scanner</a>
+                <a href="#" class="tool-item">Document Scanner (for text capture)</a>
+            </div>
+            
+            <!-- Communication & Information Tools -->
+            <div class="tool-list" id="communication-tools">
+                <a href="#" class="tool-item">Email Client</a>
+                <a href="#" class="tool-item">Email Tool</a>
+                <a href="#" class="tool-item">Messaging & Video Call Platform</a>
+                <a href="#" class="tool-item">Messaging Tool</a>
+                <a href="#" class="tool-item">Video Calling Tool</a>
+                <a href="#" class="tool-item">Contact Manager</a>
+                <a href="#" class="tool-item">Weather App & Widget</a>
+                <a href="#" class="tool-item">Weather Checker</a>
+                <a href="#" class="tool-item">News Aggregator</a>
+                <a href="#" class="tool-item">Dictionary & Translator</a>
+                <a href="#" class="tool-item">Dictionary</a>
+                <a href="#" class="tool-item">Translator</a>
+                <a href="#" class="tool-item">Map & Navigation</a>
+            </div>
+            
+            <!-- Learning & Self-Improvement Tools -->
+            <div class="tool-list" id="learning-tools">
+                <a href="#" class="tool-item">Flashcard & Study Tool</a>
+                <a href="#" class="tool-item">Flashcard Tool</a>
+                <a href="#" class="tool-item">Grade Calculator</a>
+                <a href="#" class="tool-item">Reading Timer & Study Timer</a>
+                <a href="#" class="tool-item">Study Timer</a>
+                <a href="#" class="tool-item">Reading Timer</a>
+                <a href="#" class="tool-item">Recipe Database & Meal Planner</a>
+            </div>
+            
+            <!-- Security & Privacy Tools -->
+            <div class="tool-list" id="security-tools">
+                <a href="#" class="tool-item">Password Generator & Manager</a>
+                <a href="#" class="tool-item">Password Generator</a>
+                <a href="#" class="tool-item">Password Manager</a>
+                <a href="#" class="tool-item">Two-Factor Authentication (2FA) App</a>
+                <a href="#" class="tool-item">Two-Factor Authentication Tool</a>
+                <a href="#" class="tool-item">VPN Information/Guide</a>
+                <a href="#" class="tool-item">VPN Tool</a>
+                <a href="#" class="tool-item">Antivirus Information/Guide</a>
+                <a href="#" class="tool-item">Antivirus Utility</a>
+            </div>
+            
+            <!-- Health & Wellness Tools -->
+            <div class="tool-list" id="health-tools">
+                <a href="#" class="tool-item">Fitness & Workout Tracker</a>
+                <a href="#" class="tool-item">Fitness Tracker</a>
+                <a href="#" class="tool-item">Meditation & Mindfulness Guide</a>
+                <a href="#" class="tool-item">Meditation / Focus Timer</a>
+                <a href="#" class="tool-item">Water Intake Logger</a>
+                <a href="#" class="tool-item">Nutrition & Food Tracker</a>
+                <a href="#" class="tool-item">Sleep Cycle Analyzer</a>
+                <a href="#" class="tool-item">BMI Calculator</a>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Tab functionality
+        document.querySelectorAll('.category-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                // Update active tab
+                document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Show corresponding tools
+                const category = this.dataset.category;
+                document.querySelectorAll('.tool-list').forEach(list => {
+                    list.classList.remove('active');
+                });
+                
+                if(category === 'all') {
+                    document.getElementById('all-tools').classList.add('active');
                 } else {
-                    card.style.opacity = '0';
-                    setTimeout(() => card.style.display = 'none', 300);
+                    const toolList = document.getElementById(`${category}-tools`);
+                    if(toolList) toolList.classList.add('active');
+                }
+                
+                // Filter feature cards
+                document.querySelectorAll('.feature-card').forEach(card => {
+                    if(category === 'all' || card.dataset.category === category) {
+                        card.style.display = 'block';
+                        setTimeout(() => card.style.opacity = '1', 10);
+                    } else {
+                        card.style.opacity = '0';
+                        setTimeout(() => card.style.display = 'none', 300);
+                    }
+                });
+            });
+        });
+
+        // Show all tools by default
+        document.getElementById('all-tools').classList.add('active');
+
+        // Add smooth scrolling for better UX
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                if(this.getAttribute('href') === '#') return; // Don't scroll for placeholder links
+                
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                
+                const targetElement = document.querySelector(targetId);
+                if(targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
                 }
             });
         });
-    });
 
-    // Show all tools by default
-    document.getElementById('all-tools').classList.add('active');
-
-    // Add smooth scrolling for better UX
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            if(this.getAttribute('href') === '#') return; // Don't scroll for placeholder links
+        // Add animation to tool items on hover
+        document.querySelectorAll('.tool-item').forEach(item => {
+            item.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-3px) scale(1.02)';
+            });
             
-            e.preventDefault();
-            const targetId = this.getAttribute('href');
-            
-            const targetElement = document.querySelector(targetId);
-            if(targetElement) {
-                window.scrollTo({
-                    top: targetElement.offsetTop - 80,
-                    behavior: 'smooth'
-                });
-            }
+            item.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
         });
-    });
-
-    // Add animation to tool items on hover
-    document.querySelectorAll('.tool-item').forEach(item => {
-        item.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-3px) scale(1.02)';
-        });
-        
-        item.addEventListener('mouseleave', function() {
-            this.style.transform = 'translateY(0) scale(1)';
-        });
-    });
-</script>
+    </script>
 
     <script src="/app.js"></script>
 </body>
