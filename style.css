@@ -1,0 +1,19 @@
+/* style.css - Minimal CSS for AlamToolKit PWA */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #f5f5f5;
+}
+
+/* Add any minimal styling needed */
+.btn-install {
+    background: linear-gradient(135deg, #ff6b35 0%, #ff3e3e 100%);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 20px;
+}
