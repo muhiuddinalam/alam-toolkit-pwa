@@ -1016,132 +1016,355 @@
         </div>
     </section>
 
-    <script>
-        // Tab functionality
-        document.querySelectorAll('.category-tab').forEach(tab => {
-            tab.addEventListener('click', function() {
-                // Update active tab
-                document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
-                this.classList.add('active');
-                
-                // Show corresponding tools
-                const category = this.dataset.category;
-                document.querySelectorAll('.tool-list').forEach(list => {
-                    list.classList.remove('active');
-                });
-                
-                if(category === 'all') {
-                    document.getElementById('all-tools').classList.add('active');
+  <script>
+    // ========== TAB FUNCTIONALITY ==========
+    document.querySelectorAll('.category-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            // Update active tab
+            document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Show corresponding tools
+            const category = this.dataset.category;
+            document.querySelectorAll('.tool-list').forEach(list => {
+                list.classList.remove('active');
+            });
+            
+            if(category === 'all') {
+                document.getElementById('all-tools').classList.add('active');
+            } else {
+                const toolList = document.getElementById(`${category}-tools`);
+                if(toolList) toolList.classList.add('active');
+            }
+            
+            // Filter feature cards
+            document.querySelectorAll('.feature-card').forEach(card => {
+                if(category === 'all' || card.dataset.category === category) {
+                    card.style.display = 'block';
+                    setTimeout(() => card.style.opacity = '1', 10);
                 } else {
-                    const toolList = document.getElementById(`${category}-tools`);
-                    if(toolList) toolList.classList.add('active');
-                }
-                
-                // Filter feature cards
-                document.querySelectorAll('.feature-card').forEach(card => {
-                    if(category === 'all' || card.dataset.category === category) {
-                        card.style.display = 'block';
-                        setTimeout(() => card.style.opacity = '1', 10);
-                    } else {
-                        card.style.opacity = '0';
-                        setTimeout(() => card.style.display = 'none', 300);
-                    }
-                });
-            });
-        });
-
-        // Show all tools by default
-        document.getElementById('all-tools').classList.add('active');
-
-        // Add smooth scrolling for better UX
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                if(this.getAttribute('href') === '#') return; // Don't scroll for placeholder links
-                
-                e.preventDefault();
-                const targetId = this.getAttribute('href');
-                
-                const targetElement = document.querySelector(targetId);
-                if(targetElement) {
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 80,
-                        behavior: 'smooth'
-                    });
+                    card.style.opacity = '0';
+                    setTimeout(() => card.style.display = 'none', 300);
                 }
             });
         });
+    });
 
-        // Add animation to tool items on hover
-        document.querySelectorAll('.tool-item').forEach(item => {
-            item.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-3px) scale(1.02)';
-            });
+    // Show all tools by default
+    document.getElementById('all-tools').classList.add('active');
+
+    // Add smooth scrolling for better UX
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            if(this.getAttribute('href') === '#') return; // Don't scroll for placeholder links
             
-            item.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateY(0) scale(1)';
-            });
-        });
-        
-        // ========== PWA INSTALLATION LOGIC ==========
-        let deferredPrompt;
-        const installButton = document.getElementById('pwaInstallButton');
-        
-        // Listen for install prompt
-        window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
-            deferredPrompt = e;
-            console.log('✅ PWA install is available');
+            const targetId = this.getAttribute('href');
             
-            // Show install button
-            if (installButton) {
-                installButton.style.display = 'inline-flex';
-                installButton.innerHTML = '<span>📱</span> Install Now';
+            const targetElement = document.querySelector(targetId);
+            if(targetElement) {
+                window.scrollTo({
+                    top: targetElement.offsetTop - 80,
+                    behavior: 'smooth'
+                });
             }
         });
+    });
+
+    // Add animation to tool items on hover
+    document.querySelectorAll('.tool-item').forEach(item => {
+        item.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-3px) scale(1.02)';
+        });
         
-        // Install button click
+        item.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0) scale(1)';
+        });
+    });
+    
+    // ========== PWA INSTALLATION LOGIC ==========
+    let deferredPrompt;
+    const installButton = document.getElementById('pwaInstallButton');
+    const installContainer = document.querySelector('.pwa-install-container');
+    
+    // Function to check if app is already installed
+    function isAppInstalled() {
+        // Method 1: Check display mode (Chrome/Android)
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+        
+        // Method 2: Check iOS standalone mode
+        const isIOSStandalone = window.navigator.standalone === true;
+        
+        // Method 3: Check referrer (Android app)
+        const hasAndroidReferrer = document.referrer.includes('android-app://');
+        
+        // Method 4: Check localStorage flag
+        const hasLocalStorageFlag = localStorage.getItem('alamtoolkit_installed') === 'true';
+        
+        // Method 5: Check URL parameters (sometimes added after install)
+        const urlParams = new URLSearchParams(window.location.search);
+        const hasInstallParam = urlParams.has('installed') || urlParams.has('from_pwa');
+        
+        return isStandalone || isIOSStandalone || hasAndroidReferrer || hasLocalStorageFlag || hasInstallParam;
+    }
+    
+    // Function to hide install section
+    function hideInstallSection() {
+        if (installContainer) {
+            console.log('Hiding install section - app is already installed');
+            installContainer.style.display = 'none';
+            
+            // Add a class to body for CSS targeting
+            document.body.classList.add('pwa-installed');
+            
+            // Save to localStorage for future visits
+            localStorage.setItem('alamtoolkit_installed', 'true');
+        }
+        
         if (installButton) {
-            installButton.addEventListener('click', async () => {
-                if (deferredPrompt) {
-                    installButton.innerHTML = '<span>⏳</span> Installing...';
-                    installButton.disabled = true;
+            installButton.style.display = 'none';
+        }
+    }
+    
+    // Function to show install section
+    function showInstallSection() {
+        if (installContainer && !isAppInstalled()) {
+            installContainer.style.display = 'block';
+            document.body.classList.remove('pwa-installed');
+        }
+        
+        if (installButton && !isAppInstalled()) {
+            installButton.style.display = 'inline-flex';
+        }
+    }
+    
+    // Check on page load
+    function checkInstallStatus() {
+        console.log('Checking install status...');
+        console.log('Standalone mode:', window.matchMedia('(display-mode: standalone)').matches);
+        console.log('iOS standalone:', window.navigator.standalone);
+        console.log('Referrer:', document.referrer);
+        console.log('LocalStorage flag:', localStorage.getItem('alamtoolkit_installed'));
+        
+        if (isAppInstalled()) {
+            hideInstallSection();
+        } else {
+            showInstallSection();
+        }
+    }
+    
+    // Listen for install prompt
+    window.addEventListener('beforeinstallprompt', (e) => {
+        // Prevent Chrome 67 and earlier from automatically showing the prompt
+        e.preventDefault();
+        
+        // Stash the event so it can be triggered later
+        deferredPrompt = e;
+        
+        console.log('✅ PWA install prompt is available');
+        
+        // Update UI to show install button
+        if (installButton && !isAppInstalled()) {
+            installButton.style.display = 'inline-flex';
+            installButton.innerHTML = '<span>📱</span> Install Now';
+            installButton.disabled = false;
+        }
+    });
+    
+    // Install button click handler
+    if (installButton) {
+        installButton.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                // Show the install prompt
+                installButton.innerHTML = '<span>⏳</span> Installing...';
+                installButton.disabled = true;
+                
+                try {
+                    deferredPrompt.prompt();
                     
-                    try {
-                        deferredPrompt.prompt();
-                        const { outcome } = await deferredPrompt.userChoice;
+                    // Wait for the user to respond to the prompt
+                    const choiceResult = await deferredPrompt.userChoice;
+                    
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('✅ User accepted the PWA installation');
                         
-                        if (outcome === 'accepted') {
-                            installButton.innerHTML = '<span>✅</span> Installed!';
-                            installButton.disabled = true;
-                            installButton.style.background = '#4CAF50';
-                            installButton.style.color = 'white';
+                        // Update button to show success
+                        installButton.innerHTML = '<span>✅</span> Installed!';
+                        installButton.style.background = '#4CAF50';
+                        installButton.style.color = 'white';
+                        
+                        // Hide the entire section after 2 seconds
+                        setTimeout(() => {
+                            hideInstallSection();
                             
-                            // Hide after 3 seconds
-                            setTimeout(() => {
-                                installButton.style.display = 'none';
-                            }, 3000);
-                        } else {
-                            installButton.innerHTML = '<span>📱</span> Install Now';
-                            installButton.disabled = false;
-                        }
-                    } catch (error) {
-                        console.error('Install error:', error);
+                            // Optional: Show a success message
+                            if (installContainer) {
+                                installContainer.innerHTML = `
+                                    <div style="text-align: center; padding: 30px;">
+                                        <div style="font-size: 48px; margin-bottom: 20px;">🎉</div>
+                                        <h2>App Installed Successfully!</h2>
+                                        <p>AlamToolKit has been added to your home screen.</p>
+                                        <div style="margin-top: 20px; font-size: 14px; color: #666;">
+                                            Look for the app icon on your home screen
+                                        </div>
+                                    </div>
+                                `;
+                                
+                                // Hide success message after 5 seconds
+                                setTimeout(() => {
+                                    installContainer.style.display = 'none';
+                                }, 5000);
+                            }
+                        }, 2000);
+                        
+                        // Set flag in localStorage
+                        localStorage.setItem('alamtoolkit_installed', 'true');
+                        
+                        // Add URL parameter to help detection
+                        const url = new URL(window.location);
+                        url.searchParams.set('installed', 'true');
+                        window.history.replaceState({}, '', url);
+                        
+                    } else {
+                        console.log('❌ User dismissed the PWA installation');
                         installButton.innerHTML = '<span>📱</span> Install Now';
                         installButton.disabled = false;
                     }
                     
+                    // Clear the deferredPrompt variable
                     deferredPrompt = null;
+                    
+                } catch (error) {
+                    console.error('Installation error:', error);
+                    installButton.innerHTML = '<span>📱</span> Install Now';
+                    installButton.disabled = false;
                 }
-            });
-        }
+            } else {
+                // If no deferredPrompt, maybe it's iOS
+                if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+                    // Show iOS instructions
+                    if (installContainer) {
+                        installContainer.innerHTML = `
+                            <h2>📱 Install on iPhone/iPad</h2>
+                            <p>To install AlamToolKit on iOS:</p>
+                            <ol style="text-align: left; margin: 20px auto; max-width: 300px;">
+                                <li>Tap the Share button <span style="font-size: 18px">⎙</span></li>
+                                <li>Scroll down and tap "Add to Home Screen"</li>
+                                <li>Tap "Add" in the top right corner</li>
+                            </ol>
+                            <button onclick="location.reload()" style="
+                                background: #ff6b35;
+                                color: white;
+                                border: none;
+                                padding: 12px 24px;
+                                border-radius: 8px;
+                                font-size: 16px;
+                                cursor: pointer;
+                                margin-top: 15px;
+                            ">
+                                I've Installed It
+                            </button>
+                        `;
+                    }
+                }
+            }
+        });
+    }
+    
+    // Listen for app being launched (for future detection)
+    if ('launchQueue' in window) {
+        window.launchQueue.setConsumer((launchParams) => {
+            console.log('App launched from installed PWA');
+            localStorage.setItem('alamtoolkit_installed', 'true');
+            hideInstallSection();
+        });
+    }
+    
+    // Listen for display mode changes
+    window.matchMedia('(display-mode: standalone)').addEventListener('change', (e) => {
+        console.log('Display mode changed to:', e.matches ? 'standalone' : 'browser');
+        checkInstallStatus();
+    });
+    
+    // Check when page loads
+    document.addEventListener('DOMContentLoaded', () => {
+        // Initial check
+        checkInstallStatus();
         
-        // Check if already installed
-        if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
-            console.log('✅ App is running in standalone mode');
-            if (installButton) {
-                installButton.style.display = 'none';
+        // Check again after a short delay (allows time for detection)
+        setTimeout(checkInstallStatus, 1000);
+        
+        // Check again after 3 seconds (in case of slow detection)
+        setTimeout(checkInstallStatus, 3000);
+    });
+    
+    // Also check when page becomes visible (after returning from install)
+    document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) {
+            setTimeout(checkInstallStatus, 500);
+        }
+    });
+    
+    // ========== ADDITIONAL FEATURES ==========
+    
+    // Add loading animation to all buttons
+    document.querySelectorAll('button, .btn-gradient').forEach(button => {
+        button.addEventListener('click', function(e) {
+            // Add a small ripple effect
+            const ripple = document.createElement('span');
+            const rect = this.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = e.clientX - rect.left - size/2;
+            const y = e.clientY - rect.top - size/2;
+            
+            ripple.style.cssText = `
+                position: absolute;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.7);
+                transform: scale(0);
+                animation: ripple 0.6s linear;
+                width: ${size}px;
+                height: ${size}px;
+                top: ${y}px;
+                left: ${x}px;
+                pointer-events: none;
+            `;
+            
+            this.style.position = 'relative';
+            this.style.overflow = 'hidden';
+            this.appendChild(ripple);
+            
+            setTimeout(() => ripple.remove(), 600);
+        });
+    });
+    
+    // Add ripple animation to CSS
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes ripple {
+            to {
+                transform: scale(4);
+                opacity: 0;
             }
         }
-    </script>
+        
+        /* Hide install section when app is installed */
+        body.pwa-installed .pwa-install-container {
+            display: none !important;
+        }
+        
+        /* Success animation for install button */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        #pwaInstallButton.installing {
+            animation: pulse 0.5s ease-in-out;
+        }
+    `;
+    document.head.appendChild(style);
+</script>
 </body>
 </html>
