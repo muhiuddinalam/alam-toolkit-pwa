@@ -1,11 +1,14 @@
 {
   "name": "AlamToolKit",
   "short_name": "ATK",
-  "description": "Tools and utilities collection with notifications",
-  "start_url": "https://app.alamtoolkit.com/",
+  "description": "Tools and utilities collection",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#3367D6",
+  "orientation": "any",
+  "categories": ["productivity", "utilities"],
   "icons": [
     {
       "src": "https://muhiuddinalam.github.io/alam-toolkit-pwa/icon-192.png",
@@ -18,9 +21,20 @@
       "sizes": "512x512",
       "type": "image/png"
     }
+  ],
+  "shortcuts": [
+    {
+      "name": "All Tools",
+      "short_name": "Tools",
+      "description": "Browse all available tools",
+      "url": "/?category=all"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "https://muhiuddinalam.github.io/alam-toolkit-pwa/screenshot-1.png",
+      "sizes": "1280x720",
+      "type": "image/png"
+    }
   ]
 }
-
-
-
-
