@@ -14,7 +14,7 @@
     <link href='https://www.alamtoolkit.com/' rel='canonical'>
 
     <!-- PWA Manifest -->
-    <link rel="manifest" href="/manifest.json" crossorigin="use-credentials">
+    <link rel="manifest" href="/manifest.json">
     
     <!-- Favicon & Icons -->
     <link rel="icon" type="image/png" href="/icon-192.png" sizes="192x192">
@@ -29,9 +29,9 @@
     <link rel="apple-touch-icon" sizes="512x512" href="/icon-512.png">
     
     <!-- Theme Colors -->
-    <meta name="theme-color" content="#3367D6" media="(prefers-color-scheme: light)">
-    <meta name="theme-color" content="#2a56c6" media="(prefers-color-scheme: dark)">
-    <meta name="msapplication-TileColor" content="#3367D6">
+    <meta name="theme-color" content="#ff6b35" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#ff5722" media="(prefers-color-scheme: dark)">
+    <meta name="msapplication-TileColor" content="#ff6b35">
     <meta name="msapplication-TileImage" content="/icon-192.png">
     
     <!-- Open Graph Tags (Social Media) -->
@@ -56,6 +56,22 @@
     <!-- Preload critical resources -->
     <link rel="preload" href="/app.js" as="script">
     <link rel="preload" href="/style.css" as="style">
+    
+    <!-- CRITICAL: Service Worker Registration -->
+    <script>
+        // Register Service Worker for PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(function(registration) {
+                        console.log('✅ Service Worker registered with scope:', registration.scope);
+                    })
+                    .catch(function(error) {
+                        console.log('❌ Service Worker registration failed:', error);
+                    });
+            });
+        }
+    </script>
     
     <!-- Inline CSS for critical styles -->
     <style>
@@ -1004,6 +1020,31 @@
         });
     </script>
 
+    <!-- CRITICAL: PWA Installation Logic -->
+    <script>
+        // PWA Installation - Browser will show native install prompt automatically
+        let deferredPrompt;
+        
+        // Listen for the beforeinstallprompt event
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // Prevent Chrome 67 and earlier from automatically showing the prompt
+            e.preventDefault();
+            // Stash the event so it can be triggered later
+            deferredPrompt = e;
+            console.log('✅ PWA install is available');
+            
+            // The browser will show its own install button in the address bar
+            // Chrome/Android: Shows install icon in address bar
+            // iOS Safari: User needs to use "Add to Home Screen" from share menu
+        });
+        
+        // Check if app is already installed
+        if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
+            console.log('✅ App is running in standalone mode');
+        }
+    </script>
+    
+    <!-- Load external app.js if it exists -->
     <script src="/app.js"></script>
 </body>
 </html>
