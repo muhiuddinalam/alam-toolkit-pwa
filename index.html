@@ -64,12 +64,12 @@
     
     <!-- ✅ Structured Data for PWA -->
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "AlamToolKit App",
-      "url": "https://app.alamtoolkit.com",
-      "description": "Progressive Web App installation for AlamToolKit productivity tools",
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "AlamToolKit App",
+  "url": "https://app.alamtoolkit.com",
+  "description": "Progressive Web App installation for AlamToolKit productivity tools",
   "applicationCategory": ["ProductivityApplication", "UtilitiesApplication"],
   "operatingSystem": "Any",
   "browserRequirements": "Requires JavaScript. Works best in modern browsers.",
@@ -98,9 +98,18 @@
     "ratingCount": "150",
     "bestRating": "5",
     "worstRating": "1"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://www.alamtoolkit.com"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "AlamToolKit",
+    "url": "https://www.alamtoolkit.com"
   }
 }
-</script>   
+</script>  
     
     <!-- Service Worker Registration -->
     <script>
