@@ -4,12 +4,3 @@ Disallow: /admin/
 Disallow: /private/
 
 Sitemap: https://app.alamtoolkit.com/sitemap.xml
-
-# PWA specific directives
-User-agent: Googlebot
-Allow: /js/
-Allow: /css/
-Allow: /img/
-
-User-agent: Googlebot-Mobile
-Allow: /
