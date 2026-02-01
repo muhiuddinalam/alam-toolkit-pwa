@@ -13,6 +13,3 @@ Allow: /img/
 
 User-agent: Googlebot-Mobile
 Allow: /
-
-# Crawl delay for search engines
-Crawl-delay: 1
