@@ -8,13 +8,24 @@
     <title>AlamToolKit - Productivity Tools</title>
     
     <!-- Meta Description -->
-    <meta name="description" content="AlamToolkit.com offers essential digital tools for daily life, from planners and calculators to converters and productivity apps.">
+    <meta name="description" content="Install AlamToolKit Progressive Web App for enhanced experience with 300+ productivity tools, offline access, and notifications.">
     
     <!-- Link canonical -->  
-    <link href='https://www.alamtoolkit.com/' rel='canonical'>
+    <link rel="canonical" href="https://app.alamtoolkit.com/" />
 
     <!-- PWA Manifest -->
     <link rel="manifest" href="/manifest.json">
+
+<!-- Sitemap reference -->
+<link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
+
+<!-- Hreflang for international targeting -->
+<link rel="alternate" hreflang="en" href="https://app.alamtoolkit.com/" />
+<link rel="alternate" hreflang="x-default" href="https://app.alamtoolkit.com/" />
+
+<!-- Link to main blog -->
+<link rel="alternate" media="only screen and (max-width: 640px)" 
+      href="https://www.alamtoolkit.com/" />    
     
     <!-- Favicon & Icons -->
     <link rel="icon" type="image/png" href="/icon-192.png" sizes="192x192">
@@ -49,6 +60,49 @@
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+     <!-- ✅ Robots Meta Tag -->
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    
+    <!-- ✅ Structured Data for PWA -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "AlamToolKit App",
+      "url": "https://app.alamtoolkit.com",
+      "description": "Progressive Web App installation for AlamToolKit productivity tools",
+  "applicationCategory": ["ProductivityApplication", "UtilitiesApplication"],
+  "operatingSystem": "Any",
+  "browserRequirements": "Requires JavaScript. Works best in modern browsers.",
+  "permissions": "Location (for some tools), Notifications (optional)",
+  "featureList": [
+    "300+ productivity tools",
+    "Offline functionality",
+    "Push notifications",
+    "App-like interface",
+    "Fast loading"
+  ],
+  "screenshot": {
+    "@type": "ImageObject",
+    "url": "https://app.alamtoolkit.com/icon-512.png",
+    "width": "512",
+    "height": "512"
+  },
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.8",
+    "ratingCount": "150",
+    "bestRating": "5",
+    "worstRating": "1"
+  }
+}
+</script>   
     
     <!-- Service Worker Registration -->
     <script>
