@@ -10,26 +10,26 @@
     <!-- Meta Description -->
     <meta name="description" content="Install AlamToolKit Progressive Web App for enhanced experience with 300+ productivity tools, offline access, and notifications.">
 
-        <!-- PWA Manifest -->
+    <!-- PWA Manifest -->
     <link rel="manifest" href="/manifest.json">
     
-  <!-- Link canonical, BLOG RELATIONSHIP & SEO -->  
+    <!-- Link canonical, BLOG RELATIONSHIP & SEO -->  
     <link rel="canonical" href="https://www.alamtoolkit.com/" />
     <link rel="alternate" href="https://www.alamtoolkit.com" title="AlamToolKit Blog" hreflang="en" type="text/html" />
     <link rel="author" href="https://www.alamtoolkit.com/" />
     <link rel="publisher" href="https://www.alamtoolkit.com/" />
 
-<!-- For SEO and indexing -->
-<link rel="index" href="https://www.alamtoolkit.com/" />
-<link rel="contents" href="https://www.alamtoolkit.com/" />
-<link rel="start" href="https://www.alamtoolkit.com/" />
+    <!-- For SEO and indexing -->
+    <link rel="index" href="https://www.alamtoolkit.com/" />
+    <link rel="contents" href="https://www.alamtoolkit.com/" />
+    <link rel="start" href="https://www.alamtoolkit.com/" />
 
-<!-- Sitemap reference -->
-<link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />    
+    <!-- Sitemap reference -->
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />    
 
-<!-- Hreflang for international targeting -->
-<link rel="alternate" hreflang="en" href="https://app.alamtoolkit.com/" />
-<link rel="alternate" hreflang="x-default" href="https://app.alamtoolkit.com/" />   
+    <!-- Hreflang for international targeting -->
+    <link rel="alternate" hreflang="en" href="https://app.alamtoolkit.com/" />
+    <link rel="alternate" hreflang="x-default" href="https://app.alamtoolkit.com/" />   
     
     <!-- Favicon & Icons -->
     <link rel="icon" type="image/png" href="/icon-192.png" sizes="192x192">
@@ -65,71 +65,88 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
-     <!-- ✅ Robots Meta Tag -->
+    <!-- ✅ Robots Meta Tag -->
     <meta name="robots" content="index, follow, max-image-preview:large">
     
     <!-- ✅ Structured Data for PWA -->
     <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebApplication",
-  "name": "AlamToolKit App",
-  "url": "https://app.alamtoolkit.com",
-  "description": "Progressive Web App installation for AlamToolKit productivity tools",
-  "applicationCategory": ["ProductivityApplication", "UtilitiesApplication"],
-  "operatingSystem": "Any",
-  "browserRequirements": "Requires JavaScript. Works best in modern browsers.",
-  "permissions": "Location (for some tools), Notifications (optional)",
-  "featureList": [
-    "300+ productivity tools",
-    "Offline functionality",
-    "Push notifications",
-    "App-like interface",
-    "Fast loading"
-  ],
-  "screenshot": {
-    "@type": "ImageObject",
-    "url": "https://app.alamtoolkit.com/icon-512.png",
-    "width": "512",
-    "height": "512"
-  },
-  "offers": {
-    "@type": "Offer",
-    "price": "0",
-    "priceCurrency": "USD"
-  },
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "4.8",
-    "ratingCount": "150",
-    "bestRating": "5",
-    "worstRating": "1"
-  },
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "https://www.alamtoolkit.com"
-  },
-  "isPartOf": {
-    "@type": "WebSite",
-    "name": "AlamToolKit",
-    "url": "https://www.alamtoolkit.com"
-  }
-}
-</script>
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "AlamToolKit App",
+      "url": "https://app.alamtoolkit.com",
+      "description": "Progressive Web App installation for AlamToolKit productivity tools",
+      "applicationCategory": ["ProductivityApplication", "UtilitiesApplication"],
+      "operatingSystem": "Any",
+      "browserRequirements": "Requires JavaScript. Works best in modern browsers.",
+      "permissions": "Location (for some tools), Notifications (optional)",
+      "featureList": [
+        "300+ productivity tools",
+        "Offline functionality",
+        "Push notifications",
+        "App-like interface",
+        "Fast loading"
+      ],
+      "screenshot": {
+        "@type": "ImageObject",
+        "url": "https://app.alamtoolkit.com/icon-512.png",
+        "width": "512",
+        "height": "512"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "ratingCount": "150",
+        "bestRating": "5",
+        "worstRating": "1"
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://www.alamtoolkit.com"
+      },
+      "isPartOf": {
+        "@type": "WebSite",
+        "name": "AlamToolKit",
+        "url": "https://www.alamtoolkit.com"
+      }
+    }
+    </script>
     
     <!-- Service Worker Registration -->
     <script>
-        // Register Service Worker for PWA
+        // Register Service Worker for PWA - UPDATED VERSION
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function() {
                 navigator.serviceWorker.register('/sw.js')
                     .then(function(registration) {
                         console.log('✅ Service Worker registered with scope:', registration.scope);
+                        
+                        // Check for updates
+                        registration.update();
+                        
+                        // Listen for controller change
+                        navigator.serviceWorker.addEventListener('controllerchange', () => {
+                            console.log('Service Worker controller changed');
+                            window.location.reload();
+                        });
                     })
                     .catch(function(error) {
                         console.log('❌ Service Worker registration failed:', error);
+                        // Fallback: show regular site without PWA features
                     });
             });
+            
+            // Handle messages from service worker
+            navigator.serviceWorker.addEventListener('message', event => {
+                console.log('Message from Service Worker:', event.data);
+            });
+        } else {
+            console.log('Service Worker not supported in this browser');
         }
     </script>
     
@@ -422,6 +439,59 @@
         .category-9:hover { border-color: #ffccbc; background-color: #ffd6cc; }
         .category-10:hover { border-color: #ffcc80; background-color: #ffe0b2; }
 
+        /* ========== PWA INSTALL SECTION ========== */
+        .pwa-install-container {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #ff6b35 0%, #ff3e3e 100%);
+            color: white;
+            border-radius: 12px;
+            margin: 40px auto;
+            max-width: 600px;
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);
+        }
+        
+        .pwa-install-container h2 {
+            margin: 0 0 15px 0;
+            font-size: 28px;
+        }
+        
+        .pwa-install-container p {
+            margin: 0 0 25px 0;
+            opacity: 0.9;
+            font-size: 16px;
+        }
+        
+        #pwaInstallButton {
+            background: white;
+            color: #ff6b35;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        #pwaInstallButton:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+        
+        .pwa-features {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
         /* ========== RESPONSIVE DESIGN ========== */
         @media (max-width: 1024px) {
             .hero-title {
@@ -443,6 +513,10 @@
             .category-tab {
                 padding: 10px 20px;
                 font-size: 14px;
+            }
+            
+            .pwa-install-container {
+                margin: 30px 20px;
             }
         }
 
@@ -512,6 +586,19 @@
                 height: 50px;
                 font-size: 24px;
             }
+            
+            .pwa-install-container {
+                padding: 30px 15px;
+            }
+            
+            .pwa-install-container h2 {
+                font-size: 24px;
+            }
+            
+            .pwa-features {
+                flex-direction: column;
+                gap: 10px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -537,6 +624,15 @@
             }
             
             .section-subtitle {
+                font-size: 15px;
+            }
+            
+            .pwa-install-container h2 {
+                font-size: 20px;
+            }
+            
+            #pwaInstallButton {
+                padding: 12px 24px;
                 font-size: 15px;
             }
         }
@@ -594,59 +690,597 @@
                 box-shadow: none !important;
                 border: 1px solid #ddd !important;
             }
+            
+            .pwa-install-container {
+                display: none !important;
+            }
         }
         
-        /* ========== INSTALL BUTTON STYLES ========== */
-        .pwa-install-container {
+        /* ========== MAIN CONTENT STYLES ========== */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
             text-align: center;
-            padding: 40px 20px;
-            background: linear-gradient(135deg, #ff6b35 0%, #ff3e3e 100%);
+            padding: 20px;
+            background: linear-gradient(135deg, #ff8a00, #ff3e3e);
             color: white;
             border-radius: 12px;
-            margin: 40px auto;
-            max-width: 600px;
-            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);
+            margin-bottom: 20px;
         }
         
-        .pwa-install-container h2 {
-            margin: 0 0 15px 0;
-            font-size: 28px;
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
         }
         
-        .pwa-install-container p {
-            margin: 0 0 25px 0;
+        .tagline {
+            font-size: 1.2rem;
             opacity: 0.9;
-            font-size: 16px;
         }
         
-        #pwaInstallButton {
+        .content-section {
             background: white;
-            color: #ff6b35;
-            border: none;
-            padding: 14px 32px;
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 16px;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            transition: all 0.3s ease;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+            color: #666;
+            font-size: 0.9rem;
+            border-top: 1px solid #eee;
+            max-width: 1200px;
+            margin: 30px auto 0;
+        }
+        
+        /* ========== WIDGET STYLES ========== */
+        .widget-container {
+            margin: 0 auto;
+            padding: 10px;
+            max-width: 900px;
+        }
+
+        .content-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            border: 1px solid #eaeaea;
+        }
+
+        .widget-heading {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+        }
+
+        .widget-subheading {
+            font-size: 1.1rem;
+            color: #555;
+            font-style: italic;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .widget-text p {
+            font-size: 1rem;
+            color: #444;
+            line-height: 1.6;
+            margin: 15px 0;
+        }
+
+        .image-container {
+            text-align: center;
+            margin: 20px auto;
+        }
+
+        .logo-image {
+            width: 100%;
+            max-width: 220px;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .category-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin: 25px 0 10px;
+        }
+
+        .category-tag {
             display: inline-flex;
             align-items: center;
+            gap: 6px;
+            background: #f8f9fa;
+            padding: 8px 16px;
+            border-radius: 25px;
+            font-size: 14px;
+            color: #2c3e50;
+            text-decoration: none;
+            border: 1px solid #e9ecef;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .category-tag:hover {
+            background: #3498db;
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.2);
+            border-color: #3498db;
+        }
+
+        .tag-icon {
+            font-size: 16px;
+        }
+
+        /* Color variations for different categories */
+        .category-tag:nth-child(1):hover { background: #2c3e50; border-color: #2c3e50; }
+        .category-tag:nth-child(2):hover { background: #2980b9; border-color: #2980b9; }
+        .category-tag:nth-child(3):hover { background: #27ae60; border-color: #27ae60; }
+        .category-tag:nth-child(4):hover { background: #8e44ad; border-color: #8e44ad; }
+        .category-tag:nth-child(5):hover { background: #d35400; border-color: #d35400; }
+        .category-tag:nth-child(6):hover { background: #16a085; border-color: #16a085; }
+
+        /* ========== FAQ STYLES ========== */
+        .faq-widget {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            line-height: 1.5;
+            color: #1e293b;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .faq-widget p:first-child {
+            font-size: 1rem;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #64748b;
+        }
+
+        .faq-widget a {
+            color: #ff8a00;
+            text-decoration: none;
+            font-weight: 600;
+            border-bottom: 1px solid #ffedd5;
+            padding-bottom: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .faq-widget a:hover {
+            color: #ff3e3e;
+            border-bottom-color: #ff8a00;
+        }
+
+        /* Accordion Container */
+        .accordion-container {
+            width: 100%;
+        }
+
+        /* Accordion Item */
+        .accordion-item {
+            margin-bottom: 10px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #fff;
+            box-shadow: 0 2px 6px rgba(0,0,0,.03);
+            transition: all 0.3s ease;
+        }
+
+        .accordion-item:hover {
+            box-shadow: 0 3px 8px rgba(0,0,0,.05);
+            border-color: #ffd8b7;
+        }
+
+        /* Accordion Question */
+        .accordion-item summary {
+            padding: 14px 45px 14px 18px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            list-style: none;
+            background: #f8fafc;
+            color: #1e293b;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+
+        .accordion-item summary::-webkit-details-marker { 
+            display: none; 
+        }
+
+        /* Unicode signs */
+        .accordion-item summary::after {
+            content: "\002B";
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.4rem;
+            font-weight: 300;
+            color: #ff8a00;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(255, 138, 0, 0.1);
+            transition: all 0.2s ease;
+            line-height: 1;
+        }
+
+        .accordion-item[open] summary::after {
+            content: "\2212";
+            background: rgba(255, 138, 0, 0.15);
+            color: #ff3e3e;
+        }
+
+        .accordion-item summary:hover {
+            background-color: #f1f5f9;
+            color: #ff8a00;
+        }
+
+        .accordion-item[open] summary {
+            background: linear-gradient(90deg, rgba(255, 138, 0, 0.08), rgba(255, 62, 62, 0.08));
+            color: #ff3e3e;
+            border-bottom: 1px solid #ffedd5;
+        }
+
+        /* Accordion Answer */
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            padding: 0 18px;
+            font-size: 0.95rem;
+            color: #475569;
+            line-height: 1.6;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+
+        .accordion-item[open] .accordion-content {
+            padding: 14px 18px 18px;
+            max-height: 800px;
+        }
+
+        .accordion-content p {
+            margin: 0;
+        }
+
+        /* ========== ABOUT ME STYLES ========== */
+        #about-me-widget {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            line-height: 1.6;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        #about-me-widget h2#about-me-heading {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+        }
+
+        #about-me-widget #author-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 25px;
+            margin-top: 15px;
+        }
+
+        #about-me-widget #author-logo {
+            border-radius: 50%;
+            object-fit: cover;
+            width: 120px;
+            height: 120px;
+            flex-shrink: 0;
+            border: 4px solid white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        #about-me-widget #author-bio {
+            flex: 1 1 0;
+            border: 1px solid #eaeaea;
+            border-radius: 12px;
+            background-color: white;
+            padding: 20px;
+        }
+
+        #about-me-widget #author-bio-inner {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        #about-me-widget #author-bio-inner p {
+            margin: 0;
+            font-size: 15px;
+            color: #444;
+        }
+
+        #about-me-widget #author-bio-inner a {
+            color: #2980b9;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        #about-me-widget #author-bio-inner a:hover {
+            color: #1a5276;
+            text-decoration: underline;
+        }
+
+        #about-me-widget .social-links {
+            display: flex;
+            flex-wrap: wrap;
             gap: 8px;
+            margin-top: 10px;
         }
-        
-        #pwaInstallButton:hover {
+
+        #about-me-widget .social-links a {
+            background: #ecf0f1;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            color: #2c3e50;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        #about-me-widget .social-links a:hover {
+            background: #3498db;
+            color: white;
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
         }
-        
-        .pwa-features {
+
+        #about-me-widget .email-contact {
+            margin-top: 15px;
+            padding: 10px;
+            background: #fff8e1;
+            border-radius: 8px;
+            border-left: 4px solid #f1c40f;
+        }
+
+        #about-me-widget .email-contact a {
+            color: #d35400;
+            font-weight: 600;
+        }
+
+        /* ========== OPTIMIZER SECTION ========== */
+        .optimizer-section {
+            text-align: center;
+            padding: 40px 20px;
+            background: #0f1a2b;
+            border-radius: 12px;
+            color: #fff;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .optimizer-section .opt-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .optimizer-section .opt-subtext {
+            font-size: 15px;
+            color: #cfd6e0;
+            max-width: 600px;
+            margin: 0 auto 25px;
+            line-height: 1.6;
+        }
+
+        .optimizer-section .opt-buttons {
             display: flex;
             justify-content: center;
-            gap: 20px;
-            margin-top: 20px;
-            font-size: 14px;
-            opacity: 0.8;
+        }
+
+        /* ========== ANIMATION FOR ACCORDION ========== */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .accordion-item[open] .accordion-content {
+            animation: fadeIn 0.3s ease;
+        }
+
+        /* ========== RIPPLE EFFECT ========== */
+        @keyframes ripple {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+        
+        /* Hide install section when app is installed */
+        body.pwa-installed .pwa-install-container {
+            display: none !important;
+        }
+        
+        /* Success animation for install button */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        #pwaInstallButton.installing {
+            animation: pulse 0.5s ease-in-out;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 10px;
+            }
+            
+            h2 {
+                font-size: 2rem;
+            }
+            
+            .content-section {
+                padding: 15px;
+            }
+            
+            .widget-heading {
+                font-size: 1.6rem;
+            }
+            
+            .widget-subheading {
+                font-size: 1rem;
+            }
+            
+            .logo-image {
+                max-width: 150px;
+            }
+            
+            .category-tags {
+                gap: 8px;
+            }
+            
+            .category-tag { 
+                font-size: 13px; 
+                padding: 6px 12px;
+            }
+            
+            .faq-widget {
+                padding: 16px;
+                max-width: 95%;
+            }
+            
+            .faq-widget p:first-child {
+                font-size: 0.95rem;
+            }
+            
+            .accordion-item summary {
+                font-size: 0.95rem;
+                padding: 12px 40px 12px 16px;
+            }
+            
+            .accordion-item summary::after {
+                right: 12px;
+                font-size: 1.3rem;
+                width: 22px;
+                height: 22px;
+            }
+            
+            .accordion-content {
+                font-size: 0.9rem;
+                padding: 0 16px;
+            }
+            
+            .accordion-item[open] .accordion-content {
+                padding: 12px 16px 16px;
+            }
+            
+            #about-me-widget #author-container {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                gap: 20px;
+            }
+            
+            #about-me-widget #author-logo {
+                width: 100px;
+                height: 100px;
+            }
+            
+            #about-me-widget #author-bio {
+                width: 100%;
+            }
+            
+            #about-me-widget .social-links {
+                justify-content: center;
+            }
+            
+            .optimizer-section .opt-title {
+                font-size: 24px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .widget-heading {
+                font-size: 1.4rem;
+            }
+            
+            .faq-widget p:first-child {
+                font-size: 0.9rem;
+            }
+            
+            .accordion-item summary {
+                font-size: 0.9rem;
+                padding: 10px 36px 10px 14px;
+            }
+            
+            .accordion-item summary::after {
+                right: 10px;
+                font-size: 1.2rem;
+                width: 20px;
+                height: 20px;
+            }
+            
+            .faq-widget {
+                padding: 14px;
+            }
+            
+            .category-tags {
+                gap: 6px;
+            }
+            
+            .category-tag {
+                font-size: 12px;
+                padding: 5px 10px;
+            }
+            
+            .tag-icon {
+                font-size: 14px;
+            }
+            
+            .optimizer-section .opt-title {
+                font-size: 20px;
+            }
         }
     </style>
 </head>
@@ -1082,430 +1716,12 @@
         </div>
     </section>
 
-  <script>
-    // ========== TAB FUNCTIONALITY ==========
-    document.querySelectorAll('.category-tab').forEach(tab => {
-        tab.addEventListener('click', function() {
-            // Update active tab
-            document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
-            this.classList.add('active');
-            
-            // Show corresponding tools
-            const category = this.dataset.category;
-            document.querySelectorAll('.tool-list').forEach(list => {
-                list.classList.remove('active');
-            });
-            
-            if(category === 'all') {
-                document.getElementById('all-tools').classList.add('active');
-            } else {
-                const toolList = document.getElementById(`${category}-tools`);
-                if(toolList) toolList.classList.add('active');
-            }
-            
-            // Filter feature cards
-            document.querySelectorAll('.feature-card').forEach(card => {
-                if(category === 'all' || card.dataset.category === category) {
-                    card.style.display = 'block';
-                    setTimeout(() => card.style.opacity = '1', 10);
-                } else {
-                    card.style.opacity = '0';
-                    setTimeout(() => card.style.display = 'none', 300);
-                }
-            });
-        });
-    });
-
-    // Show all tools by default
-    document.getElementById('all-tools').classList.add('active');
-
-    // Add smooth scrolling for better UX
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            if(this.getAttribute('href') === '#') return; // Don't scroll for placeholder links
-            
-            e.preventDefault();
-            const targetId = this.getAttribute('href');
-            
-            const targetElement = document.querySelector(targetId);
-            if(targetElement) {
-                window.scrollTo({
-                    top: targetElement.offsetTop - 80,
-                    behavior: 'smooth'
-                });
-            }
-        });
-    });
-
-    // Add animation to tool items on hover
-    document.querySelectorAll('.tool-item').forEach(item => {
-        item.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-3px) scale(1.02)';
-        });
-        
-        item.addEventListener('mouseleave', function() {
-            this.style.transform = 'translateY(0) scale(1)';
-        });
-    });
-    
-    // ========== PWA INSTALLATION LOGIC ==========
-    let deferredPrompt;
-    const installButton = document.getElementById('pwaInstallButton');
-    const installContainer = document.querySelector('.pwa-install-container');
-    
-    // Function to check if app is already installed
-    function isAppInstalled() {
-        // Method 1: Check display mode (Chrome/Android)
-        const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
-        
-        // Method 2: Check iOS standalone mode
-        const isIOSStandalone = window.navigator.standalone === true;
-        
-        // Method 3: Check referrer (Android app)
-        const hasAndroidReferrer = document.referrer.includes('android-app://');
-        
-        // Method 4: Check localStorage flag
-        const hasLocalStorageFlag = localStorage.getItem('alamtoolkit_installed') === 'true';
-        
-        // Method 5: Check URL parameters (sometimes added after install)
-        const urlParams = new URLSearchParams(window.location.search);
-        const hasInstallParam = urlParams.has('installed') || urlParams.has('from_pwa');
-        
-        return isStandalone || isIOSStandalone || hasAndroidReferrer || hasLocalStorageFlag || hasInstallParam;
-    }
-    
-    // Function to hide install section
-    function hideInstallSection() {
-        if (installContainer) {
-            console.log('Hiding install section - app is already installed');
-            installContainer.style.display = 'none';
-            
-            // Add a class to body for CSS targeting
-            document.body.classList.add('pwa-installed');
-            
-            // Save to localStorage for future visits
-            localStorage.setItem('alamtoolkit_installed', 'true');
-        }
-        
-        if (installButton) {
-            installButton.style.display = 'none';
-        }
-    }
-    
-    // Function to show install section
-    function showInstallSection() {
-        if (installContainer && !isAppInstalled()) {
-            installContainer.style.display = 'block';
-            document.body.classList.remove('pwa-installed');
-        }
-        
-        if (installButton && !isAppInstalled()) {
-            installButton.style.display = 'inline-flex';
-        }
-    }
-    
-    // Check on page load
-    function checkInstallStatus() {
-        console.log('Checking install status...');
-        console.log('Standalone mode:', window.matchMedia('(display-mode: standalone)').matches);
-        console.log('iOS standalone:', window.navigator.standalone);
-        console.log('Referrer:', document.referrer);
-        console.log('LocalStorage flag:', localStorage.getItem('alamtoolkit_installed'));
-        
-        if (isAppInstalled()) {
-            hideInstallSection();
-        } else {
-            showInstallSection();
-        }
-    }
-    
-    // Listen for install prompt
-    window.addEventListener('beforeinstallprompt', (e) => {
-        // Prevent Chrome 67 and earlier from automatically showing the prompt
-        e.preventDefault();
-        
-        // Stash the event so it can be triggered later
-        deferredPrompt = e;
-        
-        console.log('✅ PWA install prompt is available');
-        
-        // Update UI to show install button
-        if (installButton && !isAppInstalled()) {
-            installButton.style.display = 'inline-flex';
-            installButton.innerHTML = '<span>📱</span> Install Now';
-            installButton.disabled = false;
-        }
-    });
-    
-    // Install button click handler
-    if (installButton) {
-        installButton.addEventListener('click', async () => {
-            if (deferredPrompt) {
-                // Show the install prompt
-                installButton.innerHTML = '<span>⏳</span> Installing...';
-                installButton.disabled = true;
-                
-                try {
-                    deferredPrompt.prompt();
-                    
-                    // Wait for the user to respond to the prompt
-                    const choiceResult = await deferredPrompt.userChoice;
-                    
-                    if (choiceResult.outcome === 'accepted') {
-                        console.log('✅ User accepted the PWA installation');
-                        
-                        // Update button to show success
-                        installButton.innerHTML = '<span>✅</span> Installed!';
-                        installButton.style.background = '#4CAF50';
-                        installButton.style.color = 'white';
-                        
-                        // Hide the entire section after 2 seconds
-                        setTimeout(() => {
-                            hideInstallSection();
-                            
-                            // Optional: Show a success message
-                            if (installContainer) {
-                                installContainer.innerHTML = `
-                                    <div style="text-align: center; padding: 30px;">
-                                        <div style="font-size: 48px; margin-bottom: 20px;">🎉</div>
-                                        <h2>App Installed Successfully!</h2>
-                                        <p>AlamToolKit has been added to your home screen.</p>
-                                        <div style="margin-top: 20px; font-size: 14px; color: #666;">
-                                            Look for the app icon on your home screen
-                                        </div>
-                                    </div>
-                                `;
-                                
-                                // Hide success message after 5 seconds
-                                setTimeout(() => {
-                                    installContainer.style.display = 'none';
-                                }, 5000);
-                            }
-                        }, 2000);
-                        
-                        // Set flag in localStorage
-                        localStorage.setItem('alamtoolkit_installed', 'true');
-                        
-                        // Add URL parameter to help detection
-                        const url = new URL(window.location);
-                        url.searchParams.set('installed', 'true');
-                        window.history.replaceState({}, '', url);
-                        
-                    } else {
-                        console.log('❌ User dismissed the PWA installation');
-                        installButton.innerHTML = '<span>📱</span> Install Now';
-                        installButton.disabled = false;
-                    }
-                    
-                    // Clear the deferredPrompt variable
-                    deferredPrompt = null;
-                    
-                } catch (error) {
-                    console.error('Installation error:', error);
-                    installButton.innerHTML = '<span>📱</span> Install Now';
-                    installButton.disabled = false;
-                }
-            } else {
-                // If no deferredPrompt, maybe it's iOS
-                if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
-                    // Show iOS instructions
-                    if (installContainer) {
-                        installContainer.innerHTML = `
-                            <h2>📱 Install on iPhone/iPad</h2>
-                            <p>To install AlamToolKit on iOS:</p>
-                            <ol style="text-align: left; margin: 20px auto; max-width: 300px;">
-                                <li>Tap the Share button <span style="font-size: 18px">⎙</span></li>
-                                <li>Scroll down and tap "Add to Home Screen"</li>
-                                <li>Tap "Add" in the top right corner</li>
-                            </ol>
-                            <button onclick="location.reload()" style="
-                                background: #ff6b35;
-                                color: white;
-                                border: none;
-                                padding: 12px 24px;
-                                border-radius: 8px;
-                                font-size: 16px;
-                                cursor: pointer;
-                                margin-top: 15px;
-                            ">
-                                I've Installed It
-                            </button>
-                        `;
-                    }
-                }
-            }
-        });
-    }
-    
-    // Listen for app being launched (for future detection)
-    if ('launchQueue' in window) {
-        window.launchQueue.setConsumer((launchParams) => {
-            console.log('App launched from installed PWA');
-            localStorage.setItem('alamtoolkit_installed', 'true');
-            hideInstallSection();
-        });
-    }
-    
-    // Listen for display mode changes
-    window.matchMedia('(display-mode: standalone)').addEventListener('change', (e) => {
-        console.log('Display mode changed to:', e.matches ? 'standalone' : 'browser');
-        checkInstallStatus();
-    });
-    
-    // Check when page loads
-    document.addEventListener('DOMContentLoaded', () => {
-        // Initial check
-        checkInstallStatus();
-        
-        // Check again after a short delay (allows time for detection)
-        setTimeout(checkInstallStatus, 1000);
-        
-        // Check again after 3 seconds (in case of slow detection)
-        setTimeout(checkInstallStatus, 3000);
-    });
-    
-    // Also check when page becomes visible (after returning from install)
-    document.addEventListener('visibilitychange', () => {
-        if (!document.hidden) {
-            setTimeout(checkInstallStatus, 500);
-        }
-    });
-    
-    // ========== ADDITIONAL FEATURES ==========
-    
-    // Add loading animation to all buttons
-    document.querySelectorAll('button, .btn-gradient').forEach(button => {
-        button.addEventListener('click', function(e) {
-            // Add a small ripple effect
-            const ripple = document.createElement('span');
-            const rect = this.getBoundingClientRect();
-            const size = Math.max(rect.width, rect.height);
-            const x = e.clientX - rect.left - size/2;
-            const y = e.clientY - rect.top - size/2;
-            
-            ripple.style.cssText = `
-                position: absolute;
-                border-radius: 50%;
-                background: rgba(255, 255, 255, 0.7);
-                transform: scale(0);
-                animation: ripple 0.6s linear;
-                width: ${size}px;
-                height: ${size}px;
-                top: ${y}px;
-                left: ${x}px;
-                pointer-events: none;
-            `;
-            
-            this.style.position = 'relative';
-            this.style.overflow = 'hidden';
-            this.appendChild(ripple);
-            
-            setTimeout(() => ripple.remove(), 600);
-        });
-    });
-    
-    // Add ripple animation to CSS
-    const style = document.createElement('style');
-    style.textContent = `
-        @keyframes ripple {
-            to {
-                transform: scale(4);
-                opacity: 0;
-            }
-        }
-        
-        /* Hide install section when app is installed */
-        body.pwa-installed .pwa-install-container {
-            display: none !important;
-        }
-        
-        /* Success animation for install button */
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-        
-        #pwaInstallButton.installing {
-            animation: pulse 0.5s ease-in-out;
-        }
-    `;
-    document.head.appendChild(style);
-</script>
-
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f9f9f9;
-        }
-        
-        .main-container {
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-        }
-        
-        header {
-            text-align: center;
-            padding: 20px;
-            background: linear-gradient(135deg, #ff8a00, #ff3e3e);
-            color: white;
-            border-radius: 12px;
-            margin-bottom: 20px;
-        }
-        
-        h2 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
-        
-        .tagline {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
-        
-        .content-section {
-            background: white;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-        }
-        
-        footer {
-            text-align: center;
-            padding: 20px;
-            margin-top: 30px;
-            color: #666;
-            font-size: 0.9rem;
-            border-top: 1px solid #eee;
-        }
-        
-        @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
-            
-            h2 {
-                font-size: 2rem;
-            }
-            
-            .content-section {
-                padding: 15px;
-            }
-        }
-    </style>
-
-    <header>
-        <h2>AlamToolkit.com</h2>
-        <p class="tagline">300+ Free Online Tools for Daily Productivity</p>
-    </header>
-    
+    <!-- MAIN CONTENT CONTAINER -->
     <div class="main-container">
+        <header>
+            <h2>AlamToolkit.com</h2>
+            <p class="tagline">300+ Free Online Tools for Daily Productivity</p>
+        </header>
         
         <!-- About AlamToolKit.com Widget -->
         <section class="content-section">
@@ -1557,127 +1773,6 @@
                     </div>
                 </div>
             </div>
-
-            <style>
-            .widget-container {
-                margin: 0 auto;
-                padding: 10px;
-                max-width: 900px;
-            }
-
-            .content-card {
-                background: #fff;
-                border-radius: 12px;
-                padding: 25px;
-                box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-                border: 1px solid #eaeaea;
-            }
-
-            .widget-heading {
-                font-size: 1.8rem;
-                font-weight: 700;
-                color: #2c3e50;
-                text-align: center;
-                margin-bottom: 10px;
-                padding-bottom: 10px;
-                border-bottom: 2px solid #3498db;
-            }
-
-            .widget-subheading {
-                font-size: 1.1rem;
-                color: #555;
-                font-style: italic;
-                margin-bottom: 15px;
-                text-align: center;
-            }
-
-            .widget-text p {
-                font-size: 1rem;
-                color: #444;
-                line-height: 1.6;
-                margin: 15px 0;
-            }
-
-            .image-container {
-                text-align: center;
-                margin: 20px auto;
-            }
-
-            .logo-image {
-                width: 100%;
-                max-width: 220px;
-                height: auto;
-                border-radius: 10px;
-                box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            }
-
-            .category-tags {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 10px;
-                justify-content: center;
-                margin: 25px 0 10px;
-            }
-
-            .category-tag {
-                display: inline-flex;
-                align-items: center;
-                gap: 6px;
-                background: #f8f9fa;
-                padding: 8px 16px;
-                border-radius: 25px;
-                font-size: 14px;
-                color: #2c3e50;
-                text-decoration: none;
-                border: 1px solid #e9ecef;
-                transition: all 0.3s ease;
-                font-weight: 500;
-            }
-
-            .category-tag:hover {
-                background: #3498db;
-                color: white;
-                transform: translateY(-3px);
-                box-shadow: 0 4px 12px rgba(52, 152, 219, 0.2);
-                border-color: #3498db;
-            }
-
-            .tag-icon {
-                font-size: 16px;
-            }
-
-            /* Color variations for different categories */
-            .category-tag:nth-child(1):hover { background: #2c3e50; border-color: #2c3e50; }
-            .category-tag:nth-child(2):hover { background: #2980b9; border-color: #2980b9; }
-            .category-tag:nth-child(3):hover { background: #27ae60; border-color: #27ae60; }
-            .category-tag:nth-child(4):hover { background: #8e44ad; border-color: #8e44ad; }
-            .category-tag:nth-child(5):hover { background: #d35400; border-color: #d35400; }
-            .category-tag:nth-child(6):hover { background: #16a085; border-color: #16a085; }
-
-            @media (max-width: 600px) {
-                .widget-heading { font-size: 1.5rem; }
-                .widget-subheading { font-size: 1rem; }
-                .logo-image { max-width: 150px; }
-                .category-tags { gap: 8px; }
-                .category-tag { 
-                    font-size: 13px; 
-                    padding: 6px 12px;
-                }
-            }
-
-            @media (max-width: 480px) {
-                .category-tags {
-                    gap: 6px;
-                }
-                .category-tag {
-                    font-size: 12px;
-                    padding: 5px 10px;
-                }
-                .tag-icon {
-                    font-size: 14px;
-                }
-            }
-            </style>
         </section>
         
         <!-- FAQs Widget -->
@@ -1760,251 +1855,6 @@
                     </details>
                 </div>
             </div>
-
-            <style>
-            /* Heading style matches widget-heading */
-            .widget-heading {
-                font-size: 1.8rem;
-                font-weight: 800;
-                background: linear-gradient(90deg, #ff8a00, #ff3e3e);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                background-clip: text;
-                text-align: center;
-                margin-bottom: 15px;
-                padding-bottom: 10px;
-                border-bottom: 1px solid #f1f5f9;
-            }
-
-            /* FAQ Widget Styles - REDUCED */
-            .faq-widget {
-                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-                line-height: 1.5;
-                color: #1e293b;
-                max-width: 800px;
-                margin: 0 auto;
-                padding: 20px;
-                background: #ffffff;
-                border-radius: 12px;
-                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            }
-
-            .faq-widget p:first-child {
-                font-size: 1rem;
-                margin-bottom: 20px;
-                text-align: center;
-                color: #64748b;
-            }
-
-            .faq-widget a {
-                color: #ff8a00;
-                text-decoration: none;
-                font-weight: 600;
-                border-bottom: 1px solid #ffedd5;
-                padding-bottom: 1px;
-                transition: all 0.3s ease;
-            }
-
-            .faq-widget a:hover {
-                color: #ff3e3e;
-                border-bottom-color: #ff8a00;
-            }
-
-            /* Accordion Container */
-            .accordion-container {
-                width: 100%;
-            }
-
-            /* Accordion Item - REDUCED */
-            .accordion-item {
-                margin-bottom: 10px;
-                border: 1px solid #e2e8f0;
-                border-radius: 8px;
-                overflow: hidden;
-                background: #fff;
-                box-shadow: 0 2px 6px rgba(0,0,0,.03);
-                transition: all 0.3s ease;
-            }
-
-            .accordion-item:hover {
-                box-shadow: 0 3px 8px rgba(0,0,0,.05);
-                border-color: #ffd8b7;
-            }
-
-            /* Accordion Question - REDUCED */
-            .accordion-item summary {
-                padding: 14px 45px 14px 18px;
-                font-size: 1rem;
-                font-weight: 600;
-                cursor: pointer;
-                list-style: none;
-                background: #f8fafc;
-                color: #1e293b;
-                position: relative;
-                transition: all 0.2s ease;
-            }
-
-            .accordion-item summary::-webkit-details-marker { 
-                display: none; 
-            }
-
-            /* Unicode signs with reduced size */
-            .accordion-item summary::after {
-                content: "\002B";
-                position: absolute;
-                right: 15px;
-                top: 50%;
-                transform: translateY(-50%);
-                font-size: 1.4rem;
-                font-weight: 300;
-                color: #ff8a00;
-                width: 24px;
-                height: 24px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                border-radius: 50%;
-                background: rgba(255, 138, 0, 0.1);
-                transition: all 0.2s ease;
-                line-height: 1;
-            }
-
-            .accordion-item[open] summary::after {
-                content: "\2212";
-                background: rgba(255, 138, 0, 0.15);
-                color: #ff3e3e;
-            }
-
-            .accordion-item summary:hover {
-                background-color: #f1f5f9;
-                color: #ff8a00;
-            }
-
-            .accordion-item[open] summary {
-                background: linear-gradient(90deg, rgba(255, 138, 0, 0.08), rgba(255, 62, 62, 0.08));
-                color: #ff3e3e;
-                border-bottom: 1px solid #ffedd5;
-            }
-
-            /* Accordion Answer - REDUCED */
-            .accordion-content {
-                max-height: 0;
-                overflow: hidden;
-                padding: 0 18px;
-                font-size: 0.95rem;
-                color: #475569;
-                line-height: 1.6;
-                transition: max-height 0.3s ease, padding 0.3s ease;
-            }
-
-            .accordion-item[open] .accordion-content {
-                padding: 14px 18px 18px;
-                max-height: 800px;
-            }
-
-            .accordion-content p {
-                margin: 0;
-            }
-
-            /* Animation for opening */
-            @keyframes fadeIn {
-                from { opacity: 0; transform: translateY(-8px); }
-                to { opacity: 1; transform: translateY(0); }
-            }
-
-            .accordion-item[open] .accordion-content {
-                animation: fadeIn 0.3s ease;
-            }
-
-            /* Mobile Responsive */
-            @media (max-width: 768px) {
-                .widget-heading {
-                    font-size: 1.6rem;
-                    margin-bottom: 12px;
-                }
-                
-                .faq-widget {
-                    padding: 16px;
-                    border-radius: 10px;
-                    max-width: 95%;
-                }
-                
-                .faq-widget p:first-child {
-                    font-size: 0.95rem;
-                    margin-bottom: 16px;
-                }
-                
-                .accordion-item summary {
-                    font-size: 0.95rem;
-                    padding: 12px 40px 12px 16px;
-                }
-                
-                .accordion-item summary::after {
-                    right: 12px;
-                    font-size: 1.3rem;
-                    width: 22px;
-                    height: 22px;
-                }
-                
-                .accordion-content {
-                    font-size: 0.9rem;
-                    padding: 0 16px;
-                }
-                
-                .accordion-item[open] .accordion-content {
-                    padding: 12px 16px 16px;
-                }
-            }
-
-            @media (max-width: 480px) {
-                .widget-heading {
-                    font-size: 1.4rem;
-                }
-                
-                .faq-widget p:first-child {
-                    font-size: 0.9rem;
-                }
-                
-                .accordion-item summary {
-                    font-size: 0.9rem;
-                    padding: 10px 36px 10px 14px;
-                }
-                
-                .accordion-item summary::after {
-                    right: 10px;
-                    font-size: 1.2rem;
-                    width: 20px;
-                    height: 20px;
-                }
-                
-                .faq-widget {
-                    padding: 14px;
-                }
-            }
-            </style>
-
-            <script>
-            // Add smooth animation for accordion
-            document.querySelectorAll('.accordion-item').forEach(item => {
-                const summary = item.querySelector('summary');
-                const content = item.querySelector('.accordion-content');
-                
-                summary.addEventListener('click', function(e) {
-                    // Prevent default to handle animation manually
-                    if (!item.hasAttribute('open')) {
-                        e.preventDefault();
-                        item.setAttribute('open', '');
-                        content.style.maxHeight = content.scrollHeight + 'px';
-                    } else {
-                        e.preventDefault();
-                        content.style.maxHeight = '0px';
-                        setTimeout(() => {
-                            item.removeAttribute('open');
-                        }, 500);
-                    }
-                });
-            });
-            </script>
         </section>
         
         <!-- About Me Widget -->
@@ -2054,136 +1904,6 @@
                     </div>
                 </div>
             </div>
-
-            <style>
-            /* Scoped CSS for About Me Section */
-            #about-me-widget {
-                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-                color: #333;
-                max-width: 900px;
-                margin: 0 auto;
-                line-height: 1.6;
-                padding: 20px;
-                background: #f8f9fa;
-                border-radius: 12px;
-                box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            }
-
-            #about-me-widget h2#about-me-heading {
-                font-size: 1.8rem;
-                font-weight: 700;
-                color: #2c3e50;
-                text-align: center;
-                margin-bottom: 15px;
-                padding-bottom: 10px;
-                border-bottom: 2px solid #3498db;
-            }
-
-            #about-me-widget #author-container {
-                display: flex;
-                align-items: flex-start;
-                gap: 25px;
-                margin-top: 15px;
-            }
-
-            #about-me-widget #author-logo {
-                border-radius: 50%;
-                object-fit: cover;
-                width: 120px;
-                height: 120px;
-                flex-shrink: 0;
-                border: 4px solid white;
-                box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            }
-
-            #about-me-widget #author-bio {
-                flex: 1 1 0;
-                border: 1px solid #eaeaea;
-                border-radius: 12px;
-                background-color: white;
-                padding: 20px;
-            }
-
-            #about-me-widget #author-bio-inner {
-                display: flex;
-                flex-direction: column;
-                gap: 15px;
-            }
-
-            #about-me-widget #author-bio-inner p {
-                margin: 0;
-                font-size: 15px;
-                color: #444;
-            }
-
-            #about-me-widget #author-bio-inner a {
-                color: #2980b9;
-                text-decoration: none;
-                font-weight: 500;
-                transition: color 0.3s;
-            }
-
-            #about-me-widget #author-bio-inner a:hover {
-                color: #1a5276;
-                text-decoration: underline;
-            }
-
-            #about-me-widget .social-links {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 8px;
-                margin-top: 10px;
-            }
-
-            #about-me-widget .social-links a {
-                background: #ecf0f1;
-                padding: 6px 12px;
-                border-radius: 20px;
-                font-size: 13px;
-                color: #2c3e50;
-                text-decoration: none;
-                transition: all 0.3s;
-            }
-
-            #about-me-widget .social-links a:hover {
-                background: #3498db;
-                color: white;
-                transform: translateY(-2px);
-            }
-
-            #about-me-widget .email-contact {
-                margin-top: 15px;
-                padding: 10px;
-                background: #fff8e1;
-                border-radius: 8px;
-                border-left: 4px solid #f1c40f;
-            }
-
-            #about-me-widget .email-contact a {
-                color: #d35400;
-                font-weight: 600;
-            }
-
-            /* Mobile responsiveness */
-            @media (max-width: 600px) {
-                #about-me-widget #author-container {
-                    flex-direction: column;
-                    align-items: center;
-                    text-align: center;
-                    gap: 20px;
-                }
-                #about-me-widget #author-logo {
-                    width: 100px;
-                    height: 100px;
-                }
-                #about-me-widget #author-bio {
-                    width: 100%;
-                }
-                #about-me-widget .social-links {
-                    justify-content: center;
-                }
-            }
-            </style>
         </section>
         
         <!-- Call to Action -->
@@ -2199,58 +1919,6 @@
                     <a class='btn-gradient' href='https://www.alamtoolkit.com/'>Explore All Tools</a>
                 </div>
             </div>
-                      
-            <style> 
-            /* Container */
-            .optimizer-section {
-                text-align: center;
-                padding: 40px 20px;
-                background: #0f1a2b;
-                border-radius: 12px;
-                color: #fff;
-                max-width: 800px;
-                margin: 0 auto;
-            }
-
-            /* Title */
-            .optimizer-section .opt-title {
-                font-size: 32px;
-                font-weight: 700;
-                margin-bottom: 10px;
-            }
-
-            /* Subtitle */
-            .optimizer-section .opt-subtext {
-                font-size: 15px;
-                color: #cfd6e0;
-                max-width: 600px;
-                margin: 0 auto 25px;
-                line-height: 1.6;
-            }
-
-            /* Buttons Wrapper */
-            .optimizer-section .opt-buttons {
-                display: flex;
-                justify-content: center;
-            }
-
-            /* Gradient Button */
-            .optimizer-section .btn-gradient {
-                background: linear-gradient(90deg, #2980b9, #2c3e50);
-                padding: 12px 28px;
-                color: #fff;
-                border-radius: 50px;
-                font-weight: 600;
-                text-decoration: none;
-                font-size: 16px;
-                transition: 0.3s;
-            }
-
-            .optimizer-section .btn-gradient:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 6px 15px rgba(41, 128, 185, 0.3);
-            }
-            </style>
         </section>
     </div>
     
@@ -2258,6 +1926,385 @@
         <p>© AlamToolkit.com. All rights reserved.</p>
         <p>300+ free online tools for daily productivity and efficiency.</p>
         <p>Contact: <a href="mailto:muhiuddinalam@gmail.com">muhiuddinalam@gmail.com</a></p>
-    </footer>   
+    </footer>
+
+    <!-- MAIN JAVASCRIPT -->
+    <script>
+        // ========== TAB FUNCTIONALITY ==========
+        document.querySelectorAll('.category-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                // Update active tab
+                document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Show corresponding tools
+                const category = this.dataset.category;
+                document.querySelectorAll('.tool-list').forEach(list => {
+                    list.classList.remove('active');
+                });
+                
+                if(category === 'all') {
+                    document.getElementById('all-tools').classList.add('active');
+                } else {
+                    const toolList = document.getElementById(`${category}-tools`);
+                    if(toolList) toolList.classList.add('active');
+                }
+                
+                // Filter feature cards
+                document.querySelectorAll('.feature-card').forEach(card => {
+                    if(category === 'all' || card.dataset.category === category) {
+                        card.style.display = 'block';
+                        setTimeout(() => card.style.opacity = '1', 10);
+                    } else {
+                        card.style.opacity = '0';
+                        setTimeout(() => card.style.display = 'none', 300);
+                    }
+                });
+            });
+        });
+
+        // Show all tools by default
+        document.getElementById('all-tools').classList.add('active');
+
+        // Add smooth scrolling for better UX
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                if(this.getAttribute('href') === '#') return; // Don't scroll for placeholder links
+                
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                
+                const targetElement = document.querySelector(targetId);
+                if(targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Add animation to tool items on hover
+        document.querySelectorAll('.tool-item').forEach(item => {
+            item.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-3px) scale(1.02)';
+            });
+            
+            item.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+        
+        // ========== PWA INSTALLATION LOGIC ==========
+        let deferredPrompt;
+        const installButton = document.getElementById('pwaInstallButton');
+        const installContainer = document.querySelector('.pwa-install-container');
+        
+        // Function to check if app is already installed
+        function isAppInstalled() {
+            // Method 1: Check display mode (Chrome/Android)
+            const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+            
+            // Method 2: Check iOS standalone mode
+            const isIOSStandalone = window.navigator.standalone === true;
+            
+            // Method 3: Check referrer (Android app)
+            const hasAndroidReferrer = document.referrer.includes('android-app://');
+            
+            // Method 4: Check localStorage flag
+            const hasLocalStorageFlag = localStorage.getItem('alamtoolkit_installed') === 'true';
+            
+            // Method 5: Check URL parameters (sometimes added after install)
+            const urlParams = new URLSearchParams(window.location.search);
+            const hasInstallParam = urlParams.has('installed') || urlParams.has('from_pwa');
+            
+            return isStandalone || isIOSStandalone || hasAndroidReferrer || hasLocalStorageFlag || hasInstallParam;
+        }
+        
+        // Function to hide install section
+        function hideInstallSection() {
+            if (installContainer) {
+                console.log('Hiding install section - app is already installed');
+                installContainer.style.display = 'none';
+                
+                // Add a class to body for CSS targeting
+                document.body.classList.add('pwa-installed');
+                
+                // Save to localStorage for future visits
+                localStorage.setItem('alamtoolkit_installed', 'true');
+            }
+            
+            if (installButton) {
+                installButton.style.display = 'none';
+            }
+        }
+        
+        // Function to show install section
+        function showInstallSection() {
+            if (installContainer && !isAppInstalled()) {
+                installContainer.style.display = 'block';
+                document.body.classList.remove('pwa-installed');
+            }
+            
+            if (installButton && !isAppInstalled()) {
+                installButton.style.display = 'inline-flex';
+            }
+        }
+        
+        // Check on page load
+        function checkInstallStatus() {
+            console.log('Checking install status...');
+            console.log('Standalone mode:', window.matchMedia('(display-mode: standalone)').matches);
+            console.log('iOS standalone:', window.navigator.standalone);
+            console.log('Referrer:', document.referrer);
+            console.log('LocalStorage flag:', localStorage.getItem('alamtoolkit_installed'));
+            
+            if (isAppInstalled()) {
+                hideInstallSection();
+            } else {
+                showInstallSection();
+            }
+        }
+        
+        // Listen for install prompt
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // Prevent Chrome 67 and earlier from automatically showing the prompt
+            e.preventDefault();
+            
+            // Stash the event so it can be triggered later
+            deferredPrompt = e;
+            
+            console.log('✅ PWA install prompt is available');
+            
+            // Update UI to show install button
+            if (installButton && !isAppInstalled()) {
+                installButton.style.display = 'inline-flex';
+                installButton.innerHTML = '<span>📱</span> Install Now';
+                installButton.disabled = false;
+            }
+        });
+        
+        // Install button click handler
+        if (installButton) {
+            installButton.addEventListener('click', async () => {
+                if (deferredPrompt) {
+                    // Show the install prompt
+                    installButton.innerHTML = '<span>⏳</span> Installing...';
+                    installButton.disabled = true;
+                    
+                    try {
+                        deferredPrompt.prompt();
+                        
+                        // Wait for the user to respond to the prompt
+                        const choiceResult = await deferredPrompt.userChoice;
+                        
+                        if (choiceResult.outcome === 'accepted') {
+                            console.log('✅ User accepted the PWA installation');
+                            
+                            // Update button to show success
+                            installButton.innerHTML = '<span>✅</span> Installed!';
+                            installButton.style.background = '#4CAF50';
+                            installButton.style.color = 'white';
+                            
+                            // Hide the entire section after 2 seconds
+                            setTimeout(() => {
+                                hideInstallSection();
+                                
+                                // Optional: Show a success message
+                                if (installContainer) {
+                                    installContainer.innerHTML = `
+                                        <div style="text-align: center; padding: 30px;">
+                                            <div style="font-size: 48px; margin-bottom: 20px;">🎉</div>
+                                            <h2>App Installed Successfully!</h2>
+                                            <p>AlamToolKit has been added to your home screen.</p>
+                                            <div style="margin-top: 20px; font-size: 14px; color: #666;">
+                                                Look for the app icon on your home screen
+                                            </div>
+                                        </div>
+                                    `;
+                                    
+                                    // Hide success message after 5 seconds
+                                    setTimeout(() => {
+                                        installContainer.style.display = 'none';
+                                    }, 5000);
+                                }
+                            }, 2000);
+                            
+                            // Set flag in localStorage
+                            localStorage.setItem('alamtoolkit_installed', 'true');
+                            
+                            // Add URL parameter to help detection
+                            const url = new URL(window.location);
+                            url.searchParams.set('installed', 'true');
+                            window.history.replaceState({}, '', url);
+                            
+                        } else {
+                            console.log('❌ User dismissed the PWA installation');
+                            installButton.innerHTML = '<span>📱</span> Install Now';
+                            installButton.disabled = false;
+                        }
+                        
+                        // Clear the deferredPrompt variable
+                        deferredPrompt = null;
+                        
+                    } catch (error) {
+                        console.error('Installation error:', error);
+                        installButton.innerHTML = '<span>📱</span> Install Now';
+                        installButton.disabled = false;
+                    }
+                } else {
+                    // If no deferredPrompt, maybe it's iOS
+                    if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+                        // Show iOS instructions
+                        if (installContainer) {
+                            installContainer.innerHTML = `
+                                <h2>📱 Install on iPhone/iPad</h2>
+                                <p>To install AlamToolKit on iOS:</p>
+                                <ol style="text-align: left; margin: 20px auto; max-width: 300px;">
+                                    <li>Tap the Share button <span style="font-size: 18px">⎙</span></li>
+                                    <li>Scroll down and tap "Add to Home Screen"</li>
+                                    <li>Tap "Add" in the top right corner</li>
+                                </ol>
+                                <button onclick="location.reload()" style="
+                                    background: #ff6b35;
+                                    color: white;
+                                    border: none;
+                                    padding: 12px 24px;
+                                    border-radius: 8px;
+                                    font-size: 16px;
+                                    cursor: pointer;
+                                    margin-top: 15px;
+                                ">
+                                    I've Installed It
+                                </button>
+                            `;
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Listen for app being launched (for future detection)
+        if ('launchQueue' in window) {
+            window.launchQueue.setConsumer((launchParams) => {
+                console.log('App launched from installed PWA');
+                localStorage.setItem('alamtoolkit_installed', 'true');
+                hideInstallSection();
+            });
+        }
+        
+        // Listen for display mode changes
+        window.matchMedia('(display-mode: standalone)').addEventListener('change', (e) => {
+            console.log('Display mode changed to:', e.matches ? 'standalone' : 'browser');
+            checkInstallStatus();
+        });
+        
+        // Check when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initial check
+            checkInstallStatus();
+            
+            // Check again after a short delay (allows time for detection)
+            setTimeout(checkInstallStatus, 1000);
+            
+            // Check again after 3 seconds (in case of slow detection)
+            setTimeout(checkInstallStatus, 3000);
+        });
+        
+        // Also check when page becomes visible (after returning from install)
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) {
+                setTimeout(checkInstallStatus, 500);
+            }
+        });
+        
+        // ========== ADDITIONAL FEATURES ==========
+        
+        // Add loading animation to all buttons
+        document.querySelectorAll('button, .btn-gradient').forEach(button => {
+            button.addEventListener('click', function(e) {
+                // Add a small ripple effect
+                const ripple = document.createElement('span');
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size/2;
+                const y = e.clientY - rect.top - size/2;
+                
+                ripple.style.cssText = `
+                    position: absolute;
+                    border-radius: 50%;
+                    background: rgba(255, 255, 255, 0.7);
+                    transform: scale(0);
+                    animation: ripple 0.6s linear;
+                    width: ${size}px;
+                    height: ${size}px;
+                    top: ${y}px;
+                    left: ${x}px;
+                    pointer-events: none;
+                `;
+                
+                this.style.position = 'relative';
+                this.style.overflow = 'hidden';
+                this.appendChild(ripple);
+                
+                setTimeout(() => ripple.remove(), 600);
+            });
+        });
+        
+        // Add smooth animation for FAQ accordion
+        document.querySelectorAll('.accordion-item').forEach(item => {
+            const summary = item.querySelector('summary');
+            const content = item.querySelector('.accordion-content');
+            
+            summary.addEventListener('click', function(e) {
+                // Prevent default to handle animation manually
+                if (!item.hasAttribute('open')) {
+                    e.preventDefault();
+                    item.setAttribute('open', '');
+                    content.style.maxHeight = content.scrollHeight + 'px';
+                } else {
+                    e.preventDefault();
+                    content.style.maxHeight = '0px';
+                    setTimeout(() => {
+                        item.removeAttribute('open');
+                    }, 500);
+                }
+            });
+        });
+        
+        // Add ripple animation to CSS
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+            
+            /* Hide install section when app is installed */
+            body.pwa-installed .pwa-install-container {
+                display: none !important;
+            }
+            
+            /* Success animation for install button */
+            @keyframes pulse {
+                0% { transform: scale(1); }
+                50% { transform: scale(1.05); }
+                100% { transform: scale(1); }
+            }
+            
+            #pwaInstallButton.installing {
+                animation: pulse 0.5s ease-in-out;
+            }
+            
+            /* Animation for opening FAQ */
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(-8px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
 </body>
 </html>
