@@ -439,57 +439,106 @@
         .category-9:hover { border-color: #ffccbc; background-color: #ffd6cc; }
         .category-10:hover { border-color: #ffcc80; background-color: #ffe0b2; }
 
-        /* ========== PWA INSTALL SECTION ========== */
+        /* ========== MOBILE-OPTIMIZED PWA INSTALL SECTION ========== */
         .pwa-install-container {
             text-align: center;
-            padding: 40px 20px;
+            padding: 30px 20px;
             background: linear-gradient(135deg, #ff6b35 0%, #ff3e3e 100%);
             color: white;
-            border-radius: 12px;
-            margin: 40px auto;
-            max-width: 600px;
+            border-radius: 16px;
+            margin: 30px 20px;
             box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);
+            width: calc(100% - 40px);
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
         }
-        
+
+        .pwa-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .pwa-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
         .pwa-install-container h2 {
-            margin: 0 0 15px 0;
-            font-size: 28px;
+            margin: 0 0 10px 0;
+            font-size: 24px;
+            line-height: 1.3;
+            font-weight: 700;
         }
-        
-        .pwa-install-container p {
+
+        .pwa-description {
             margin: 0 0 25px 0;
             opacity: 0.9;
             font-size: 16px;
+            line-height: 1.5;
+            padding: 0 5px;
         }
-        
-        #pwaInstallButton {
+
+        .install-btn {
             background: white;
             color: #ff6b35;
             border: none;
-            padding: 14px 32px;
+            padding: 15px 35px;
             border-radius: 50px;
-            font-weight: 600;
-            font-size: 16px;
+            font-weight: 700;
+            font-size: 17px;
             cursor: pointer;
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
             transition: all 0.3s ease;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+            min-width: 180px;
+            justify-content: center;
+            margin-bottom: 20px;
         }
-        
-        #pwaInstallButton:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+
+        .install-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
         }
-        
+
+        .btn-icon {
+            font-size: 20px;
+        }
+
+        .btn-text {
+            font-weight: 600;
+        }
+
         .pwa-features {
             display: flex;
             justify-content: center;
-            gap: 20px;
-            margin-top: 20px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
             font-size: 14px;
-            opacity: 0.8;
+            opacity: 0.9;
+            padding: 6px 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            min-width: 110px;
+            justify-content: center;
+        }
+
+        .feature-icon {
+            font-size: 16px;
+        }
+
+        .feature-text {
+            white-space: nowrap;
         }
 
         /* ========== RESPONSIVE DESIGN ========== */
@@ -517,6 +566,7 @@
             
             .pwa-install-container {
                 margin: 30px 20px;
+                max-width: calc(100% - 40px);
             }
         }
 
@@ -587,17 +637,36 @@
                 font-size: 24px;
             }
             
+            /* PWA Section Mobile */
             .pwa-install-container {
-                padding: 30px 15px;
+                margin: 25px 15px;
+                padding: 25px 15px;
+                width: calc(100% - 30px);
+            }
+            
+            .pwa-icon {
+                font-size: 35px;
             }
             
             .pwa-install-container h2 {
-                font-size: 24px;
+                font-size: 22px;
             }
             
-            .pwa-features {
-                flex-direction: column;
-                gap: 10px;
+            .pwa-description {
+                font-size: 15px;
+                margin-bottom: 20px;
+            }
+            
+            .install-btn {
+                padding: 14px 30px;
+                font-size: 16px;
+                min-width: 170px;
+            }
+            
+            .feature-item {
+                font-size: 13px;
+                min-width: 100px;
+                padding: 5px 10px;
             }
         }
 
@@ -627,13 +696,99 @@
                 font-size: 15px;
             }
             
+            /* PWA Section Small Mobile */
+            .pwa-install-container {
+                margin: 20px 10px;
+                padding: 20px 12px;
+                width: calc(100% - 20px);
+            }
+            
+            .pwa-icon {
+                font-size: 32px;
+            }
+            
             .pwa-install-container h2 {
                 font-size: 20px;
             }
             
-            #pwaInstallButton {
-                padding: 12px 24px;
+            .pwa-description {
+                font-size: 14px;
+                margin-bottom: 18px;
+                padding: 0;
+            }
+            
+            .install-btn {
+                padding: 12px 25px;
                 font-size: 15px;
+                min-width: 160px;
+                margin-bottom: 15px;
+            }
+            
+            .pwa-features {
+                gap: 10px;
+            }
+            
+            .feature-item {
+                font-size: 12px;
+                min-width: 90px;
+                padding: 4px 8px;
+            }
+        }
+
+        /* For very small screens (iPhone 5/SE) */
+        @media (max-width: 320px) {
+            .hero-title {
+                font-size: 24px;
+            }
+            
+            .hero-subtext {
+                font-size: 14px;
+            }
+            
+            .section-title {
+                font-size: 20px;
+            }
+            
+            .section-subtitle {
+                font-size: 14px;
+            }
+            
+            /* PWA Section Very Small */
+            .pwa-install-container {
+                margin: 15px 8px;
+                padding: 18px 10px;
+                width: calc(100% - 16px);
+            }
+            
+            .pwa-icon {
+                font-size: 28px;
+            }
+            
+            .pwa-install-container h2 {
+                font-size: 18px;
+            }
+            
+            .pwa-description {
+                font-size: 13px;
+            }
+            
+            .install-btn {
+                padding: 10px 20px;
+                font-size: 14px;
+                min-width: 140px;
+                gap: 6px;
+            }
+            
+            .pwa-features {
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .feature-item {
+                width: 100%;
+                max-width: 200px;
+                margin: 0 auto;
+                font-size: 12px;
             }
         }
 
@@ -1334,19 +1489,33 @@
         </div>
     </section>
 
-    <!-- PWA INSTALL SECTION -->
+    <!-- PWA INSTALL SECTION - MOBILE OPTIMIZED -->
     <div class="pwa-install-container">
-        <h2>🚀 Install AlamToolKit App</h2>
-        <p>Get faster access, offline features & push notifications</p>
+        <div class="pwa-header">
+            <div class="pwa-icon">🚀</div>
+            <h2>Install AlamToolKit App</h2>
+        </div>
         
-        <button id="pwaInstallButton">
-            <span>📱</span> Install Now
+        <p class="pwa-description">Get faster access, offline features & push notifications</p>
+        
+        <button id="pwaInstallButton" class="install-btn">
+            <span class="btn-icon">📱</span>
+            <span class="btn-text">Install Now</span>
         </button>
         
         <div class="pwa-features">
-            <div>⚡ Fast Loading</div>
-            <div>📶 Works Offline</div>
-            <div>🔔 Push Alerts</div>
+            <div class="feature-item">
+                <span class="feature-icon">⚡</span>
+                <span class="feature-text">Fast Loading</span>
+            </div>
+            <div class="feature-item">
+                <span class="feature-icon">📶</span>
+                <span class="feature-text">Works Offline</span>
+            </div>
+            <div class="feature-item">
+                <span class="feature-icon">🔔</span>
+                <span class="feature-text">Push Alerts</span>
+            </div>
         </div>
     </div>
 
@@ -2079,7 +2248,7 @@
             // Update UI to show install button
             if (installButton && !isAppInstalled()) {
                 installButton.style.display = 'inline-flex';
-                installButton.innerHTML = '<span>📱</span> Install Now';
+                installButton.innerHTML = '<span class="btn-icon">📱</span><span class="btn-text">Install Now</span>';
                 installButton.disabled = false;
             }
         });
@@ -2089,8 +2258,9 @@
             installButton.addEventListener('click', async () => {
                 if (deferredPrompt) {
                     // Show the install prompt
-                    installButton.innerHTML = '<span>⏳</span> Installing...';
+                    installButton.innerHTML = '<span class="btn-icon">⏳</span><span class="btn-text">Installing...</span>';
                     installButton.disabled = true;
+                    installButton.classList.add('installing');
                     
                     try {
                         deferredPrompt.prompt();
@@ -2102,9 +2272,10 @@
                             console.log('✅ User accepted the PWA installation');
                             
                             // Update button to show success
-                            installButton.innerHTML = '<span>✅</span> Installed!';
+                            installButton.innerHTML = '<span class="btn-icon">✅</span><span class="btn-text">Installed!</span>';
                             installButton.style.background = '#4CAF50';
                             installButton.style.color = 'white';
+                            installButton.classList.remove('installing');
                             
                             // Hide the entire section after 2 seconds
                             setTimeout(() => {
@@ -2115,9 +2286,9 @@
                                     installContainer.innerHTML = `
                                         <div style="text-align: center; padding: 30px;">
                                             <div style="font-size: 48px; margin-bottom: 20px;">🎉</div>
-                                            <h2>App Installed Successfully!</h2>
-                                            <p>AlamToolKit has been added to your home screen.</p>
-                                            <div style="margin-top: 20px; font-size: 14px; color: #666;">
+                                            <h2 style="color: white; margin-bottom: 15px;">App Installed Successfully!</h2>
+                                            <p style="color: rgba(255,255,255,0.9);">AlamToolKit has been added to your home screen.</p>
+                                            <div style="margin-top: 20px; font-size: 14px; color: rgba(255,255,255,0.7);">
                                                 Look for the app icon on your home screen
                                             </div>
                                         </div>
@@ -2140,8 +2311,9 @@
                             
                         } else {
                             console.log('❌ User dismissed the PWA installation');
-                            installButton.innerHTML = '<span>📱</span> Install Now';
+                            installButton.innerHTML = '<span class="btn-icon">📱</span><span class="btn-text">Install Now</span>';
                             installButton.disabled = false;
+                            installButton.classList.remove('installing');
                         }
                         
                         // Clear the deferredPrompt variable
@@ -2149,8 +2321,9 @@
                         
                     } catch (error) {
                         console.error('Installation error:', error);
-                        installButton.innerHTML = '<span>📱</span> Install Now';
+                        installButton.innerHTML = '<span class="btn-icon">📱</span><span class="btn-text">Install Now</span>';
                         installButton.disabled = false;
+                        installButton.classList.remove('installing');
                     }
                 } else {
                     // If no deferredPrompt, maybe it's iOS
@@ -2158,22 +2331,26 @@
                         // Show iOS instructions
                         if (installContainer) {
                             installContainer.innerHTML = `
-                                <h2>📱 Install on iPhone/iPad</h2>
-                                <p>To install AlamToolKit on iOS:</p>
-                                <ol style="text-align: left; margin: 20px auto; max-width: 300px;">
-                                    <li>Tap the Share button <span style="font-size: 18px">⎙</span></li>
-                                    <li>Scroll down and tap "Add to Home Screen"</li>
-                                    <li>Tap "Add" in the top right corner</li>
+                                <div class="pwa-header">
+                                    <div class="pwa-icon">📱</div>
+                                    <h2>Install on iPhone/iPad</h2>
+                                </div>
+                                <p class="pwa-description">To install AlamToolKit on iOS:</p>
+                                <ol style="text-align: left; margin: 20px auto; max-width: 300px; color: rgba(255,255,255,0.9); padding-left: 20px;">
+                                    <li style="margin-bottom: 10px;">Tap the Share button <span style="font-size: 18px">⎙</span></li>
+                                    <li style="margin-bottom: 10px;">Scroll down and tap "Add to Home Screen"</li>
+                                    <li style="margin-bottom: 10px;">Tap "Add" in the top right corner</li>
                                 </ol>
                                 <button onclick="location.reload()" style="
-                                    background: #ff6b35;
-                                    color: white;
+                                    background: white;
+                                    color: #ff6b35;
                                     border: none;
                                     padding: 12px 24px;
                                     border-radius: 8px;
                                     font-size: 16px;
                                     cursor: pointer;
                                     margin-top: 15px;
+                                    font-weight: 600;
                                 ">
                                     I've Installed It
                                 </button>
