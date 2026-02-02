@@ -2,8 +2,8 @@
   "name": "AlamToolKit",
   "short_name": "ATK",
   "description": "Your Ultimate Digital Toolkit",
-  "start_url": "/",
-  "scope": "/",
+  "start_url": "https://app.alamtoolkit.com",
+  "scope": "https://app.alamtoolkit.com",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#ff6b35",
@@ -39,3 +39,4 @@
     }
   ]
 }
+
