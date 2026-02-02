@@ -2,8 +2,8 @@
   "name": "AlamToolKit",
   "short_name": "ATK",
   "description": "Your Ultimate Digital Toolkit",
-  "start_url": "https://www.alamtoolkit.com",
-  "scope": "https://www.alamtoolkit.com",
+  "start_url": "/?utm_source=pwa&utm_medium=standalone",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#ff6b35",
@@ -11,33 +11,26 @@
   "categories": ["productivity", "utilities"],
   "icons": [
     {
-      "src": "/icon-192.png",
+      "src": "https://app.alamtoolkit.com/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
-  ],
-  "screenshots": [
-    {
       "src": "https://app.alamtoolkit.com/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "form_factor": "wide"
+      "purpose": "any maskable"
     }
   ],
   "shortcuts": [
     {
-      "name": "Tools",
+      "name": "Browse Tools",
       "short_name": "Tools",
-      "description": "Browse all tools",
+      "description": "Browse all available tools",
       "url": "/#tool-categories-section"
     }
-  ]
+  ],
+  "prefer_related_applications": false,
+  "related_applications": []
 }
-
-
