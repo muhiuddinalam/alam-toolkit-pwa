@@ -5,427 +5,146 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Install AlamToolKit PWA</title>
     
-    <!-- PWA Manifest -->
-    <link rel="manifest" href="/manifest.json">
+    <!-- CORRECT Canonical -->
+    <link rel="canonical" href="https://app.alamtoolkit.com/" />
     
-    <!-- Meta Tags -->
-    <meta name="description" content="Install AlamToolKit Progressive Web App for enhanced experience">
-    <meta name="theme-color" content="#ff6b35">
-    
-    <!-- Icons -->
-    <link rel="icon" href="/icons/icon-192.png">
-    <link rel="apple-touch-icon" href="/icons/icon-192.png">
+    <!-- Manifest points to www -->
+    <link rel="manifest" href="https://www.alamtoolkit.com/manifest.json">
     
     <style>
-        /* Base Styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #ff6b35 0%, #ff3e3e 100%);
-            color: white;
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #ff6b35, #ff3e3e);
+            color: white;
+            text-align: center;
             padding: 20px;
+            margin: 0;
         }
         
         .container {
-            max-width: 800px;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
+            max-width: 500px;
             padding: 40px;
-            text-align: center;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        /* Header */
-        .header {
-            margin-bottom: 30px;
-        }
-        
-        .app-icon {
-            font-size: 60px;
-            margin-bottom: 15px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
         }
         
         h1 {
             font-size: 2.5rem;
-            margin-bottom: 10px;
-            font-weight: 800;
+            margin-bottom: 20px;
         }
         
-        .subtitle {
-            font-size: 1.2rem;
-            opacity: 0.9;
-            max-width: 600px;
-            margin: 0 auto 30px;
+        .icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
         }
         
-        /* Install Button */
-        .install-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
+        .btn {
+            display: inline-block;
+            padding: 15px 30px;
             background: white;
             color: #ff6b35;
-            border: none;
-            padding: 18px 40px;
-            font-size: 1.2rem;
-            font-weight: 700;
-            border-radius: 50px;
-            cursor: pointer;
             text-decoration: none;
-            margin: 20px 0 30px;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin: 20px 0;
             transition: all 0.3s ease;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
         }
         
-        .install-btn:hover {
+        .btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
         }
         
-        .btn-icon {
-            font-size: 1.5rem;
-        }
-        
-        /* Features Grid */
         .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
             gap: 20px;
-            margin: 40px 0;
+            margin: 30px 0;
         }
         
         .feature {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 20px;
-            border-radius: 15px;
-            transition: transform 0.3s ease;
-        }
-        
-        .feature:hover {
-            transform: translateY(-5px);
-            background: rgba(255, 255, 255, 0.15);
-        }
-        
-        .feature-icon {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
-        
-        .feature h3 {
-            margin-bottom: 8px;
-            font-size: 1.1rem;
-        }
-        
-        /* Instructions */
-        .instructions {
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 15px;
-            padding: 25px;
-            margin: 30px 0;
-            text-align: left;
-        }
-        
-        .instructions h2 {
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        
-        .step {
-            display: flex;
-            align-items: flex-start;
-            gap: 15px;
-            margin-bottom: 15px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .step:last-child {
-            border-bottom: none;
-        }
-        
-        .step-number {
-            background: white;
-            color: #ff6b35;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            flex-shrink: 0;
-        }
-        
-        /* Back Link */
-        .back-link {
-            display: inline-block;
-            color: white;
-            text-decoration: none;
-            opacity: 0.8;
-            margin-top: 30px;
-            padding: 10px 20px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 25px;
-            transition: all 0.3s ease;
-        }
-        
-        .back-link:hover {
-            opacity: 1;
-            background: rgba(255, 255, 255, 0.1);
-        }
-        
-        /* Responsive */
-        @media (max-width: 768px) {
-            .container {
-                padding: 25px 20px;
-            }
-            
-            h1 {
-                font-size: 2rem;
-            }
-            
-            .subtitle {
-                font-size: 1rem;
-            }
-            
-            .install-btn {
-                padding: 15px 30px;
-                font-size: 1.1rem;
-            }
-            
-            .features {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .container {
-                padding: 20px 15px;
-            }
-            
-            h1 {
-                font-size: 1.8rem;
-            }
-            
-            .instructions {
-                padding: 20px 15px;
-            }
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 10px;
+            min-width: 120px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <div class="app-icon">🚀</div>
-            <h1>AlamToolKit PWA</h1>
-            <p class="subtitle">Install our Progressive Web App for the best experience with 300+ productivity tools</p>
-        </div>
+        <div class="icon">📱</div>
+        <h1>Install AlamToolKit App</h1>
+        <p>Get faster loading, offline access, and push notifications</p>
         
-        <!-- Install Button -->
-        <button id="installButton" class="install-btn">
-            <span class="btn-icon">📱</span>
-            <span>Install AlamToolKit App</span>
-        </button>
-        
-        <!-- Features -->
         <div class="features">
             <div class="feature">
-                <div class="feature-icon">⚡</div>
-                <h3>Lightning Fast</h3>
-                <p>Loads instantly, works offline</p>
+                <div style="font-size: 2rem;">⚡</div>
+                <div>Faster Loading</div>
             </div>
             <div class="feature">
-                <div class="feature-icon">📱</div>
-                <h3>App Experience</h3>
-                <p>Native app feel on any device</p>
+                <div style="font-size: 2rem;">📶</div>
+                <div>Works Offline</div>
             </div>
             <div class="feature">
-                <div class="feature-icon">🔔</div>
-                <h3>Push Notifications</h3>
-                <p>Stay updated with new tools</p>
-            </div>
-            <div class="feature">
-                <div class="feature-icon">💾</div>
-                <h3>Data Saver</h3>
-                <p>Uses less data than websites</p>
+                <div style="font-size: 2rem;">🔔</div>
+                <div>Push Alerts</div>
             </div>
         </div>
         
-        <!-- Instructions -->
-        <div class="instructions">
-            <h2>📝 Installation Guide</h2>
-            
-            <div class="step">
-                <div class="step-number">1</div>
-                <div>
-                    <strong>Chrome/Edge on Desktop:</strong><br>
-                    Click the install button above, then "Install" in the address bar
-                </div>
-            </div>
-            
-            <div class="step">
-                <div class="step-number">2</div>
-                <div>
-                    <strong>Chrome on Android:</strong><br>
-                    Tap menu (⋮) → "Add to Home screen"
-                </div>
-            </div>
-            
-            <div class="step">
-                <div class="step-number">3</div>
-                <div>
-                    <strong>Safari on iPhone/iPad:</strong><br>
-                    Tap share (⎙) → "Add to Home Screen"
-                </div>
-            </div>
+        <a href="https://www.alamtoolkit.com" class="btn">
+            Continue to Main Site →
+        </a>
+        
+        <div style="margin-top: 30px; font-size: 0.9rem; opacity: 0.8;">
+            <p>Once installed, the app will open <strong>www.alamtoolkit.com</strong></p>
+            <p>All 300+ tools available on the main site</p>
         </div>
-        
-        <!-- Back to Main Site -->
-        <a href="https://www.alamtoolkit.com" class="back-link">← Back to Main Website</a>
-        
-        <!-- PWA Status -->
-        <div id="pwaStatus" style="margin-top: 20px; font-size: 0.9rem; opacity: 0.8;"></div>
     </div>
     
-    <!-- JavaScript -->
     <script>
-        // PWA Installation Logic
-        let deferredPrompt;
-        const installButton = document.getElementById('installButton');
-        const pwaStatus = document.getElementById('pwaStatus');
-        
-        // Check if already installed
-        function checkPWAStatus() {
-            const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
-            const isiOSStandalone = window.navigator.standalone === true;
-            
-            if (isStandalone || isiOSStandalone) {
-                // Already installed, redirect to main site
-                pwaStatus.innerHTML = '✅ App is already installed. Redirecting to main site...';
-                setTimeout(() => {
-                    window.location.href = 'https://www.alamtoolkit.com';
-                }, 2000);
-                return true;
-            }
-            
-            return false;
+        // If PWA is already installed, redirect to main site
+        if (window.matchMedia('(display-mode: standalone)').matches || 
+            window.navigator.standalone === true) {
+            window.location.href = 'https://www.alamtoolkit.com';
         }
         
-        // Listen for beforeinstallprompt
+        // PWA installation logic
+        let deferredPrompt;
+        
         window.addEventListener('beforeinstallprompt', (e) => {
-            // Prevent Chrome 67 and earlier from automatically showing prompt
             e.preventDefault();
             deferredPrompt = e;
             
-            console.log('✅ PWA install prompt available');
-            
             // Show install button
-            installButton.style.display = 'inline-flex';
-            installButton.disabled = false;
-        });
-        
-        // Install button click handler
-        installButton.addEventListener('click', async () => {
-            if (deferredPrompt) {
-                // Show install prompt
-                installButton.innerHTML = '<span class="btn-icon">⏳</span><span>Installing...</span>';
-                installButton.disabled = true;
-                
-                try {
+            const installBtn = document.createElement('button');
+            installBtn.className = 'btn';
+            installBtn.innerHTML = '📱 Install App Now';
+            installBtn.style.margin = '10px';
+            
+            installBtn.addEventListener('click', async () => {
+                if (deferredPrompt) {
                     deferredPrompt.prompt();
+                    const { outcome } = await deferredPrompt.userChoice;
                     
-                    // Wait for user to respond
-                    const choiceResult = await deferredPrompt.userChoice;
-                    
-                    if (choiceResult.outcome === 'accepted') {
-                        console.log('✅ User accepted PWA installation');
-                        
-                        // Update button
-                        installButton.innerHTML = '<span class="btn-icon">✅</span><span>Installed!</span>';
-                        installButton.style.background = '#4CAF50';
-                        installButton.style.color = 'white';
-                        
+                    if (outcome === 'accepted') {
                         // Redirect to main site after installation
                         setTimeout(() => {
                             window.location.href = 'https://www.alamtoolkit.com';
-                        }, 1500);
-                        
-                        // Track installation
-                        if (typeof gtag !== 'undefined') {
-                            gtag('event', 'pwa_install', {
-                                'event_category': 'engagement',
-                                'event_label': 'app_install'
-                            });
-                        }
-                    } else {
-                        console.log('❌ User dismissed PWA installation');
-                        installButton.innerHTML = '<span class="btn-icon">📱</span><span>Install AlamToolKit App</span>';
-                        installButton.disabled = false;
+                        }, 2000);
                     }
-                    
                     deferredPrompt = null;
-                    
-                } catch (error) {
-                    console.error('Installation error:', error);
-                    installButton.innerHTML = '<span class="btn-icon">📱</span><span>Install AlamToolKit App</span>';
-                    installButton.disabled = false;
-                    
-                    // Fallback to manual instructions
-                    alert('Please use your browser\'s menu to install the app:\n\nChrome/Edge: Click install in address bar\nAndroid: Menu → Add to Home screen\niOS: Share → Add to Home Screen');
                 }
-            } else {
-                // Show instructions for manual installation
-                alert('To install AlamToolKit:\n\n1. Use Chrome/Edge on desktop\n2. Or on mobile: tap menu (⋮) → "Add to Home screen"\n3. On iOS: tap share (⎙) → "Add to Home Screen"');
-            }
-        });
-        
-        // Check PWA status on load
-        document.addEventListener('DOMContentLoaded', () => {
-            if (checkPWAStatus()) {
-                installButton.style.display = 'none';
-            }
-            
-            // Also check URL parameters
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.has('installed') || urlParams.has('from_pwa')) {
-                window.location.href = 'https://www.alamtoolkit.com';
-            }
-        });
-        
-        // Service Worker Registration
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js')
-                    .then(registration => {
-                        console.log('✅ Service Worker registered:', registration.scope);
-                    })
-                    .catch(error => {
-                        console.log('❌ Service Worker registration failed:', error);
-                    });
             });
-        }
-    </script>
-    
-    <!-- Optional: Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=YOUR-GA-ID"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'YOUR-GA-ID');
+            
+            document.querySelector('.container').insertBefore(installBtn, document.querySelector('.btn'));
+        });
     </script>
 </body>
 </html>
