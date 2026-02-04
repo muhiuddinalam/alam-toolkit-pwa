@@ -2,57 +2,57 @@
   "name": "AlamToolKit",
   "short_name": "AlamToolKit",
   "description": "300+ Productivity Tools - Calculators, Planners, Converters",
-  "start_url": "https://www.alamtoolkit.com/",
-  "scope": "https://www.alamtoolkit.com/",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#ff6b35",
+  "scope": "/",
   "orientation": "any",
   "icons": [
     {
-      "src": "icons/icon-72.png",
+      "src": "/icon-72.png",
       "sizes": "72x72",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "icons/icon-96.png",
+      "src": "/icon-96.png",
       "sizes": "96x96",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "icons/icon-128.png",
+      "src": "/icon-128.png",
       "sizes": "128x128",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "icons/icon-144.png",
+      "src": "/icon-144.png",
       "sizes": "144x144",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "icons/icon-152.png",
+      "src": "/icon-152.png",
       "sizes": "152x152",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "icons/icon-192.png",
+      "src": "/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "icons/icon-384.png",
+      "src": "/icon-384.png",
       "sizes": "384x384",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "icons/icon-512.png",
+      "src": "/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
@@ -63,19 +63,19 @@
       "name": "All Tools",
       "short_name": "Tools",
       "description": "Browse all productivity tools",
-      "url": "https://www.alamtoolkit.com/"
+      "url": "/"
     },
     {
       "name": "Calculators",
       "short_name": "Calculate",
       "description": "Engineering & Financial Calculators",
-      "url": "https://www.alamtoolkit.com/search/label/Calculator"
+      "url": "/search/label/Calculator"
     },
     {
       "name": "Planners",
       "short_name": "Plan",
       "description": "Calendar & Task Management",
-      "url": "https://www.alamtoolkit.com/search/label/Planner"
+      "url": "/search/label/Planner"
     }
   ]
 }
