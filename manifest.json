@@ -1,77 +1,42 @@
 {
-  "name": "Alam Toolkit",
-  "short_name": "AlamToolkit",
-  "description": "Free online tools and utilities",
+  "name": "AlamToolKit - Your Ultimate Digital Toolkit",
+  "short_name": "AlamToolKit",
+  "description": "300+ FREE tools for planning, calculation, organization, and productivity",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#3b82f6",
-  "orientation": "any",
+  "theme_color": "#007bff",
+  "orientation": "portrait",
   "scope": "/",
   "icons": [
     {
-      "src": "https://raw.githubusercontent.com/muhiuddinalam/alam-toolkit-pwa/main/icons/icon-72x72.png",
-      "sizes": "72x72",
-      "type": "image/png"
-    },
-    {
-      "src": "https://raw.githubusercontent.com/muhiuddinalam/alam-toolkit-pwa/main/icons/icon-96x96.png",
-      "sizes": "96x96",
-      "type": "image/png"
-    },
-    {
-      "src": "https://raw.githubusercontent.com/muhiuddinalam/alam-toolkit-pwa/main/icons/icon-128x128.png",
-      "sizes": "128x128",
-      "type": "image/png"
-    },
-    {
-      "src": "https://raw.githubusercontent.com/muhiuddinalam/alam-toolkit-pwa/main/icons/icon-144x144.png",
-      "sizes": "144x144",
-      "type": "image/png"
-    },
-    {
-      "src": "https://raw.githubusercontent.com/muhiuddinalam/alam-toolkit-pwa/main/icons/icon-152x152.png",
-      "sizes": "152x152",
-      "type": "image/png"
-    },
-    {
-      "src": "https://raw.githubusercontent.com/muhiuddinalam/alam-toolkit-pwa/main/icons/icon-192x192.png",
+      "src": "https://muhiuddinalam.github.io/alam-toolkit-pwa/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "https://raw.githubusercontent.com/muhiuddinalam/alam-toolkit-pwa/main/icons/icon-384x384.png",
-      "sizes": "384x384",
-      "type": "image/png"
-    },
-    {
-      "src": "https://raw.githubusercontent.com/muhiuddinalam/alam-toolkit-pwa/main/icons/icon-512x512.png",
+      "src": "https://muhiuddinalam.github.io/alam-toolkit-pwa/icon-512.png",
       "sizes": "512x512",
-      "type": "image/png"
-    }
-  ],
-  "screenshots": [
-    {
-      "src": "https://raw.githubusercontent.com/muhiuddinalam/alam-toolkit-pwa/main/screenshots/screenshot1.png",
-      "sizes": "1280x720",
       "type": "image/png",
-      "label": "Alam Toolkit Main Interface"
+      "purpose": "any maskable"
     }
   ],
-  "categories": ["utilities", "productivity", "tools"],
+  "categories": [
+    "productivity",
+    "utilities",
+    "education"
+  ],
   "shortcuts": [
     {
-      "name": "Text Tools",
-      "short_name": "Text",
-      "description": "Text manipulation tools",
-      "url": "/text-tools",
-      "icons": [
-        {
-          "src": "https://raw.githubusercontent.com/muhiuddinalam/alam-toolkit-pwa/main/icons/text-icon.png",
-          "sizes": "96x96"
-        }
-      ]
+      "name": "All Tools",
+      "short_name": "Tools",
+      "description": "Browse all 300+ tools",
+      "url": "/",
+      "icons": [{
+        "src": "https://muhiuddinalam.github.io/alam-toolkit-pwa/icon-192.png",
+        "sizes": "192x192"
+      }]
     }
   ]
 }
