@@ -1,18 +1,13 @@
 {
   "name": "AlamToolKit",
   "short_name": "AlamToolKit",
-  "description": "300+ Productivity Tools for Daily Life - Calculators, Planners, Converters & Utilities",
+  "description": "300+ Productivity Tools - Calculators, Planners, Converters",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#ff6b35",
-  "orientation": "any",
-  "categories": ["productivity", "utilities", "tools"],
-  "lang": "en",
-  "dir": "ltr",
   "scope": "/",
-  "id": "/",
-  
+  "orientation": "any",
   "icons": [
     {
       "src": "/icon-72.png",
@@ -63,38 +58,12 @@
       "purpose": "any maskable"
     }
   ],
-  
   "shortcuts": [
     {
       "name": "All Tools",
       "short_name": "Tools",
       "description": "Browse all productivity tools",
-      "url": "/?source=pwa",
-      "icons": [{ "src": "/icon-96.png", "sizes": "96x96" }]
-    },
-    {
-      "name": "Calculators",
-      "short_name": "Calculate",
-      "description": "Engineering & Financial Calculators",
-      "url": "/?category=calculation&source=pwa",
-      "icons": [{ "src": "/icon-96.png", "sizes": "96x96" }]
-    },
-    {
-      "name": "Planners",
-      "short_name": "Plan",
-      "description": "Calendar & Task Management",
-      "url": "/?category=planning&source=pwa",
-      "icons": [{ "src": "/icon-96.png", "sizes": "96x96" }]
-    }
-  ],
-  
-  "screenshots": [
-    {
-      "src": "https://app.alamtoolkit.com/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "form_factor": "wide",
-      "label": "AlamToolKit Home Screen"
+      "url": "/"
     }
   ]
 }
