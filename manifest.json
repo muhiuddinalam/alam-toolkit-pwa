@@ -1,42 +1,26 @@
 {
-  "name": "AlamToolKit - Your Ultimate Digital Toolkit",
-  "short_name": "AlamToolKit",
-  "description": "300+ FREE tools for planning, calculation, organization, and productivity",
-  "start_url": "/",
+  "name": "Alam Toolkit",
+  "short_name": "Alam Toolkit",
+  "description": "Collection of useful online tools and utilities",
+  "start_url": "/alam-toolkit-pwa/",
+  "scope": "/alam-toolkit-pwa/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#007bff",
-  "orientation": "portrait",
-  "scope": "/",
+  "theme_color": "#4285f4",
+  "orientation": "any",
   "icons": [
     {
-      "src": "https://muhiuddinalam.github.io/alam-toolkit-pwa/icon-192.png",
+      "src": "icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "https://muhiuddinalam.github.io/alam-toolkit-pwa/icon-512.png",
+      "src": "icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
     }
   ],
-  "categories": [
-    "productivity",
-    "utilities",
-    "education"
-  ],
-  "shortcuts": [
-    {
-      "name": "All Tools",
-      "short_name": "Tools",
-      "description": "Browse all 300+ tools",
-      "url": "/",
-      "icons": [{
-        "src": "https://muhiuddinalam.github.io/alam-toolkit-pwa/icon-192.png",
-        "sizes": "192x192"
-      }]
-    }
-  ]
+  "categories": ["utilities", "productivity", "tools"]
 }
