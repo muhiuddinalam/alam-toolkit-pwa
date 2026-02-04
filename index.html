@@ -370,247 +370,241 @@
 
     <!-- JavaScript -->
     <script>
-// DOM Elements
-const installButton = document.getElementById('installButton');
-const installStatus = document.getElementById('installStatus');
-
-// Variables
-let deferredPrompt = null;
-let isInstalled = false;
-let isiOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-let isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-
-// Check if PWA is already installed
-function checkIfPWAInstalled() {
-    if (window.matchMedia('(display-mode: standalone)').matches) {
-        return true;
-    }
-    if (window.navigator.standalone === true) {
-        return true;
-    }
-    if (localStorage.getItem('alam_pwa_installed') === 'true') {
-        return true;
-    }
-    return false;
-}
-
-// Update install button state
-function updateInstallButton() {
-    isInstalled = checkIfPWAInstalled();
-    
-    if (isInstalled) {
-        installButton.innerHTML = '<span class="btn-icon">✅</span><span>Already Installed</span>';
-        installButton.style.background = 'linear-gradient(135deg, #27ae60 0%, #2ecc71 100%)';
-        installButton.disabled = true;
-        installStatus.textContent = 'AlamToolKit is installed on your device';
-        return;
-    }
-    
-    // Show iOS instructions if on iOS Safari
-    if (isiOS && isSafari) {
-        installStatus.innerHTML = 'On iOS: Tap Share (⎙) → "Add to Home Screen"';
-        installButton.innerHTML = '<span class="btn-icon">📱</span><span>Show iOS Instructions</span>';
-    } else {
-        installButton.innerHTML = '<span class="btn-icon">📱</span><span>Install AlamToolKit App</span>';
-        installStatus.textContent = 'Click to install AlamToolKit as a standalone app';
-    }
-}
-
-// Handle install button click
-async function handleInstallClick() {
-    if (isInstalled) {
-        showMessage('✅ AlamToolKit is already installed!', 'success');
-        return;
-    }
-    
-    // For iOS Safari
-    if (isiOS && isSafari) {
-        showiOSInstructions();
-        return;
-    }
-    
-    // For Chrome/Edge/Android
-    if (deferredPrompt) {
-        try {
-            installButton.innerHTML = '<span class="btn-icon">⏳</span><span>Installing...</span>';
-            installButton.disabled = true;
-            
-            deferredPrompt.prompt();
-            const { outcome } = await deferredPrompt.userChoice;
-            
-            if (outcome === 'accepted') {
-                localStorage.setItem('alam_pwa_installed', 'true');
-                isInstalled = true;
-                
-                showMessage('🎉 AlamToolKit installed successfully!', 'success');
-                
-                // Redirect to main site after 2 seconds
-                setTimeout(() => {
-                    window.location.href = 'https://www.alamtoolkit.com';
-                }, 2000);
-            } else {
-                showMessage('Installation cancelled. You can install later.', 'info');
-                resetInstallButton();
+        // DOM Elements
+        const installButton = document.getElementById('installButton');
+        const installStatus = document.getElementById('installStatus');
+        
+        // Variables
+        let deferredPrompt = null;
+        let isInstalled = false;
+        let isiOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+        let isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+        
+        // Check if PWA is already installed
+        function checkIfPWAInstalled() {
+            // Check display mode
+            if (window.matchMedia('(display-mode: standalone)').matches) {
+                return true;
             }
             
-            deferredPrompt = null;
-        } catch (error) {
-            console.error('Installation error:', error);
-            showMessage('Installation failed. Please try again.', 'error');
-            resetInstallButton();
+            // iOS standalone
+            if (window.navigator.standalone === true) {
+                return true;
+            }
+            
+            // Check localStorage
+            if (localStorage.getItem('alam_pwa_installed') === 'true') {
+                return true;
+            }
+            
+            return false;
         }
-    } else {
-        // If no deferredPrompt, show instructions based on browser
-        if (isiOS) {
-            showiOSInstructions();
-        } else {
-            showMessage('For installation, please use Chrome, Edge, or Safari browser.', 'info');
-            setTimeout(() => {
-                installStatus.innerHTML = '<a href="https://www.alamtoolkit.com" style="color:#ff6b35;text-decoration:underline;">Go to Main Site →</a>';
-            }, 2000);
-        }
-    }
-}
-
-// Show iOS instructions modal
-function showiOSInstructions() {
-    const modal = document.createElement('div');
-    modal.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0,0,0,0.9);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 10000;
-        padding: 20px;
-    `;
-    
-    modal.innerHTML = `
-        <div style="
-            background: white;
-            padding: 30px;
-            border-radius: 20px;
-            max-width: 400px;
-            width: 100%;
-            text-align: center;
-        ">
-            <div style="font-size: 48px; margin-bottom: 20px;">📱</div>
-            <h3 style="margin: 0 0 15px 0; color: #333;">Install AlamToolKit on iOS</h3>
-            <div style="text-align: left; margin: 20px 0;">
-                <div style="display: flex; align-items: center; margin-bottom: 15px; padding: 10px; background: #f8f9fa; border-radius: 10px;">
-                    <div style="background: #ff6b35; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; font-weight: bold;">1</div>
-                    <div>Tap the <strong>Share</strong> button <span style="font-size: 20px;">⎙</span> (bottom bar)</div>
-                </div>
-                <div style="display: flex; align-items: center; margin-bottom: 15px; padding: 10px; background: #f8f9fa; border-radius: 10px;">
-                    <div style="background: #ff6b35; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; font-weight: bold;">2</div>
-                    <div>Scroll and tap <strong>"Add to Home Screen"</strong></div>
-                </div>
-                <div style="display: flex; align-items: center; margin-bottom: 15px; padding: 10px; background: #f8f9fa; border-radius: 10px;">
-                    <div style="background: #ff6b35; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; font-weight: bold;">3</div>
-                    <div>Tap <strong>"Add"</strong> (top-right corner)</div>
-                </div>
-            </div>
-            <button id="closeModal" style="
-                background: #ff6b35;
-                color: white;
-                border: none;
-                padding: 12px 30px;
-                border-radius: 25px;
-                font-weight: bold;
-                cursor: pointer;
-                margin-top: 10px;
-            ">
-                Got It, Thanks!
-            </button>
-        </div>
-    `;
-    
-    document.body.appendChild(modal);
-    
-    document.getElementById('closeModal').addEventListener('click', () => {
-        document.body.removeChild(modal);
-    });
-    
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
-            document.body.removeChild(modal);
-        }
-    });
-}
-
-// Show message
-function showMessage(message, type) {
-    installStatus.textContent = message;
-    installStatus.style.color = type === 'success' ? '#27ae60' : 
-                               type === 'error' ? '#e74c3c' : '#3498db';
-    
-    if (type !== 'success') {
-        setTimeout(() => {
-            installStatus.textContent = '';
-        }, 5000);
-    }
-}
-
-// Reset install button
-function resetInstallButton() {
-    installButton.innerHTML = '<span class="btn-icon">📱</span><span>Install AlamToolKit App</span>';
-    installButton.disabled = false;
-}
-
-// Initialize
-function initialize() {
-    updateInstallButton();
-    
-    // Listen for beforeinstallprompt event
-    window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
         
-        installStatus.textContent = 'Installation available! Click the button above.';
-        installStatus.style.color = '#ff6b35';
+        // Update install button state
+        function updateInstallButton() {
+            isInstalled = checkIfPWAInstalled();
+            
+            if (isInstalled) {
+                installButton.innerHTML = '<span class="btn-icon">✅</span><span>Already Installed</span>';
+                installButton.style.background = 'linear-gradient(135deg, #27ae60 0%, #2ecc71 100%)';
+                installButton.disabled = true;
+                installStatus.textContent = 'AlamToolKit is installed on your device';
+                return;
+            }
+            
+            // Show iOS instructions if on iOS Safari
+            if (isiOS && isSafari) {
+                installStatus.innerHTML = 'On iOS: Tap Share (⎙) → "Add to Home Screen"';
+            }
+        }
         
-        // Log for debugging
-        console.log('✅ PWA Install Prompt Available');
-    });
-    
-    // Listen for app installed event
-    window.addEventListener('appinstalled', () => {
-        localStorage.setItem('alam_pwa_installed', 'true');
-        isInstalled = true;
-        updateInstallButton();
-        console.log('🎉 PWA Installed Successfully');
-    });
-    
-    // Add click listener
-    installButton.addEventListener('click', handleInstallClick);
-    
-    // Check again after 2 seconds
-    setTimeout(updateInstallButton, 2000);
-}
-
-// Start when DOM is ready
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initialize);
-} else {
-    initialize();
-}
-
-// Register service worker for GitHub Pages
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js')
-            .then(registration => {
-                console.log('Service Worker registered:', registration.scope);
-            })
-            .catch(error => {
-                console.log('Service Worker registration failed:', error);
+        // Handle install button click
+        async function handleInstallClick() {
+            if (isInstalled) {
+                showMessage('✅ AlamToolKit is already installed on your device!', 'success');
+                return;
+            }
+            
+            if (deferredPrompt) {
+                // Chrome/Edge/Android
+                try {
+                    installButton.innerHTML = '<span class="btn-icon">⏳</span><span>Installing...</span>';
+                    installButton.disabled = true;
+                    
+                    deferredPrompt.prompt();
+                    const { outcome } = await deferredPrompt.userChoice;
+                    
+                    if (outcome === 'accepted') {
+                        // Installation successful
+                        localStorage.setItem('alam_pwa_installed', 'true');
+                        isInstalled = true;
+                        
+                        showMessage('🎉 AlamToolKit installed successfully! Opening main site...', 'success');
+                        
+                        // Redirect to main site after 2 seconds
+                        setTimeout(() => {
+                            window.location.href = 'https://www.alamtoolkit.com';
+                        }, 2000);
+                    } else {
+                        // Installation declined
+                        showMessage('Installation cancelled. You can install later.', 'info');
+                        resetInstallButton();
+                    }
+                    
+                    deferredPrompt = null;
+                } catch (error) {
+                    console.error('Installation error:', error);
+                    showMessage('Installation failed. Please try again.', 'error');
+                    resetInstallButton();
+                }
+            } else if (isiOS) {
+                // iOS - show instructions
+                showiOSInstructions();
+            } else {
+                // Browser doesn't support installation
+                showMessage('Installation not supported in this browser. Try Chrome, Edge, or Safari.', 'info');
+            }
+        }
+        
+        // Show iOS instructions
+        function showiOSInstructions() {
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.9);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 10000;
+                padding: 20px;
+            `;
+            
+            modal.innerHTML = `
+                <div style="
+                    background: white;
+                    padding: 30px;
+                    border-radius: 20px;
+                    max-width: 400px;
+                    width: 100%;
+                    text-align: center;
+                ">
+                    <div style="font-size: 48px; margin-bottom: 20px;">📱</div>
+                    <h3 style="margin: 0 0 15px 0; color: #333;">Install on iPhone/iPad</h3>
+                    <div style="text-align: left; margin: 20px 0;">
+                        <div style="display: flex; align-items: center; margin-bottom: 15px; padding: 10px; background: #f8f9fa; border-radius: 10px;">
+                            <div style="background: #ff6b35; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; font-weight: bold;">1</div>
+                            <div>Tap the <strong>Share</strong> button <span style="font-size: 20px;">⎙</span></div>
+                        </div>
+                        <div style="display: flex; align-items: center; margin-bottom: 15px; padding: 10px; background: #f8f9fa; border-radius: 10px;">
+                            <div style="background: #ff6b35; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; font-weight: bold;">2</div>
+                            <div>Scroll down and tap <strong>"Add to Home Screen"</strong></div>
+                        </div>
+                        <div style="display: flex; align-items: center; margin-bottom: 15px; padding: 10px; background: #f8f9fa; border-radius: 10px;">
+                            <div style="background: #ff6b35; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; font-weight: bold;">3</div>
+                            <div>Tap <strong>"Add"</strong> in the top right corner</div>
+                        </div>
+                    </div>
+                    <button id="closeModal" style="
+                        background: #ff6b35;
+                        color: white;
+                        border: none;
+                        padding: 12px 30px;
+                        border-radius: 25px;
+                        font-weight: bold;
+                        cursor: pointer;
+                        margin-top: 10px;
+                    ">
+                        Got It, Thanks!
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Close modal
+            document.getElementById('closeModal').addEventListener('click', () => {
+                document.body.removeChild(modal);
             });
-    });
-}
-</script>
+            
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    document.body.removeChild(modal);
+                }
+            });
+        }
+        
+        // Show message
+        function showMessage(message, type) {
+            installStatus.textContent = message;
+            installStatus.style.color = type === 'success' ? '#27ae60' : 
+                                       type === 'error' ? '#e74c3c' : '#3498db';
+            
+            // Clear message after 5 seconds
+            if (type !== 'success') {
+                setTimeout(() => {
+                    installStatus.textContent = '';
+                }, 5000);
+            }
+        }
+        
+        // Reset install button
+        function resetInstallButton() {
+            installButton.innerHTML = '<span class="btn-icon">📱</span><span>Install AlamToolKit App</span>';
+            installButton.disabled = false;
+        }
+        
+        // Initialize
+        function initialize() {
+            // Check initial state
+            updateInstallButton();
+            
+            // Listen for beforeinstallprompt event
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                
+                // Update button to show install available
+                installStatus.textContent = 'Installation available! Click the button above.';
+                installStatus.style.color = '#ff6b35';
+            });
+            
+            // Listen for app installed event
+            window.addEventListener('appinstalled', () => {
+                localStorage.setItem('alam_pwa_installed', 'true');
+                isInstalled = true;
+                updateInstallButton();
+            });
+            
+            // Add click listener
+            installButton.addEventListener('click', handleInstallClick);
+            
+            // Check again after 2 seconds
+            setTimeout(updateInstallButton, 2000);
+        }
+        
+        // Start when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initialize);
+        } else {
+            initialize();
+        }
+        
+        // Register service worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(registration => {
+                        console.log('Service Worker registered:', registration.scope);
+                    })
+                    .catch(error => {
+                        console.log('Service Worker registration failed:', error);
+                    });
+            });
+        }
+    </script>
 </body>
 </html>
