@@ -1,17 +1,15 @@
 // Service Worker for AlamToolKit PWA
-const urlsToCache = [
-  '/',
-  'index.html',
-  'offline.html',
-  'manifest.json',
-  'https://www.alamtoolkit.com/'
-];
+const CACHE_NAME = 'alamtoolkit-pwa-v1';
+const OFFLINE_URL = 'offline.html';
 
+// Install event
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
-      console.log('Caching PWA installation page');
-      return cache.addAll(urlsToCache);
+      return cache.addAll([
+        OFFLINE_URL,
+        'manifest.json'
+      ]);
     }).then(() => self.skipWaiting())
   );
 });
@@ -46,4 +44,3 @@ self.addEventListener('fetch', event => {
       })
   );
 });
-
