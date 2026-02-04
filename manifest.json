@@ -64,6 +64,18 @@
       "short_name": "Tools",
       "description": "Browse all productivity tools",
       "url": "https://www.alamtoolkit.com/"
+    },
+    {
+      "name": "Calculators",
+      "short_name": "Calculate",
+      "description": "Engineering & Financial Calculators",
+      "url": "https://www.alamtoolkit.com/search/label/Calculator"
+    },
+    {
+      "name": "Planners",
+      "short_name": "Plan",
+      "description": "Calendar & Task Management",
+      "url": "https://www.alamtoolkit.com/search/label/Planner"
     }
   ]
 }
