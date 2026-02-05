@@ -1,541 +1,209 @@
 // ============================================
-// COMPLETE SERVICE WORKER FOR ALAM TOOLKIT
-// Version: 5.0 - Auto Notifications + Firebase FCM
+// SIMPLIFIED SERVICE WORKER FOR ALAM TOOLKIT
+// Version: 2.1 - Fixed for Blogger
 // ============================================
 
-const APP_VERSION = '5.0';
-const CACHE_NAME = `alam-toolkit-v${APP_VERSION}`;
-const STATIC_CACHE = `${CACHE_NAME}-static`;
-const DYNAMIC_CACHE = `${CACHE_NAME}-dynamic`;
-const API_CACHE = `${CACHE_NAME}-api`;
+const CACHE_NAME = 'alam-toolkit-v3';
+const STATIC_CACHE = CACHE_NAME + '-static';
 
-// Import Firebase for background messages
-importScripts('https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js');
-importScripts('https://www.gstatic.com/firebasejs/9.22.0/firebase-messaging-compat.js');
-
-// Firebase Config (will be updated by client)
-let firebaseConfig = {
-  apiKey: "AIzaSyC3bnvA5ygr0CaR_xJZCor3t1deSS9iUCA",
-  authDomain: "calendar-planner-6c3a6.firebaseapp.com",
-  projectId: "calendar-planner-6c3a6",
-  storageBucket: "calendar-planner-6c3a6.firebasestorage.app",
-  messagingSenderId: "491757673096",
-  appId: "1:491757673096:web:ea8f89f60f0621e6705d3d"
-};
-
-let messaging = null;
-
-// ============================================
-// FIREBASE FCM BACKGROUND HANDLER
-// ============================================
-function initializeFirebaseInSW() {
-  try {
-    if (typeof firebase !== 'undefined') {
-      firebase.initializeApp(firebaseConfig);
-      messaging = firebase.messaging();
-      console.log('✅ Firebase initialized in Service Worker');
-
-      // Handle background messages (app closed)
-      messaging.onBackgroundMessage((payload) => {
-        console.log('📨 Background message received:', payload);
-        
-        const notificationTitle = payload.notification?.title || 'Alam Toolkit';
-        const notificationOptions = {
-          body: payload.notification?.body || 'New content available!',
-          icon: 'https://raw.githubusercontent.com/muhiuddinalam/alam-toolkit-pwa/main/icon-192.png',
-          badge: 'https://raw.githubusercontent.com/muhiuddinalam/alam-toolkit-pwa/main/icon-192.png',
-          data: payload.data || { 
-            url: payload.data?.url || 'https://www.alamtoolkit.com/',
-            postId: payload.data?.postId || '',
-            action: 'open_post'
-          },
-          vibrate: [200, 100, 200],
-          tag: 'alam-toolkit-notification',
-          requireInteraction: payload.data?.important || false,
-          actions: [
-            {
-              action: 'open',
-              title: 'Open',
-              icon: 'https://raw.githubusercontent.com/muhiuddinalam/alam-toolkit-pwa/main/icon-192.png'
-            },
-            {
-              action: 'dismiss',
-              title: 'Dismiss'
-            }
-          ],
-          timestamp: Date.now()
-        };
-
-        // Add image if available
-        if (payload.notification?.image) {
-          notificationOptions.image = payload.notification.image;
-        }
-
-        return self.registration.showNotification(notificationTitle, notificationOptions);
-      });
-    }
-  } catch (error) {
-    console.log('Firebase SW init:', error);
-  }
-}
-
-// Initialize Firebase immediately
-initializeFirebaseInSW();
-
-// ============================================
-// NOTIFICATION CLICK HANDLER
-// ============================================
-self.addEventListener('notificationclick', (event) => {
-  console.log('🔔 Notification clicked:', event.notification.data);
-  
-  event.notification.close();
-  
-  let urlToOpen = 'https://www.alamtoolkit.com/';
-  
-  // Determine URL based on notification data
-  if (event.notification.data) {
-    if (event.notification.data.url) {
-      urlToOpen = event.notification.data.url;
-    } else if (event.notification.data.postId) {
-      urlToOpen = `https://www.alamtoolkit.com/${event.notification.data.postId}`;
-    }
-  }
-  
-  // Handle action buttons
-  if (event.action === 'open') {
-    event.waitUntil(openUrl(urlToOpen));
-  } else if (event.action === 'dismiss') {
-    // Just dismiss
-  } else {
-    // Default click
-    event.waitUntil(openUrl(urlToOpen));
-  }
-});
-
-async function openUrl(url) {
-  const clients = await self.clients.matchAll({ 
-    type: 'window', 
-    includeUncontrolled: true 
-  });
-  
-  // Check if window is already open
-  for (const client of clients) {
-    if (client.url === url && 'focus' in client) {
-      return client.focus();
-    }
-  }
-  
-  // Open new window
-  if (clients.openWindow) {
-    return clients.openWindow(url);
-  }
-}
-
-// ============================================
-// CORE ASSETS TO CACHE
-// ============================================
-const CORE_ASSETS = [
+// Assets to cache
+const ASSETS = [
   '/alam-toolkit-pwa/',
   '/alam-toolkit-pwa/index.html',
   '/alam-toolkit-pwa/icon-192.png',
   '/alam-toolkit-pwa/icon-512.png',
-  '/alam-toolkit-pwa/manifest.json',
-  'https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js',
-  'https://www.gstatic.com/firebasejs/9.22.0/firebase-messaging-compat.js'
+  '/alam-toolkit-pwa/manifest.json'
 ];
 
 // ============================================
-// INSTALL EVENT
+// INSTALL
 // ============================================
-self.addEventListener('install', (event) => {
-  console.log(`🚀 Service Worker installing v${APP_VERSION}`);
+self.addEventListener('install', event => {
+  console.log('📦 Installing Service Worker');
   
   event.waitUntil(
     caches.open(STATIC_CACHE)
-      .then((cache) => {
-        console.log('📦 Caching core assets...');
-        return cache.addAll(CORE_ASSETS);
-      })
-      .then(() => {
-        console.log('✅ Core assets cached');
-        return self.skipWaiting();
-      })
-      .catch((error) => {
-        console.error('❌ Cache installation failed:', error);
-      })
+      .then(cache => cache.addAll(ASSETS))
+      .then(() => self.skipWaiting())
   );
 });
 
 // ============================================
-// ACTIVATE EVENT
+// ACTIVATE
 // ============================================
-self.addEventListener('activate', (event) => {
-  console.log('🔄 Service Worker activating...');
+self.addEventListener('activate', event => {
+  console.log('🔄 Activating Service Worker');
   
   event.waitUntil(
     Promise.all([
-      // Clean up old caches
-      caches.keys().then((cacheNames) => {
+      // Clean old caches
+      caches.keys().then(cacheNames => {
         return Promise.all(
-          cacheNames.map((cacheName) => {
-            if (!cacheName.includes(CACHE_NAME)) {
-              console.log(`🗑️ Deleting old cache: ${cacheName}`);
+          cacheNames.map(cacheName => {
+            if (cacheName !== STATIC_CACHE && cacheName.includes('alam-toolkit')) {
               return caches.delete(cacheName);
             }
           })
         );
       }),
-      // Claim clients immediately
+      // Take control
       self.clients.claim()
     ]).then(() => {
       console.log('✅ Service Worker ready');
-      // Notify all clients
-      sendMessageToClients({ type: 'SW_ACTIVATED', version: APP_VERSION });
     })
   );
 });
 
 // ============================================
-// FETCH EVENT - SMART CACHING STRATEGY
+// FETCH
 // ============================================
-self.addEventListener('fetch', (event) => {
-  const request = event.request;
-  const url = new URL(request.url);
+self.addEventListener('fetch', event => {
+  // Skip non-GET requests
+  if (event.request.method !== 'GET') return;
   
-  // Skip non-GET requests and browser extensions
-  if (request.method !== 'GET') return;
-  
-  // Handle different content types
-  if (isStaticAsset(url)) {
-    event.respondWith(cacheFirstStrategy(request));
-  } else if (isAPIRequest(url)) {
-    event.respondWith(networkFirstStrategy(request));
-  } else if (request.mode === 'navigate') {
-    event.respondWith(navigationStrategy(request));
-  } else {
-    event.respondWith(networkFirstStrategy(request));
-  }
+  event.respondWith(
+    caches.match(event.request)
+      .then(cached => {
+        // Return cached if available
+        if (cached) {
+          return cached;
+        }
+        
+        // Otherwise fetch from network
+        return fetch(event.request)
+          .then(response => {
+            // Cache successful responses
+            if (response.ok) {
+              const clone = response.clone();
+              caches.open(STATIC_CACHE)
+                .then(cache => cache.put(event.request, clone));
+            }
+            return response;
+          })
+          .catch(() => {
+            // Return offline page for navigation requests
+            if (event.request.mode === 'navigate') {
+              return caches.match('/alam-toolkit-pwa/index.html');
+            }
+            return new Response('Offline', { status: 503 });
+          });
+      })
+  );
 });
 
-// Cache First for static assets
-async function cacheFirstStrategy(request) {
-  const cached = await caches.match(request);
-  if (cached) {
-    // Update cache in background
-    updateCache(request);
-    return cached;
+// ============================================
+// PUSH NOTIFICATIONS
+// ============================================
+self.addEventListener('push', event => {
+  console.log('📨 Push received');
+  
+  let data = {};
+  try {
+    data = event.data.json();
+  } catch {
+    data = {
+      title: 'Alam Toolkit',
+      body: 'New update available'
+    };
   }
   
-  try {
-    const response = await fetch(request);
-    if (response.ok) {
-      const cache = await caches.open(STATIC_CACHE);
-      cache.put(request, response.clone());
-    }
-    return response;
-  } catch (error) {
-    return new Response('Offline', { 
-      status: 503,
-      headers: { 'Content-Type': 'text/plain' }
-    });
-  }
-}
-
-// Network First for API calls
-async function networkFirstStrategy(request) {
-  try {
-    const response = await fetch(request);
-    
-    // Cache successful API responses
-    if (response.ok) {
-      const cache = await caches.open(API_CACHE);
-      cache.put(request, response.clone());
-    }
-    
-    return response;
-  } catch (error) {
-    const cached = await caches.match(request);
-    if (cached) return cached;
-    
-    return new Response(JSON.stringify({ 
-      offline: true, 
-      timestamp: Date.now() 
-    }), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' }
-    });
-  }
-}
-
-// Navigation strategy
-async function navigationStrategy(request) {
-  try {
-    const response = await fetch(request);
-    
-    if (response.ok) {
-      const cache = await caches.open(DYNAMIC_CACHE);
-      cache.put(request, response.clone());
-    }
-    
-    return response;
-  } catch (error) {
-    const cached = await caches.match(request);
-    if (cached) return cached;
-    
-    // Return offline page
-    return caches.match('/alam-toolkit-pwa/index.html');
-  }
-}
-
-// Update cache in background
-async function updateCache(request) {
-  try {
-    const response = await fetch(request);
-    if (response.ok) {
-      const cache = await caches.open(STATIC_CACHE);
-      cache.put(request, response);
-    }
-  } catch (error) {
-    // Silent fail
-  }
-}
-
-// Helper functions
-function isStaticAsset(url) {
-  const staticExtensions = ['.css', '.js', '.png', '.jpg', '.jpeg', '.gif', '.svg', '.woff', '.woff2', '.ttf', '.ico', '.webp'];
-  return staticExtensions.some(ext => url.pathname.endsWith(ext));
-}
-
-function isAPIRequest(url) {
-  return url.pathname.includes('/api/') || url.pathname.includes('/feeds/');
-}
-
-// ============================================
-// BACKGROUND SYNC
-// ============================================
-self.addEventListener('sync', (event) => {
-  console.log('🔄 Background sync:', event.tag);
+  const options = {
+    body: data.body || 'Check out the latest tools',
+    icon: '/alam-toolkit-pwa/icon-192.png',
+    badge: '/alam-toolkit-pwa/icon-192.png',
+    data: data.data || { url: 'https://www.alamtoolkit.com/' },
+    vibrate: [200, 100, 200],
+    tag: 'alam-notification'
+  };
   
-  switch (event.tag) {
-    case 'sync-new-content':
-      event.waitUntil(syncNewContent());
-      break;
-    case 'sync-notifications':
-      event.waitUntil(syncNotificationQueue());
-      break;
-    case 'sync-analytics':
-      event.waitUntil(syncAnalyticsData());
-      break;
-  }
+  event.waitUntil(
+    self.registration.showNotification(data.title || 'Alam Toolkit', options)
+  );
 });
 
-async function syncNewContent() {
-  console.log('Syncing new content...');
-  // This would fetch new posts/tools
-}
-
-async function syncNotificationQueue() {
-  const queue = await getNotificationQueue();
+// ============================================
+// NOTIFICATION CLICK
+// ============================================
+self.addEventListener('notificationclick', event => {
+  console.log('🔔 Notification clicked');
   
-  for (const notification of queue) {
-    try {
-      // Send notification to subscribed users
-      await processNotification(notification);
-      await removeFromQueue(notification.id);
-    } catch (error) {
-      console.error('Failed to sync notification:', error);
-    }
-  }
-}
-
-async function syncAnalyticsData() {
-  const analytics = JSON.parse(localStorage.getItem('alam-analytics') || '[]');
+  event.notification.close();
   
-  if (analytics.length > 0) {
-    try {
-      // Send analytics to your endpoint
-      await fetch('https://www.alamtoolkit.com/api/analytics', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ events: analytics })
-      });
-      localStorage.removeItem('alam-analytics');
-    } catch (error) {
-      console.error('Analytics sync failed:', error);
-    }
-  }
-}
+  const url = event.notification.data?.url || 'https://www.alamtoolkit.com/';
+  
+  event.waitUntil(
+    clients.matchAll({ type: 'window' })
+      .then(clientList => {
+        // Check if window is already open
+        for (const client of clientList) {
+          if (client.url === url && 'focus' in client) {
+            return client.focus();
+          }
+        }
+        
+        // Open new window
+        if (clients.openWindow) {
+          return clients.openWindow(url);
+        }
+      })
+  );
+});
 
 // ============================================
 // MESSAGE HANDLING
 // ============================================
-self.addEventListener('message', (event) => {
-  console.log('📨 Message from client:', event.data);
+self.addEventListener('message', event => {
+  console.log('📨 Message from client:', event.data.type);
   
-  switch (event.data?.type) {
+  switch (event.data.type) {
     case 'SEND_NOTIFICATION':
-      sendNotificationFromSW(event.data.payload);
+      sendNotification(event.data.data);
       break;
       
-    case 'UPDATE_FIREBASE_CONFIG':
-      updateFirebaseConfig(event.data.config);
+    case 'NEW_CONTENT':
+      handleNewContent(event.data.data);
       break;
       
-    case 'SKIP_WAITING':
-      self.skipWaiting();
-      break;
-      
-    case 'CHECK_FOR_UPDATES':
-      checkForContentUpdates();
-      break;
-      
-    case 'GET_STATUS':
-      event.ports[0]?.postMessage({
-        version: APP_VERSION,
-        firebase: !!messaging,
-        clients: event.data.clientCount || 0
-      });
+    case 'CONFIG':
+      console.log('Config received from client');
       break;
   }
 });
 
-async function sendNotificationFromSW(payload) {
-  try {
-    await self.registration.showNotification(
-      payload.title || 'Alam Toolkit',
-      {
-        body: payload.body || 'New update',
-        icon: 'https://raw.githubusercontent.com/muhiuddinalam/alam-toolkit-pwa/main/icon-192.png',
-        badge: 'https://raw.githubusercontent.com/muhiuddinalam/alam-toolkit-pwa/main/icon-192.png',
-        data: payload.data || { url: 'https://www.alamtoolkit.com/' },
-        tag: payload.tag || 'direct-notification',
-        requireInteraction: payload.important || false
-      }
-    );
-    return true;
-  } catch (error) {
-    console.error('Notification failed:', error);
-    return false;
-  }
-}
-
-function updateFirebaseConfig(config) {
-  if (config && config.apiKey) {
-    firebaseConfig = config;
-    initializeFirebaseInSW();
-  }
-}
-
-async function checkForContentUpdates() {
-  try {
-    const response = await fetch('https://www.alamtoolkit.com/feeds/posts/default?alt=json&max-results=1');
-    const data = await response.json();
-    
-    // Check if new content is available
-    const latestPost = data.feed.entry[0];
-    const lastChecked = localStorage.getItem('last_checked_post');
-    
-    if (latestPost.id.$t !== lastChecked) {
-      // New content detected
-      sendMessageToClients({
-        type: 'NEW_CONTENT_AVAILABLE',
-        post: latestPost
-      });
-      
-      localStorage.setItem('last_checked_post', latestPost.id.$t);
-    }
-  } catch (error) {
-    console.error('Update check failed:', error);
-  }
-}
-
 // ============================================
 // HELPER FUNCTIONS
 // ============================================
-async function sendMessageToClients(message) {
-  const clients = await self.clients.matchAll();
-  clients.forEach(client => {
-    try {
-      client.postMessage(message);
-    } catch (error) {
-      console.log('Message failed to client:', error);
-    }
-  });
-}
-
-async function getNotificationQueue() {
-  const db = await openNotificationDB();
-  return new Promise((resolve) => {
-    const transaction = db.transaction(['notifications'], 'readonly');
-    const store = transaction.objectStore('notifications');
-    const request = store.getAll();
-    request.onsuccess = () => resolve(request.result || []);
-    request.onerror = () => resolve([]);
-  });
-}
-
-async function removeFromQueue(id) {
-  const db = await openNotificationDB();
-  return new Promise((resolve) => {
-    const transaction = db.transaction(['notifications'], 'readwrite');
-    const store = transaction.objectStore('notifications');
-    store.delete(id);
-    transaction.oncomplete = () => resolve(true);
-    transaction.onerror = () => resolve(false);
-  });
-}
-
-async function openNotificationDB() {
-  return new Promise((resolve, reject) => {
-    const request = indexedDB.open('alam-notifications', 1);
-    
-    request.onupgradeneeded = (event) => {
-      const db = event.target.result;
-      if (!db.objectStoreNames.contains('notifications')) {
-        const store = db.createObjectStore('notifications', { keyPath: 'id' });
-        store.createIndex('timestamp', 'timestamp');
-        store.createIndex('status', 'status');
-      }
-    };
-    
-    request.onsuccess = (event) => resolve(event.target.result);
-    request.onerror = (event) => reject(event.target.error);
-  });
-}
-
-async function processNotification(notification) {
-  // This would send to Firebase or other service
-  console.log('Processing notification:', notification);
+function sendNotification(data) {
+  const options = {
+    body: data.body || 'New update',
+    icon: '/alam-toolkit-pwa/icon-192.png',
+    badge: '/alam-toolkit-pwa/icon-192.png',
+    data: { url: data.url || 'https://www.alamtoolkit.com/' },
+    vibrate: [200, 100, 200],
+    tag: 'manual-notification'
+  };
   
-  // For now, just show locally
-  if (self.registration) {
-    await self.registration.showNotification(notification.title, {
-      body: notification.body,
-      icon: notification.icon || 'https://raw.githubusercontent.com/muhiuddinalam/alam-toolkit-pwa/main/icon-192.png',
-      data: notification.data
+  return self.registration.showNotification(
+    data.title || 'Alam Toolkit',
+    options
+  );
+}
+
+function handleNewContent(data) {
+  console.log('New content detected:', data.title);
+  
+  // You could show a notification here
+  // For now, just log it
+  if (Math.random() < 0.3) { // 30% chance to demo
+    sendNotification({
+      title: '📢 New Content!',
+      body: data.title,
+      url: data.url
     });
   }
 }
 
 // ============================================
-// PERIODIC TASK - CHECK FOR UPDATES
+// INIT
 // ============================================
-async function checkPeriodicUpdates() {
-  // Check for new content every 2 hours
-  const lastCheck = parseInt(localStorage.getItem('last_update_check') || '0');
-  const now = Date.now();
-  
-  if (now - lastCheck > 2 * 60 * 60 * 1000) {
-    await checkForContentUpdates();
-    localStorage.setItem('last_update_check', now.toString());
-  }
-}
-
-// Run periodic check when service worker starts
-checkPeriodicUpdates();
-setInterval(checkPeriodicUpdates, 30 * 60 * 1000); // Every 30 minutes
-
-// ============================================
-// INITIALIZATION
-// ============================================
-console.log(`✅ Alam Toolkit Service Worker v${APP_VERSION} loaded`);
+console.log('✅ Alam Toolkit Service Worker loaded');
