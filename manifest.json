@@ -2,8 +2,8 @@
   "name": "Alam Toolkit",
   "short_name": "Alam Toolkit",
   "description": "Collection of useful online tools and utilities",
-  "start_url": "/alam-toolkit-pwa/",
-  "scope": "/alam-toolkit-pwa/",
+  "start_url": "https://www.alamtoolkit.com/?source=pwa",
+  "scope": "https://www.alamtoolkit.com/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#4285f4",
@@ -22,5 +22,22 @@
       "purpose": "any maskable"
     }
   ],
-  "categories": ["utilities", "productivity", "tools"]
+  "screenshots": [
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ],
+  "categories": ["utilities", "productivity", "tools"],
+  "shortcuts": [
+    {
+      "name": "Home",
+      "short_name": "Home",
+      "description": "Go to homepage",
+      "url": "https://www.alamtoolkit.com/?source=pwa",
+      "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
+    }
+  ]
 }
