@@ -1,21 +1,26 @@
 {
   "name": "Alam Toolkit",
   "short_name": "Alam Toolkit",
-  "start_url": "/alam-toolkit-pwa/",
-  "scope": "/alam-toolkit-pwa/",
+  "description": "Collection of useful online tools and utilities",
+  "start_url": "https://www.alamtoolkit.com/?pwa=1",
+  "scope": "https://www.alamtoolkit.com/",
   "display": "standalone",
-  "background_color": "#4285f4",
+  "background_color": "#ffffff",
   "theme_color": "#4285f4",
+  "orientation": "any",
   "icons": [
     {
-      "src": "/alam-toolkit-pwa/icon-192.png",
+      "src": "https://raw.githubusercontent.com/muhiuddinalam/alam-toolkit-pwa/main/icon-192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
-      "src": "/alam-toolkit-pwa/icon-512.png",
+      "src": "https://raw.githubusercontent.com/muhiuddinalam/alam-toolkit-pwa/main/icon-512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
-  ]
+  ],
+  "categories": ["utilities", "productivity", "tools"]
 }
