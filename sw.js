@@ -1,4 +1,4 @@
-// Universal Alarm Service Worker with Push Notifications
+// Universal Alarm Service Worker for Mobile & Desktop
 const CACHE_NAME = 'alarm-universal-v2';
 let alarms = [];
 let timerInterval = null;
@@ -41,95 +41,10 @@ self.addEventListener('message', event => {
     }
 });
 
-// Handle push notifications from server
-self.addEventListener('push', event => {
-    console.log('Push notification received:', event);
-    
-    let data = {};
-    try {
-        data = event.data ? event.data.json() : {};
-    } catch (e) {
-        data = {
-            title: '⏰ Alarm Clock',
-            body: 'Time to wake up!',
-            icon: 'https://www.alamtoolkit.com/icons/alarm-192.png'
-        };
-    }
-    
-    const options = {
-        body: data.body || 'Time to wake up!',
-        icon: data.icon || 'https://www.alamtoolkit.com/icons/alarm-192.png',
-        badge: 'https://www.alamtoolkit.com/icons/badge-96.png',
-        tag: data.tag || `push-${Date.now()}`,
-        requireInteraction: true,
-        renotify: true,
-        silent: false,
-        vibrate: [200, 100, 200, 100, 200],
-        data: data.data || {}
-    };
-    
-    // Add actions for alarms
-    if (data.data && data.data.alarmId) {
-        options.actions = [
-            { action: 'snooze', title: `😴 Snooze (${data.data.snoozeMinutes || 10}min)` },
-            { action: 'dismiss', title: '🛑 Dismiss' }
-        ];
-    }
-    
-    event.waitUntil(
-        self.registration.showNotification(data.title || '⏰ Alarm Clock', options)
-    );
-});
-
-// Handle notification clicks
-self.addEventListener('notificationclick', event => {
-    console.log('Notification clicked:', event.action);
-    event.notification.close();
-    
-    const action = event.action;
-    const alarmId = event.notification.data?.alarmId;
-    const snoozeMinutes = event.notification.data?.snoozeMinutes || 10;
-    
-    if (action === 'snooze') {
-        // Schedule snoozed alarm
-        const snoozeTime = Date.now() + (snoozeMinutes * 60 * 1000);
-        scheduleAlarm({
-            id: `snooze-${alarmId}-${Date.now()}`,
-            label: `Snooze: ${event.notification.data?.label || 'Alarm'}`,
-            delay: snoozeMinutes * 60 * 1000,
-            sound: event.notification.data?.sound || 'classic',
-            volume: event.notification.data?.volume || 70,
-            snoozeMinutes: snoozeMinutes,
-            isDesktop: true
-        });
-        
-        // Notify client
-        notifyClient('ALARM_SNOOZED', { alarmId, snoozeMinutes });
-        
-    } else if (action === 'dismiss') {
-        // Cancel alarm
-        cancelAlarm(alarmId);
-        notifyClient('ALARM_DISMISSED', { alarmId });
-        
-    } else {
-        // Open app
-        event.waitUntil(
-            clients.matchAll({ type: 'window', includeUncontrolled: true })
-                .then(windowClients => {
-                    if (windowClients.length > 0) {
-                        windowClients[0].focus();
-                    } else {
-                        clients.openWindow('/');
-                    }
-                })
-        );
-    }
-});
-
 // Schedule alarm
 function scheduleAlarm(alarmData) {
     const alarmId = alarmData.id || 'alarm-' + Date.now();
-    const alarmTime = Date.now() + (alarmData.delay || 0);
+    const alarmTime = Date.now() + alarmData.delay;
     
     const alarm = {
         id: alarmId,
@@ -138,7 +53,8 @@ function scheduleAlarm(alarmData) {
         sound: alarmData.sound || 'classic',
         volume: alarmData.volume || 70,
         snoozeMinutes: alarmData.snoozeMinutes || 10,
-        isDesktop: true
+        isMobile: alarmData.isMobile || false,
+        repeat: alarmData.repeat || 'once'
     };
     
     alarms.push(alarm);
@@ -149,15 +65,16 @@ function scheduleAlarm(alarmData) {
         startAlarmChecker();
     }
     
-    // Request wake lock for desktop
-    if (alarm.isDesktop) {
+    // Request wake lock for mobile
+    if (alarm.isMobile) {
         requestWakeLock();
     }
     
     // Notify client
     notifyClient('ALARM_SCHEDULED', { 
         id: alarmId, 
-        time: new Date(alarmTime).toLocaleTimeString()
+        time: new Date(alarmTime).toLocaleTimeString(),
+        isMobile: alarm.isMobile 
     });
 }
 
@@ -174,8 +91,6 @@ function cancelAlarm(alarmId) {
 
 // Schedule timer
 function scheduleTimer(timerData) {
-    const timerEnd = Date.now() + timerData.duration;
-    
     setTimeout(() => {
         triggerTimerFinished();
     }, timerData.duration);
@@ -214,8 +129,8 @@ async function triggerAlarm(alarm) {
         badge: 'https://www.alamtoolkit.com/icons/badge-96.png',
         tag: `alarm-${alarm.id}`,
         requireInteraction: true,
+        vibrate: alarm.isMobile ? [200, 100, 200, 100, 200] : [],
         silent: false,
-        vibrate: [200, 100, 200, 100, 200],
         actions: [
             {
                 action: 'snooze',
@@ -228,11 +143,10 @@ async function triggerAlarm(alarm) {
         ],
         data: {
             alarmId: alarm.id,
-            label: alarm.label,
+            type: 'alarm',
             sound: alarm.sound,
             volume: alarm.volume,
-            snoozeMinutes: alarm.snoozeMinutes,
-            isDesktop: true
+            isMobile: alarm.isMobile
         }
     };
     
@@ -241,8 +155,8 @@ async function triggerAlarm(alarm) {
     // Notify all clients
     notifyClient('ALARM_TRIGGERED', alarm);
     
-    // Keep wake lock for desktop
-    if (alarm.isDesktop) {
+    // Keep wake lock for mobile
+    if (alarm.isMobile) {
         requestWakeLock();
     }
 }
@@ -257,14 +171,14 @@ async function triggerTimerFinished() {
         tag: 'timer-finished',
         requireInteraction: true,
         silent: false,
-        vibrate: [200, 100, 200]
+        vibrate: [100, 50, 100]
     };
     
     await self.registration.showNotification(title, options);
     notifyClient('TIMER_FINISHED', {});
 }
 
-// Request wake lock (for desktop)
+// Request wake lock (for mobile)
 async function requestWakeLock() {
     if ('wakeLock' in navigator && !wakeLock) {
         try {
@@ -289,6 +203,49 @@ function releaseWakeLock() {
         console.log('Wake Lock released');
     }
 }
+
+// Handle notification clicks
+self.addEventListener('notificationclick', event => {
+    console.log('Notification clicked:', event.notification.tag);
+    event.notification.close();
+    
+    const action = event.action;
+    const alarmId = event.notification.data?.alarmId;
+    const isMobile = event.notification.data?.isMobile;
+    
+    if (action === 'snooze') {
+        const alarm = alarms.find(a => a.id === alarmId);
+        if (alarm) {
+            const snoozeTime = Date.now() + (alarm.snoozeMinutes * 60 * 1000);
+            scheduleAlarm({
+                id: `snooze-${alarmId}-${Date.now()}`,
+                label: `Snooze: ${alarm.label}`,
+                delay: alarm.snoozeMinutes * 60 * 1000,
+                sound: alarm.sound,
+                volume: alarm.volume,
+                snoozeMinutes: alarm.snoozeMinutes,
+                isMobile: isMobile
+            });
+            
+            notifyClient('ALARM_SNOOZED', alarm);
+        }
+    } else if (action === 'dismiss') {
+        cancelAlarm(alarmId);
+        notifyClient('ALARM_DISMISSED', { alarmId });
+    }
+    
+    // Focus the app window
+    event.waitUntil(
+        clients.matchAll({ type: 'window', includeUncontrolled: true })
+            .then(windowClients => {
+                if (windowClients.length > 0) {
+                    windowClients[0].focus();
+                } else {
+                    clients.openWindow('/');
+                }
+            })
+    );
+});
 
 // Notify client
 function notifyClient(type, data) {
