@@ -1,8 +1,8 @@
 // ============================================
-// UNIVERSAL SERVICE WORKER - REQUIRED FOR NOTIFICATIONS
+// SERVICE WORKER - REQUIRED FOR DESKTOP NOTIFICATIONS
 // ============================================
 
-const CACHE_NAME = 'alarm-universal-v1';
+const CACHE_NAME = 'alarm-desktop-v1';
 let scheduledAlarms = {};
 
 self.addEventListener('install', event => {
@@ -25,6 +25,9 @@ self.addEventListener('message', event => {
         case 'CANCEL_ALARM':
             cancelAlarm(event.data.alarmId);
             break;
+        case 'SHOW_DESKTOP_NOTIFICATION':
+            showDesktopNotification(event.data.alarm);
+            break;
         case 'TEST_NOTIFICATION':
             showTestNotification();
             break;
@@ -37,7 +40,7 @@ function scheduleAlarm(alarm) {
     const now = Date.now();
     const delay = Math.max(0, alarmTime - now);
     
-    console.log(`Scheduling alarm "${alarm.label}" in ${Math.round(delay/1000)}s`);
+    console.log(`Scheduling alarm "${alarm.label}" in ${Math.round(delay/1000)}s (Desktop: ${alarm.isDesktop})`);
     
     if (scheduledAlarms[alarmId]) {
         clearTimeout(scheduledAlarms[alarmId]);
@@ -66,11 +69,11 @@ function cancelAlarm(alarmId) {
 }
 
 async function triggerAlarm(alarm) {
-    console.log('🔔 ALARM TRIGGERED:', alarm.label);
+    console.log('🔔 DESKTOP ALARM TRIGGERED:', alarm.label);
     
     const title = `⏰ ${alarm.label}`;
     const options = {
-        body: `Time: ${new Date(alarm.targetTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`,
+        body: `Time: ${alarm.time || new Date(alarm.targetTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`,
         icon: 'https://www.alamtoolkit.com/icons/alarm-192.png',
         badge: 'https://www.alamtoolkit.com/icons/badge-96.png',
         tag: `alarm-${alarm.id}-${Date.now()}`,
@@ -82,8 +85,7 @@ async function triggerAlarm(alarm) {
             label: alarm.label,
             snoozeMinutes: alarm.snoozeDuration || 10,
             sound: alarm.sound || 'beep',
-            volume: alarm.volume || 70,
-            isMobile: alarm.isMobile || false
+            volume: alarm.volume || 70
         },
         actions: [
             { action: 'snooze', title: `😴 Snooze (${alarm.snoozeDuration || 10}min)` },
@@ -102,14 +104,42 @@ async function triggerAlarm(alarm) {
             });
         });
     } catch (error) {
-        console.error('Failed to show notification:', error);
+        console.error('Failed to show desktop notification:', error);
+    }
+}
+
+async function showDesktopNotification(alarm) {
+    const title = `⏰ ${alarm.label}`;
+    const options = {
+        body: `Time: ${alarm.time}`,
+        icon: 'https://www.alamtoolkit.com/icons/alarm-192.png',
+        badge: 'https://www.alamtoolkit.com/icons/badge-96.png',
+        tag: `desktop-${alarm.id}-${Date.now()}`,
+        requireInteraction: true,
+        silent: false,
+        vibrate: [200, 100, 200, 100, 200],
+        data: {
+            alarmId: alarm.id,
+            label: alarm.label,
+            snoozeMinutes: alarm.snoozeDuration || 10
+        },
+        actions: [
+            { action: 'snooze', title: `😴 Snooze (${alarm.snoozeDuration || 10}min)` },
+            { action: 'stop', title: '🛑 Stop' }
+        ]
+    };
+    
+    try {
+        await self.registration.showNotification(title, options);
+    } catch (error) {
+        console.error('Failed to show desktop notification:', error);
     }
 }
 
 async function showTestNotification() {
-    const title = '🔔 Test Notification';
+    const title = '🔔 Desktop Notifications Active';
     const options = {
-        body: 'Alarm system is working!',
+        body: 'You will receive alarm notifications even when using other browsers!',
         icon: 'https://www.alamtoolkit.com/icons/alarm-192.png',
         badge: 'https://www.alamtoolkit.com/icons/badge-96.png',
         tag: 'test-' + Date.now(),
@@ -126,7 +156,6 @@ self.addEventListener('notificationclick', event => {
     
     const alarmId = event.notification.data?.alarmId;
     const snoozeMinutes = event.notification.data?.snoozeMinutes || 10;
-    const isMobile = event.notification.data?.isMobile || false;
     
     if (event.action === 'snooze' && alarmId) {
         const snoozeTime = Date.now() + (snoozeMinutes * 60 * 1000);
@@ -135,10 +164,9 @@ self.addEventListener('notificationclick', event => {
             id: `snooze-${alarmId}-${Date.now()}`,
             label: `Snooze: ${event.notification.data?.label || 'Alarm'}`,
             targetTime: snoozeTime,
+            time: new Date(snoozeTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
             snoozeDuration: snoozeMinutes,
-            sound: event.notification.data?.sound || 'beep',
-            volume: event.notification.data?.volume || 70,
-            isMobile: isMobile
+            isDesktop: true
         });
         
         self.clients.matchAll().then(clients => {
@@ -177,4 +205,4 @@ self.addEventListener('notificationclick', event => {
     );
 });
 
-console.log('Service Worker loaded');
+console.log('Desktop Service Worker loaded');
