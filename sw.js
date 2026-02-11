@@ -1,480 +1,277 @@
-// Alam Toolkit Service Worker with Background Alarms
-const CACHE_NAME = 'alam-toolkit-alarm-v1';
-const OFFLINE_URL = '/offline.html';
-const VAPID_KEY = 'BDinNd7RS2Z-jM9zBmGeVotJLK_QHxBG3iABKalVlLlj9VwfciqD_cgNa4rTYskgp1K4tI1yBRQmAJDJiFZAZWI';
+// Service Worker for AlamToolkit Alarm Clock
+// Save as sw.js in your site root
 
-// URLs to cache for offline functionality
-const urlsToCache = [
-  OFFLINE_URL,
-  // Add other important pages here
+const CACHE_NAME = 'alarm-clock-v4';
+const CACHE_FILES = [
+  '/',
+  '/alarm-clock',
+  '/icons/alarm-192.png',
+  '/icons/badge-96.png',
+  '/icons/icon-512.png',
+  '/sounds/beep.mp3',
+  '/sounds/chime.mp3'
 ];
 
-// Alarm scheduling in service worker
-const scheduledAlarms = new Map();
-const MAX_ALARM_DELAY = 15 * 60 * 1000; // 15 minutes max for reliable alarms
-
-// Install service worker
-self.addEventListener('install', (event) => {
-  console.log('[Service Worker] Installing...');
+// Install event
+self.addEventListener('install', event => {
+  console.log('Service Worker installing...');
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then((cache) => {
-        console.log('[Service Worker] Caching offline page');
-        return cache.addAll(urlsToCache);
+      .then(cache => {
+        console.log('Caching app shell');
+        return cache.addAll(CACHE_FILES);
       })
-      .then(() => {
-        console.log('[Service Worker] Skip waiting on install');
-        return self.skipWaiting();
-      })
+      .then(() => self.skipWaiting())
   );
 });
 
-// Activate service worker
-self.addEventListener('activate', (event) => {
-  console.log('[Service Worker] Activating...');
-  const cacheWhitelist = [CACHE_NAME];
+// Activate event
+self.addEventListener('activate', event => {
+  console.log('Service Worker activating...');
   event.waitUntil(
     caches.keys().then(cacheNames => {
       return Promise.all(
         cacheNames.map(cacheName => {
-          if (cacheWhitelist.indexOf(cacheName) === -1) {
-            console.log('[Service Worker] Deleting old cache:', cacheName);
+          if (cacheName !== CACHE_NAME) {
+            console.log('Deleting old cache:', cacheName);
             return caches.delete(cacheName);
           }
         })
       );
-    })
-    .then(() => {
-      console.log('[Service Worker] Claiming clients');
-      return self.clients.claim();
-    })
+    }).then(() => self.clients.claim())
   );
 });
 
-// Fetch from cache or network with offline fallback
-self.addEventListener('fetch', (event) => {
-  // Skip non-GET requests and chrome-extension requests
-  if (event.request.method !== 'GET' || event.request.url.startsWith('chrome-extension://')) {
-    return;
-  }
-
+// Fetch event
+self.addEventListener('fetch', event => {
   event.respondWith(
     caches.match(event.request)
-      .then((response) => {
-        // Cache hit - return response
+      .then(response => {
         if (response) {
           return response;
         }
-
-        // Clone the request because it can only be used once
-        const fetchRequest = event.request.clone();
-
-        return fetch(fetchRequest)
-          .then((response) => {
-            // Check if we received a valid response
-            if (!response || response.status !== 200 || response.type !== 'basic') {
-              return response;
-            }
-
-            // Clone the response because it can only be used once
-            const responseToCache = response.clone();
-
-            caches.open(CACHE_NAME)
-              .then((cache) => {
-                cache.put(event.request, responseToCache);
-              });
-
+        return fetch(event.request).then(response => {
+          // Don't cache non-successful responses
+          if (!response || response.status !== 200 || response.type !== 'basic') {
             return response;
-          })
-          .catch(() => {
-            // If both fetch and cache fail, show offline page for HTML requests
-            if (event.request.headers.get('accept').includes('text/html')) {
-              return caches.match(OFFLINE_URL);
-            }
-            // For other requests, return a custom offline response
-            return new Response('Offline', {
-              status: 503,
-              statusText: 'Service Unavailable',
-              headers: new Headers({
-                'Content-Type': 'text/plain'
-              })
+          }
+          
+          // Clone the response
+          const responseToCache = response.clone();
+          
+          caches.open(CACHE_NAME)
+            .then(cache => {
+              cache.put(event.request, responseToCache);
             });
-          });
+            
+          return response;
+        });
       })
   );
 });
 
-// ============================================
-// BACKGROUND ALARM SYSTEM
-// ============================================
-
-// Handle messages from main thread
-self.addEventListener('message', (event) => {
-  console.log('[Service Worker] Received message:', event.data.type);
-  
-  switch (event.data.type) {
-    case 'SCHEDULE_ALARM':
-      scheduleAlarmNotification(event.data.alarm);
-      break;
-      
-    case 'CANCEL_ALARM':
-      cancelAlarm(event.data.alarmId);
-      break;
-      
-    case 'SYNC_ALARMS':
-      syncAlarmsWithServer();
-      break;
-      
-    case 'REQUEST_NOTIFICATION_PERMISSION':
-      requestNotificationPermission();
-      break;
-      
-    default:
-      console.log('[Service Worker] Unknown message type:', event.data.type);
-  }
-});
-
-// Schedule an alarm notification
-function scheduleAlarmNotification(alarm) {
-  console.log('[Service Worker] Scheduling alarm:', alarm.id, 'delay:', alarm.delay);
-  
-  // Calculate delay (max 15 minutes for service worker reliability)
-  const delay = Math.min(alarm.delay, MAX_ALARM_DELAY);
-  
-  if (delay <= 0) {
-    console.log('[Service Worker] Alarm delay is zero or negative, triggering immediately');
-    triggerAlarmNotification(alarm);
-    return;
-  }
-  
-  const timeoutId = setTimeout(() => {
-    console.log('[Service Worker] Alarm triggered:', alarm.id);
-    triggerAlarmNotification(alarm);
-    
-    // Clean up
-    scheduledAlarms.delete(alarm.id);
-    
-    // If alarm was scheduled for more than MAX_ALARM_DELAY, reschedule
-    if (alarm.delay > MAX_ALARM_DELAY) {
-      console.log('[Service Worker] Rescheduling remaining alarm time');
-      const newAlarm = {
-        ...alarm,
-        delay: alarm.delay - MAX_ALARM_DELAY
-      };
-      scheduleAlarmNotification(newAlarm);
-    }
-  }, delay);
-  
-  scheduledAlarms.set(alarm.id, timeoutId);
-  console.log('[Service Worker] Alarm scheduled successfully');
-}
-
-// Cancel a scheduled alarm
-function cancelAlarm(alarmId) {
-  console.log('[Service Worker] Canceling alarm:', alarmId);
-  const timeoutId = scheduledAlarms.get(alarmId);
-  if (timeoutId) {
-    clearTimeout(timeoutId);
-    scheduledAlarms.delete(alarmId);
-    console.log('[Service Worker] Alarm canceled successfully');
-  } else {
-    console.log('[Service Worker] Alarm not found for cancellation:', alarmId);
-  }
-}
-
-// Trigger an alarm notification
-function triggerAlarmNotification(alarm) {
-  console.log('[Service Worker] Showing alarm notification for:', alarm.id);
-  
-  const timeString = `${alarm.hours.toString().padStart(2, '0')}:${alarm.minutes.toString().padStart(2, '0')}`;
-  const bodyText = alarm.label 
-    ? `${alarm.label} - ${timeString}`
-    : `Alarm at ${timeString}`;
-  
-  const options = {
-    body: bodyText,
-    icon: '/favicon.ico',
-    badge: '/favicon.ico',
-    tag: `alarm-${alarm.id}`,
-    requireInteraction: true,
-    vibrate: [200, 100, 200, 100, 200, 100, 200],
-    actions: [
-      {
-        action: 'snooze',
-        title: '⏰ Snooze (10 min)',
-        icon: '/icons/snooze.png'
-      },
-      {
-        action: 'dismiss',
-        title: '❌ Dismiss',
-        icon: '/icons/dismiss.png'
-      }
-    ],
-    data: {
-      alarmId: alarm.id,
-      alarmTime: timeString,
-      alarmLabel: alarm.label || 'Alarm',
-      timestamp: Date.now(),
-      url: self.location.origin
-    }
-  };
-  
-  self.registration.showNotification('⏰ Alarm Clock', options)
-    .then(() => console.log('[Service Worker] Notification shown successfully'))
-    .catch(error => console.error('[Service Worker] Error showing notification:', error));
-}
-
-// ============================================
-// PUSH NOTIFICATIONS
-// ============================================
-
-// Handle push notifications from server
-self.addEventListener('push', (event) => {
-  console.log('[Service Worker] Push received');
+// Push notification event
+self.addEventListener('push', event => {
+  console.log('Push notification received:', event);
   
   let data = {};
   if (event.data) {
-    try {
-      data = event.data.json();
-    } catch (e) {
-      data = {
-        title: 'Alarm Clock',
-        body: event.data.text() || 'Alarm is ringing!'
-      };
-    }
+    data = event.data.json();
   }
   
   const options = {
-    body: data.body || 'Alarm is ringing!',
-    icon: '/favicon.ico',
-    badge: '/favicon.ico',
-    tag: 'alarm-push-notification',
+    body: data.body || 'Alarm!',
+    icon: '/icons/alarm-192.png',
+    badge: '/icons/badge-96.png',
+    vibrate: [200, 100, 200, 100, 200],
+    tag: 'alarm-notification',
+    renotify: true,
     requireInteraction: true,
-    vibrate: [200, 100, 200, 100, 200, 100, 200],
     actions: [
-      {
-        action: 'snooze',
-        title: 'Snooze'
-      },
-      {
-        action: 'dismiss',
-        title: 'Dismiss'
-      }
+      { action: 'snooze', title: 'Snooze', icon: '/icons/snooze.png' },
+      { action: 'dismiss', title: 'Dismiss', icon: '/icons/dismiss.png' }
     ],
     data: {
-      ...data,
-      timestamp: Date.now(),
-      url: self.location.origin
+      url: self.location.origin,
+      alarmId: data.alarmId,
+      deviceId: data.deviceId
     }
   };
-
+  
   event.waitUntil(
-    self.registration.showNotification(data.title || '⏰ Alarm Clock', options)
-      .then(() => console.log('[Service Worker] Push notification shown'))
-      .catch(error => console.error('[Service Worker] Error showing push notification:', error))
+    self.registration.showNotification(data.title || 'Alarm Clock', options)
   );
 });
 
-// Handle notification clicks
-self.addEventListener('notificationclick', (event) => {
-  console.log('[Service Worker] Notification clicked:', event.action);
+// Notification click event
+self.addEventListener('notificationclick', event => {
+  console.log('Notification clicked:', event);
+  
   event.notification.close();
-
-  const notificationData = event.notification.data || {};
   
-  switch (event.action) {
-    case 'snooze':
-      // Handle snooze action
-      console.log('[Service Worker] Snooze clicked for alarm:', notificationData.alarmId);
-      
-      // Send message to main thread to handle snooze
-      event.waitUntil(
-        self.clients.matchAll({ type: 'window' })
-          .then((clients) => {
-            if (clients.length > 0) {
-              const client = clients[0];
-              client.postMessage({
-                type: 'SNOOZE_ALARM',
-                alarmId: notificationData.alarmId,
-                snoozeDuration: 10 // 10 minutes
-              });
-              return client.focus();
-            } else {
-              // If no clients are open, open the app
-              return self.clients.openWindow('/');
-            }
-          })
-      );
-      break;
-      
-    case 'dismiss':
-      // Handle dismiss action
-      console.log('[Service Worker] Dismiss clicked for alarm:', notificationData.alarmId);
-      
-      // Send message to main thread to handle dismiss
-      event.waitUntil(
-        self.clients.matchAll({ type: 'window' })
-          .then((clients) => {
-            if (clients.length > 0) {
-              const client = clients[0];
-              client.postMessage({
-                type: 'DISMISS_ALARM',
-                alarmId: notificationData.alarmId
-              });
-            }
-          })
-      );
-      break;
-      
-    default:
-      // Default click action - focus or open the app
-      console.log('[Service Worker] Default notification click');
-      event.waitUntil(
-        self.clients.matchAll({ 
-          type: 'window',
-          includeUncontrolled: true 
-        })
-          .then((clients) => {
-            // Check if there's already a window/tab open with the app
-            const client = clients.find(c => 
-              c.url.includes(self.location.origin) && 'focus' in c
-            );
-            
-            if (client) {
-              // Focus existing window
-              console.log('[Service Worker] Focusing existing client');
-              return client.focus();
-            } else {
-              // Open new window
-              console.log('[Service Worker] Opening new client window');
-              return self.clients.openWindow('/');
-            }
-          })
-          .catch(error => {
-            console.error('[Service Worker] Error handling notification click:', error);
-            return self.clients.openWindow('/');
-          })
-      );
-  }
-});
-
-// Handle notification close
-self.addEventListener('notificationclose', (event) => {
-  console.log('[Service Worker] Notification closed:', event.notification.tag);
-  // You could log analytics here
-});
-
-// ============================================
-// BACKGROUND SYNC
-// ============================================
-
-// Background sync for alarms
-self.addEventListener('sync', (event) => {
-  console.log('[Service Worker] Background sync event:', event.tag);
+  const urlToOpen = new URL(event.notification.data.url || self.location.origin).href;
   
-  if (event.tag === 'sync-alarms') {
+  if (event.action === 'snooze') {
+    // Handle snooze
     event.waitUntil(
-      syncAlarmsWithServer()
-        .then(() => {
-          console.log('[Service Worker] Background sync completed successfully');
-          // Show notification to user
-          return self.registration.showNotification('Alarm Clock', {
-            body: 'Alarms synced successfully',
-            icon: '/favicon.ico',
-            badge: '/favicon.ico',
-            tag: 'sync-complete'
+      self.clients.matchAll().then(clients => {
+        if (clients.length > 0) {
+          clients[0].focus();
+          clients[0].postMessage({
+            type: 'NOTIFICATION_ACTION',
+            action: 'snooze',
+            alarmId: event.notification.data.alarmId
           });
-        })
-        .catch(error => {
-          console.error('[Service Worker] Background sync failed:', error);
-          // Retry sync later
-          return self.registration.sync.register('sync-alarms');
-        })
+        } else {
+          self.clients.openWindow(urlToOpen);
+        }
+      })
     );
-  }
-});
-
-// Sync alarms with server (Firebase)
-async function syncAlarmsWithServer() {
-  console.log('[Service Worker] Syncing alarms with server');
-  
-  const clients = await self.clients.matchAll();
-  if (clients.length === 0) {
-    console.log('[Service Worker] No clients found for sync');
-    return;
-  }
-  
-  // Ask main thread to sync alarms
-  clients.forEach(client => {
-    client.postMessage({
-      type: 'PERFORM_SYNC',
-      timestamp: Date.now()
-    });
-  });
-  
-  return Promise.resolve();
-}
-
-// Periodic sync for checking alarms (if supported)
-self.addEventListener('periodicsync', (event) => {
-  if (event.tag === 'check-alarms') {
-    console.log('[Service Worker] Periodic sync for alarm checking');
+  } else if (event.action === 'dismiss') {
+    // Handle dismiss
     event.waitUntil(
-      checkPendingAlarms()
+      self.clients.matchAll().then(clients => {
+        clients.forEach(client => {
+          client.postMessage({
+            type: 'NOTIFICATION_ACTION',
+            action: 'dismiss',
+            alarmId: event.notification.data.alarmId
+          });
+        });
+      })
+    );
+  } else {
+    // User clicked notification body
+    event.waitUntil(
+      self.clients.matchAll({type: 'window'}).then(windowClients => {
+        if (windowClients.length > 0) {
+          windowClients[0].focus();
+        } else {
+          self.clients.openWindow(urlToOpen);
+        }
+      })
     );
   }
 });
 
-// Check for pending alarms
-async function checkPendingAlarms() {
-  console.log('[Service Worker] Checking pending alarms');
+// Background sync event
+self.addEventListener('sync', event => {
+  if (event.tag === 'alarm-sync') {
+    console.log('Background sync for alarms');
+    event.waitUntil(syncAlarms());
+  }
+});
+
+// Periodic sync event
+self.addEventListener('periodicsync', event => {
+  if (event.tag === 'alarm-check') {
+    console.log('Periodic sync for alarm check');
+    event.waitUntil(checkScheduledAlarms());
+  }
+});
+
+// Message event from main thread
+self.addEventListener('message', event => {
+  console.log('Service Worker received message:', event.data);
   
-  const clients = await self.clients.matchAll();
-  if (clients.length === 0) {
-    console.log('[Service Worker] No clients found for alarm check');
-    return;
+  switch (event.data.type) {
+    case 'SCHEDULE_ALARM':
+      scheduleAlarmInSW(event.data.data);
+      break;
+      
+    case 'ALARM_TRIGGERED':
+      // Forward to other clients
+      self.clients.matchAll().then(clients => {
+        clients.forEach(client => {
+          if (client.id !== event.source.id) {
+            client.postMessage({
+              type: 'ALARM_TRIGGERED',
+              ...event.data.data
+            });
+          }
+        });
+      });
+      break;
+      
+    case 'ALARM_SNOOZED':
+    case 'ALARM_DISMISSED':
+    case 'ALARM_TOGGLE':
+    case 'ALARM_DELETED':
+      // Forward to other clients
+      self.clients.matchAll().then(clients => {
+        clients.forEach(client => {
+          client.postMessage({
+            type: event.data.type,
+            ...event.data.data
+          });
+        });
+      });
+      break;
+  }
+});
+
+// Helper functions
+async function syncAlarms() {
+  const cache = await caches.open(CACHE_NAME);
+  // Sync logic here
+}
+
+async function checkScheduledAlarms() {
+  // Check and trigger scheduled alarms
+}
+
+function scheduleAlarmInSW(alarm) {
+  const alarmTime = new Date(alarm.time);
+  const now = new Date();
+  
+  // Set date for alarm
+  alarmTime.setDate(now.getDate());
+  alarmTime.setMonth(now.getMonth());
+  alarmTime.setFullYear(now.getFullYear());
+  
+  // If alarm time is in the past, schedule for tomorrow
+  if (alarmTime < now) {
+    alarmTime.setDate(alarmTime.getDate() + 1);
   }
   
-  // Ask main thread to check alarms
-  clients.forEach(client => {
-    client.postMessage({
-      type: 'CHECK_ALARMS',
-      timestamp: Date.now()
-    });
-  });
-}
-
-// Request notification permission
-async function requestNotificationPermission() {
-  console.log('[Service Worker] Requesting notification permission');
+  const delay = alarmTime.getTime() - now.getTime();
   
-  const clients = await self.clients.matchAll();
-  if (clients.length > 0) {
-    clients[0].postMessage({
-      type: 'REQUEST_NOTIFICATION_PERMISSION'
-    });
+  if (delay > 0 && delay < 24 * 60 * 60 * 1000) { // Max 24 hours
+    setTimeout(() => {
+      self.registration.showNotification(`Alarm: ${alarm.label}`, {
+        body: `Time: ${alarm.time}`,
+        tag: `alarm-${alarm.id}`,
+        requireInteraction: true,
+        actions: [
+          { action: 'snooze', title: 'Snooze' },
+          { action: 'dismiss', title: 'Dismiss' }
+        ]
+      });
+      
+      // Notify all clients
+      self.clients.matchAll().then(clients => {
+        clients.forEach(client => {
+          client.postMessage({
+            type: 'ALARM_TRIGGERED',
+            alarmId: alarm.id,
+            alarmData: alarm
+          });
+        });
+      });
+    }, delay);
   }
 }
 
-// ============================================
-// HEALTH CHECK & CLEANUP
-// ============================================
-
-// Clean up old alarms periodically
-function cleanupOldAlarms() {
-  console.log('[Service Worker] Cleaning up old alarms');
-  const now = Date.now();
-  const oneDayAgo = now - (24 * 60 * 60 * 1000);
-  
-  // In a real implementation, you would check stored alarms
-  // and clean up those older than one day
-  console.log('[Service Worker] Cleanup completed');
-}
-
-// Run cleanup every hour
-setInterval(cleanupOldAlarms, 60 * 60 * 1000);
-
-// Initial cleanup
-cleanupOldAlarms();
-
-console.log('[Service Worker] Alam Toolkit Service Worker loaded with background alarms');
+// Network status handling
+self.addEventListener('message', event => {
+  if (event.data.type === 'NETWORK_STATUS') {
+    self.clients.matchAll().then(clients => {
+      clients.forEach(client => {
+        client.postMessage({
+          type: 'NETWORK_STATUS',
+          online: event.data.online
+        });
+      });
+    });
+  }
+});
