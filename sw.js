@@ -1,22 +1,20 @@
 // ============================================
-// UNIVERSAL SERVICE WORKER - MOBILE & DESKTOP
+// UNIVERSAL SERVICE WORKER - REQUIRED FOR NOTIFICATIONS
 // ============================================
 
-const CACHE_NAME = 'alarm-universal-v3';
+const CACHE_NAME = 'alarm-universal-v1';
 let scheduledAlarms = {};
-let wakeLock = null;
 
 self.addEventListener('install', event => {
-    console.log('Universal Service Worker installing');
+    console.log('Service Worker installing');
     self.skipWaiting();
 });
 
 self.addEventListener('activate', event => {
-    console.log('Universal Service Worker activating');
+    console.log('Service Worker activating');
     event.waitUntil(self.clients.claim());
 });
 
-// Handle messages from main app
 self.addEventListener('message', event => {
     console.log('SW received:', event.data.type);
     
@@ -30,27 +28,19 @@ self.addEventListener('message', event => {
         case 'TEST_NOTIFICATION':
             showTestNotification();
             break;
-        case 'REQUEST_WAKE_LOCK':
-            requestWakeLock();
-            break;
-        case 'RELEASE_WAKE_LOCK':
-            releaseWakeLock();
-            break;
     }
 });
 
-// Schedule alarm
 function scheduleAlarm(alarm) {
     const alarmId = alarm.id;
     const alarmTime = alarm.targetTime;
     const now = Date.now();
     const delay = Math.max(0, alarmTime - now);
     
-    console.log(`Scheduling alarm "${alarm.label}" in ${Math.round(delay/1000)}s (Mobile: ${alarm.isMobile})`);
+    console.log(`Scheduling alarm "${alarm.label}" in ${Math.round(delay/1000)}s`);
     
     if (scheduledAlarms[alarmId]) {
         clearTimeout(scheduledAlarms[alarmId]);
-        delete scheduledAlarms[alarmId];
     }
     
     if (delay > 0) {
@@ -65,7 +55,6 @@ function scheduleAlarm(alarm) {
     return false;
 }
 
-// Cancel alarm
 function cancelAlarm(alarmId) {
     if (scheduledAlarms[alarmId]) {
         clearTimeout(scheduledAlarms[alarmId]);
@@ -76,11 +65,9 @@ function cancelAlarm(alarmId) {
     return false;
 }
 
-// Trigger alarm
 async function triggerAlarm(alarm) {
-    console.log('🔔 ALARM TRIGGERED:', alarm.label, 'Mobile:', alarm.isMobile);
+    console.log('🔔 ALARM TRIGGERED:', alarm.label);
     
-    // Always show notification
     const title = `⏰ ${alarm.label}`;
     const options = {
         body: `Time: ${new Date(alarm.targetTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`,
@@ -99,22 +86,14 @@ async function triggerAlarm(alarm) {
             isMobile: alarm.isMobile || false
         },
         actions: [
-            {
-                action: 'snooze',
-                title: `😴 Snooze (${alarm.snoozeDuration || 10}min)`
-            },
-            {
-                action: 'stop',
-                title: '🛑 Stop'
-            }
+            { action: 'snooze', title: `😴 Snooze (${alarm.snoozeDuration || 10}min)` },
+            { action: 'stop', title: '🛑 Stop' }
         ]
     };
     
     try {
         await self.registration.showNotification(title, options);
-        console.log('✓ Notification shown');
         
-        // Notify all clients
         const clients = await self.clients.matchAll();
         clients.forEach(client => {
             client.postMessage({
@@ -122,43 +101,11 @@ async function triggerAlarm(alarm) {
                 alarm: alarm
             });
         });
-        
-        // Request wake lock for mobile
-        if (alarm.isMobile) {
-            requestWakeLock();
-        }
     } catch (error) {
         console.error('Failed to show notification:', error);
     }
 }
 
-// Request wake lock (keeps device awake and allows audio)
-async function requestWakeLock() {
-    if ('wakeLock' in navigator && !wakeLock) {
-        try {
-            wakeLock = await navigator.wakeLock.request('screen');
-            console.log('✓ Wake Lock active - device will stay awake');
-            
-            wakeLock.addEventListener('release', () => {
-                console.log('Wake Lock released');
-                wakeLock = null;
-            });
-        } catch (err) {
-            console.error('Wake Lock failed:', err);
-        }
-    }
-}
-
-// Release wake lock
-function releaseWakeLock() {
-    if (wakeLock) {
-        wakeLock.release();
-        wakeLock = null;
-        console.log('Wake Lock released');
-    }
-}
-
-// Show test notification
 async function showTestNotification() {
     const title = '🔔 Test Notification';
     const options = {
@@ -174,9 +121,7 @@ async function showTestNotification() {
     await self.registration.showNotification(title, options);
 }
 
-// Handle notification clicks
 self.addEventListener('notificationclick', event => {
-    console.log('Notification clicked:', event.action);
     event.notification.close();
     
     const alarmId = event.notification.data?.alarmId;
@@ -220,7 +165,6 @@ self.addEventListener('notificationclick', event => {
         });
     }
     
-    // Focus or open the app
     event.waitUntil(
         self.clients.matchAll({ type: 'window', includeUncontrolled: true })
             .then(windowClients => {
@@ -233,4 +177,4 @@ self.addEventListener('notificationclick', event => {
     );
 });
 
-console.log('Universal Service Worker loaded');
+console.log('Service Worker loaded');
