@@ -1,15 +1,15 @@
 // ============================================
-// UNIVERSAL SERVICE WORKER WITH PUSH NOTIFICATIONS FOR DESKTOP
+// UNIVERSAL SERVICE WORKER FOR DESKTOP NOTIFICATIONS
 // ============================================
-// Save this file as sw.js in your site root
 
-const CACHE_NAME = 'alarm-universal-v3';
+const CACHE_NAME = 'alarm-universal-v2';
 let alarms = [];
 let timerInterval = null;
 let wakeLock = null;
+let scheduledAlarms = new Map();
 
 self.addEventListener('install', event => {
-    console.log('Universal Service Worker installing for desktop push');
+    console.log('Universal Service Worker installing');
     event.waitUntil(self.skipWaiting());
 });
 
@@ -35,8 +35,8 @@ self.addEventListener('message', event => {
             scheduleTimer(event.data.timer);
             break;
             
-        case 'TEST_ALARM':
-            triggerTestAlarm();
+        case 'TEST_NOTIFICATION':
+            triggerTestNotification(event.data);
             break;
             
         case 'REQUEST_WAKE_LOCK':
@@ -52,7 +52,8 @@ self.addEventListener('message', event => {
 // Schedule alarm
 function scheduleAlarm(alarmData) {
     const alarmId = alarmData.id || 'alarm-' + Date.now();
-    const alarmTime = Date.now() + alarmData.delay;
+    const alarmTime = alarmData.targetTime || (Date.now() + alarmData.delay);
+    const delay = Math.max(0, alarmTime - Date.now());
     
     const alarm = {
         id: alarmId,
@@ -65,13 +66,28 @@ function scheduleAlarm(alarmData) {
         repeat: alarmData.repeat || 'once'
     };
     
-    alarms.push(alarm);
-    console.log('Alarm scheduled for desktop:', alarm);
-    
-    if (!timerInterval) {
-        startAlarmChecker();
+    // Clear existing alarm with same ID
+    if (scheduledAlarms.has(alarmId)) {
+        clearTimeout(scheduledAlarms.get(alarmId));
+        scheduledAlarms.delete(alarmId);
     }
     
+    // Remove from alarms array
+    alarms = alarms.filter(a => a.id !== alarmId);
+    alarms.push(alarm);
+    
+    console.log('Alarm scheduled:', alarm.label, 'in', Math.round(delay/1000), 'seconds');
+    
+    // Schedule the alarm
+    if (delay > 0) {
+        const timeoutId = setTimeout(() => {
+            triggerAlarm(alarm);
+        }, delay);
+        
+        scheduledAlarms.set(alarmId, timeoutId);
+    }
+    
+    // Notify client
     notifyClient('ALARM_SCHEDULED', { 
         id: alarmId, 
         time: new Date(alarmTime).toLocaleTimeString()
@@ -80,58 +96,41 @@ function scheduleAlarm(alarmData) {
 
 // Cancel alarm
 function cancelAlarm(alarmId) {
+    if (scheduledAlarms.has(alarmId)) {
+        clearTimeout(scheduledAlarms.get(alarmId));
+        scheduledAlarms.delete(alarmId);
+    }
+    
     alarms = alarms.filter(a => a.id !== alarmId);
     console.log('Alarm cancelled:', alarmId);
-    
-    if (alarms.length === 0 && timerInterval) {
-        clearInterval(timerInterval);
-        timerInterval = null;
-    }
 }
 
 // Schedule timer
 function scheduleTimer(timerData) {
-    const timerEnd = Date.now() + timerData.duration;
+    const timerId = timerData.id || 'timer-' + Date.now();
+    const duration = timerData.duration || 0;
     
     setTimeout(() => {
-        triggerTimerFinished();
-    }, timerData.duration);
+        triggerTimerFinished(timerId);
+    }, duration);
     
-    console.log('Timer scheduled for desktop:', timerData.duration + 'ms');
+    console.log('Timer scheduled:', duration + 'ms');
 }
 
-// Start checking alarms
-function startAlarmChecker() {
-    timerInterval = setInterval(() => {
-        const now = Date.now();
-        const dueAlarms = alarms.filter(a => a.time <= now && a.time > now - 60000);
-        
-        dueAlarms.forEach(alarm => {
-            triggerAlarm(alarm);
-            cancelAlarm(alarm.id);
-        });
-        
-        if (alarms.length === 0 && timerInterval) {
-            clearInterval(timerInterval);
-            timerInterval = null;
-        }
-    }, 1000);
-}
-
-// Trigger alarm with push notification for desktop
+// Trigger alarm
 async function triggerAlarm(alarm) {
-    console.log('Desktop alarm triggered:', alarm.id);
+    console.log('Alarm triggered:', alarm.id, 'Label:', alarm.label);
     
+    // Show notification
     const title = `⏰ ${alarm.label}`;
     const options = {
-        body: `Time: ${new Date().toLocaleTimeString()}${alarm.repeat !== 'once' ? ' (Repeating)' : ''}`,
+        body: `Time: ${new Date().toLocaleTimeString()}`,
         icon: 'https://www.alamtoolkit.com/icons/alarm-192.png',
         badge: 'https://www.alamtoolkit.com/icons/badge-96.png',
         tag: `alarm-${alarm.id}`,
         requireInteraction: true,
         silent: false,
         vibrate: [200, 100, 200, 100, 200],
-        sound: alarm.sound || 'default',
         actions: [
             {
                 action: 'snooze',
@@ -147,58 +146,82 @@ async function triggerAlarm(alarm) {
             type: 'alarm',
             sound: alarm.sound,
             volume: alarm.volume,
-            isDesktop: true
+            label: alarm.label,
+            snoozeMinutes: alarm.snoozeMinutes
         }
     };
     
     await self.registration.showNotification(title, options);
+    
+    // Notify all clients
     notifyClient('ALARM_TRIGGERED', alarm);
-}
-
-// Trigger test alarm
-function triggerTestAlarm() {
-    const testAlarm = {
-        id: 'test-alarm-' + Date.now(),
-        label: 'Test Alarm',
-        sound: 'classic',
-        volume: 70,
-        snoozeMinutes: 5,
-        isDesktop: true
-    };
     
-    notifyClient('TEST_ALARM_TRIGGERED', testAlarm);
-    
-    self.registration.showNotification('🔔 Test Alarm', {
-        body: 'This is a test notification from service worker',
-        icon: 'https://www.alamtoolkit.com/icons/alarm-192.png',
-        requireInteraction: true
-    });
+    // Handle repeat alarms
+    if (alarm.repeat && alarm.repeat !== 'once') {
+        let nextTime;
+        const now = new Date();
+        
+        if (alarm.repeat === 'daily') {
+            nextTime = new Date(alarm.time + (24 * 60 * 60 * 1000));
+        } else if (alarm.repeat === 'weekdays') {
+            nextTime = new Date(alarm.time + (24 * 60 * 60 * 1000));
+            while (nextTime.getDay() === 0 || nextTime.getDay() === 6) {
+                nextTime = new Date(nextTime.getTime() + (24 * 60 * 60 * 1000));
+            }
+        }
+        
+        if (nextTime) {
+            scheduleAlarm({
+                ...alarm,
+                id: alarm.id,
+                targetTime: nextTime.getTime()
+            });
+        }
+    }
 }
 
 // Trigger timer finished
-async function triggerTimerFinished() {
+async function triggerTimerFinished(timerId) {
     const title = '⏱️ Timer Finished';
     const options = {
-        body: 'Your timer has completed',
+        body: 'Your timer has completed!',
         icon: 'https://www.alamtoolkit.com/icons/alarm-192.png',
         badge: 'https://www.alamtoolkit.com/icons/badge-96.png',
-        tag: 'timer-finished-' + Date.now(),
+        tag: `timer-${timerId}`,
         requireInteraction: true,
         silent: false,
-        vibrate: [200, 100, 200],
-        actions: [
-            {
-                action: 'dismiss',
-                title: 'Dismiss'
-            }
-        ]
+        vibrate: [200, 100, 200, 100, 200],
+        data: {
+            type: 'timer',
+            timerId: timerId
+        }
     };
     
     await self.registration.showNotification(title, options);
-    notifyClient('TIMER_FINISHED', {});
+    notifyClient('TIMER_FINISHED', { timerId });
 }
 
-// Request wake lock
+// Trigger test notification
+async function triggerTestNotification(data) {
+    const title = '🔔 Test Notification';
+    const options = {
+        body: 'This is a test notification from AlamToolkit',
+        icon: 'https://www.alamtoolkit.com/icons/alarm-192.png',
+        badge: 'https://www.alamtoolkit.com/icons/badge-96.png',
+        tag: `test-${Date.now()}`,
+        requireInteraction: false,
+        silent: false,
+        vibrate: [200, 100, 200],
+        data: {
+            type: 'test',
+            sound: data.sound || 'classic'
+        }
+    };
+    
+    await self.registration.showNotification(title, options);
+}
+
+// Request wake lock (for keeping system awake)
 async function requestWakeLock() {
     if ('wakeLock' in navigator && !wakeLock) {
         try {
@@ -231,38 +254,51 @@ self.addEventListener('notificationclick', event => {
     
     const action = event.action;
     const alarmId = event.notification.data?.alarmId;
+    const snoozeMinutes = event.notification.data?.snoozeMinutes || 10;
     
-    if (action === 'snooze') {
+    if (action === 'snooze' && alarmId) {
+        // Find and snooze alarm
         const alarm = alarms.find(a => a.id === alarmId);
         if (alarm) {
-            const snoozeTime = Date.now() + (alarm.snoozeMinutes * 60 * 1000);
+            const snoozeTime = Date.now() + (snoozeMinutes * 60 * 1000);
             scheduleAlarm({
                 id: `snooze-${alarmId}-${Date.now()}`,
                 label: `Snooze: ${alarm.label}`,
-                delay: alarm.snoozeMinutes * 60 * 1000,
+                targetTime: snoozeTime,
                 sound: alarm.sound,
                 volume: alarm.volume,
                 snoozeMinutes: alarm.snoozeMinutes,
-                isDesktop: true
+                repeat: 'once'
             });
             
-            notifyClient('ALARM_SNOOZED', alarm);
+            // Notify client
+            notifyClient('ALARM_SNOOZED', { 
+                alarmId: alarmId,
+                snoozeMinutes: snoozeMinutes 
+            });
         }
-    } else if (action === 'stop' || action === 'dismiss') {
+    } else if (action === 'stop' && alarmId) {
+        // Handle stop
         cancelAlarm(alarmId);
         notifyClient('ALARM_STOPPED', { alarmId });
     }
     
+    // Focus the app window
     event.waitUntil(
         clients.matchAll({ type: 'window', includeUncontrolled: true })
             .then(windowClients => {
                 if (windowClients.length > 0) {
                     windowClients[0].focus();
                 } else {
-                    clients.openWindow('/');
+                    clients.openWindow('https://www.alamtoolkit.com/');
                 }
             })
     );
+});
+
+// Handle notification close
+self.addEventListener('notificationclose', event => {
+    console.log('Notification closed:', event.notification.tag);
 });
 
 // Notify client
@@ -277,19 +313,11 @@ function notifyClient(type, data) {
     });
 }
 
-// Initial alarm checker
-if (timerInterval) clearInterval(timerInterval);
-timerInterval = setInterval(() => {
-    const now = Date.now();
-    const dueAlarms = alarms.filter(a => a.time <= now && a.time > now - 60000);
-    
-    dueAlarms.forEach(alarm => {
-        triggerAlarm(alarm);
-        cancelAlarm(alarm.id);
-    });
-    
-    if (alarms.length === 0) {
-        clearInterval(timerInterval);
-        timerInterval = null;
-    }
-}, 1000);
+// Start checking for missed alarms on activation
+self.addEventListener('activate', event => {
+    event.waitUntil(
+        clients.claim().then(() => {
+            console.log('Service Worker activated and controlling clients');
+        })
+    );
+});
